@@ -479,6 +479,10 @@
   campoData.min = dataMinima;
 
 
+  // =========================
+  // SELECIONAR SERVIÇO
+  // =========================
+
   function selecionarServico(elemento, servico, preco) {
 
     document.querySelectorAll(".servico").forEach(function(item) {
@@ -492,6 +496,10 @@
   }
 
 
+  // =========================
+  // SELECIONAR HORÁRIO
+  // =========================
+
   function selecionarHorario(elemento, horario) {
 
     document.querySelectorAll(".horario").forEach(function(item) {
@@ -504,6 +512,10 @@
   }
 
 
+  // =========================
+  // FORMATAR DATA
+  // =========================
+
   function formatarData(data) {
 
     const partes = data.split("-");
@@ -511,6 +523,10 @@
     return `${partes[2]}/${partes[1]}/${partes[0]}`;
   }
 
+
+  // =========================
+  // MOSTRAR RESUMO
+  // =========================
 
   function mostrarResumo() {
 
@@ -571,37 +587,11 @@
   }
 
 
+  // =========================
+  // CONFIRMAR AGENDAMENTO
+  // =========================
+
   async function confirmarAgendamento() {
-    alert("A função de confirmação foi acionada!");
-
-  const agendamento = {
-    nome: document.getElementById("nome").value,
-    telefone: document.getElementById("telefone").value,
-    servico: servicoSelecionado,
-    preco: precoSelecionado,
-    data: document.getElementById("data").value,
-    horario: horarioSelecionado
-  };
-
-  const { data, error } = await supabaseClient
-    .from("agendamentos")
-    .insert([agendamento])
-    .select();
-
-  if (error) {
-    console.error(error);
-    alert("Não foi possível confirmar o agendamento. Tente novamente.");
-    return;
-  }
-
-  document.getElementById("resumo").style.display = "none";
-
-  document.getElementById("confirmado").style.display = "block";
-
-  document.getElementById("confirmado").scrollIntoView({
-    behavior: "smooth"
-  });
-}
 
     const agendamento = {
 
@@ -620,6 +610,22 @@
     };
 
 
+    const { error } = await supabaseClient
+      .from("agendamentos")
+      .insert([agendamento]);
+
+
+    if (error) {
+
+      console.error(error);
+
+      alert("Não foi possível confirmar o agendamento. Tente novamente.");
+
+      return;
+    }
+
+
+    // Salva também no navegador
     localStorage.setItem(
       "ultimoAgendamento",
       JSON.stringify(agendamento)
@@ -630,12 +636,17 @@
 
     document.getElementById("confirmado").style.display = "block";
 
+
     document.getElementById("confirmado").scrollIntoView({
       behavior: "smooth"
     });
 
   }
 
+
+  // =========================
+  // NOVO AGENDAMENTO
+  // =========================
 
   function novoAgendamento() {
 
@@ -653,12 +664,16 @@
 
 
     document.querySelectorAll(".servico").forEach(function(item) {
+
       item.classList.remove("selecionado");
+
     });
 
 
     document.querySelectorAll(".horario").forEach(function(item) {
+
       item.classList.remove("selecionado");
+
     });
 
 
