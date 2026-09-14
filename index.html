@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -570,7 +571,36 @@
   }
 
 
-  function confirmarAgendamento() {
+  async function confirmarAgendamento() {
+
+  const agendamento = {
+    nome: document.getElementById("nome").value,
+    telefone: document.getElementById("telefone").value,
+    servico: servicoSelecionado,
+    preco: precoSelecionado,
+    data: document.getElementById("data").value,
+    horario: horarioSelecionado
+  };
+
+  const { data, error } = await supabaseClient
+    .from("agendamentos")
+    .insert([agendamento])
+    .select();
+
+  if (error) {
+    console.error(error);
+    alert("Não foi possível confirmar o agendamento. Tente novamente.");
+    return;
+  }
+
+  document.getElementById("resumo").style.display = "none";
+
+  document.getElementById("confirmado").style.display = "block";
+
+  document.getElementById("confirmado").scrollIntoView({
+    behavior: "smooth"
+  });
+}
 
     const agendamento = {
 
@@ -640,6 +670,11 @@
   }
 
 </script>
-
+const SUPABASE_URL = "bgmcryfcwjikuttwftgp ";
+const SUPABASE_KEY = " sb_publishable_C0Tahq5Lffw4ukCwj9WXHQ_HtDbD6PU";
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 </body>
 </html>
