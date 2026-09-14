@@ -1,620 +1,1464 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
   <title>Arantes Barber Shop</title>
+
+
   <!-- SUPABASE -->
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script>
+
     const SUPABASE_URL = "bgmcryfcwjikuttwftgp";
     const SUPABASE_KEY = "sb_publishable_C0Tahq5Lffw4ukCwj9WXHQ_HtDbD6PU";
-    const supabaseClient = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY
-    );
+
+
+
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
   </script>
+
+
   <style>
+
     * {
       box-sizing: border-box;
     }
+
+
     body {
+
       margin: 0;
+
       font-family: Arial, sans-serif;
+
       background: #0d0d0d;
+
       color: #ffffff;
+
     }
+
+
     .container {
+
       width: 100%;
+
       max-width: 520px;
+
       margin: auto;
+
       padding: 20px;
+
     }
+
+
     header {
+
       text-align: center;
+
       padding: 25px 0;
+
     }
+
+
     header h1 {
+
       margin: 0;
+
       font-size: 30px;
+
       letter-spacing: 1px;
+
     }
+
+
     header p {
+
       color: #aaa;
+
       margin-top: 8px;
+
     }
+
+
     .card {
+
       background: #171717;
+
       border-radius: 16px;
+
       padding: 20px;
+
       margin-bottom: 18px;
+
       border: 1px solid #292929;
+
     }
+
+
     .titulo {
+
       font-size: 18px;
+
       font-weight: bold;
+
       margin-bottom: 15px;
+
     }
+
+
     input {
+
       width: 100%;
+
       padding: 14px;
+
       margin-bottom: 12px;
+
       border-radius: 10px;
+
       border: 1px solid #333;
+
       background: #101010;
+
       color: white;
+
       font-size: 16px;
+
     }
+
+
     .servicos,
     .horarios {
+
       display: grid;
+
       gap: 10px;
+
     }
+
+
     .servico,
     .horario {
+
       padding: 16px;
+
       background: #101010;
+
       border: 1px solid #333;
+
       border-radius: 12px;
+
       cursor: pointer;
+
       transition: 0.2s;
+
     }
+
+
     .servico:hover,
     .horario:hover {
+
       border-color: #d4af37;
+
     }
+
+
     .servico.selecionado,
     .horario.selecionado {
+
       border-color: #d4af37;
+
       background: #25200d;
+
     }
+
+
     .servico-nome {
+
       font-weight: bold;
+
       font-size: 16px;
+
     }
+
+
     .servico-preco {
+
       margin-top: 5px;
+
       color: #d4af37;
+
       font-weight: bold;
+
     }
+
+
+    /* HORÁRIO OCUPADO */
+
+    .horario.ocupado {
+
+      background: #252525;
+
+      border-color: #444;
+
+      color: #666;
+
+      cursor: not-allowed;
+
+      text-decoration: line-through;
+
+      opacity: 0.6;
+
+    }
+
+
+    .horario.ocupado:hover {
+
+      border-color: #444;
+
+    }
+
+
     .horario-confirmado {
+
       display: none;
+
       margin-top: 15px;
+
       padding: 13px;
+
       text-align: center;
+
       border-radius: 10px;
+
       background: #25200d;
+
       border: 1px solid #d4af37;
+
       color: #ffffff;
+
     }
+
+
     .horario-confirmado strong {
+
       color: #d4af37;
+
     }
+
+
+    .carregando {
+
+      text-align: center;
+
+      color: #aaa;
+
+      padding: 10px;
+
+    }
+
+
     button {
+
       width: 100%;
+
       padding: 16px;
+
       border: none;
+
       border-radius: 12px;
+
       background: #d4af37;
+
       color: #000;
+
       font-size: 17px;
+
       font-weight: bold;
+
       cursor: pointer;
+
     }
+
+
     button:hover {
+
       opacity: 0.9;
+
     }
+
+
     .botao-secundario {
+
       margin-top: 10px;
+
       background: #292929;
+
       color: white;
+
     }
+
+
     #resumo,
     #confirmacao {
+
       display: none;
+
     }
+
+
     .resumo-item {
+
       padding: 10px 0;
+
       border-bottom: 1px solid #292929;
+
     }
+
+
     .resumo-item:last-child {
+
       border-bottom: none;
+
     }
+
+
     .confirmacao {
+
       text-align: center;
+
       padding: 30px 10px;
+
     }
+
+
     .confirmacao .icone {
+
       font-size: 55px;
+
       margin-bottom: 15px;
+
     }
+
+
     .confirmacao h2 {
+
       color: #d4af37;
+
       margin-bottom: 10px;
+
     }
+
+
     .confirmacao p {
+
       color: #bbb;
+
       line-height: 1.5;
+
     }
+
+
     .erro {
+
       display: none;
+
       margin-top: 15px;
+
       padding: 12px;
+
       border-radius: 10px;
+
       background: #3a1515;
+
       border: 1px solid #8b3030;
+
       color: #ffb0b0;
+
       text-align: center;
+
     }
+
   </style>
+
 </head>
+
+
 <body>
+
+
   <div class="container">
+
+
     <header>
-      <h1>ARANTES BARBER SHOP</h1>
-      <p>Agende seu horário</p>
+
+      <h1>
+        ARANTES BARBER SHOP
+      </h1>
+
+      <p>
+        Agende seu horário
+      </p>
+
     </header>
-    <!-- DADOS DO CLIENTE -->
-    <div class="card" id="formulario">
-      <div class="titulo">Seus dados</div>
+
+
+    <!-- DADOS -->
+
+    <div
+      class="card"
+      id="formulario"
+    >
+
+      <div class="titulo">
+        Seus dados
+      </div>
+
+
       <input
         type="text"
         id="nome"
         placeholder="Seu nome"
       >
+
+
       <input
         type="tel"
         id="telefone"
         placeholder="WhatsApp"
       >
+
     </div>
+
+
     <!-- SERVIÇOS -->
+
     <div class="card">
-      <div class="titulo">Escolha o serviço</div>
+
+      <div class="titulo">
+        Escolha o serviço
+      </div>
+
+
       <div class="servicos">
+
+
         <div
           class="servico"
-          onclick="selecionarServico(this, 'Corte de cabelo', 40)"
+          onclick="selecionarServico(
+            this,
+            'Corte de cabelo',
+            40
+          )"
         >
+
           <div class="servico-nome">
             Corte de cabelo
           </div>
+
           <div class="servico-preco">
             R$ 40,00
           </div>
+
         </div>
+
+
         <div
           class="servico"
-          onclick="selecionarServico(this, 'Barba', 35)"
+          onclick="selecionarServico(
+            this,
+            'Barba',
+            35
+          )"
         >
+
           <div class="servico-nome">
             Barba
           </div>
+
           <div class="servico-preco">
             R$ 35,00
           </div>
+
         </div>
+
+
         <div
           class="servico"
-          onclick="selecionarServico(this, 'Corte + Barba', 75)"
+          onclick="selecionarServico(
+            this,
+            'Corte + Barba',
+            75
+          )"
         >
+
           <div class="servico-nome">
             Corte + Barba
           </div>
+
           <div class="servico-preco">
             R$ 75,00
           </div>
+
         </div>
+
+
       </div>
+
     </div>
+
+
     <!-- DATA -->
+
     <div class="card">
-      <div class="titulo">Escolha a data</div>
+
+      <div class="titulo">
+        Escolha a data
+      </div>
+
+
       <input
         type="date"
         id="data"
+        onchange="carregarHorarios()"
       >
+
     </div>
+
+
     <!-- HORÁRIOS -->
+
     <div class="card">
-      <div class="titulo">Escolha o horário</div>
-      <div class="horarios">
-        <div
-          class="horario"
-          onclick="selecionarHorario(this, '09:00')"
-        >
-          09:00
-        </div>
-        <div
-          class="horario"
-          onclick="selecionarHorario(this, '10:00')"
-        >
-          10:00
-        </div>
-        <div
-          class="horario"
-          onclick="selecionarHorario(this, '11:00')"
-        >
-          11:00
-        </div>
-        <div
-          class="horario"
-          onclick="selecionarHorario(this, '13:00')"
-        >
-          13:00
-        </div>
-        <div
-          class="horario"
-          onclick="selecionarHorario(this, '14:00')"
-        >
-          14:00
-        </div>
-        <div
-          class="horario"
-          onclick="selecionarHorario(this, '15:00')"
-        >
-          15:00
-        </div>
-        <div
-          class="horario"
-          onclick="selecionarHorario(this, '16:00')"
-        >
-          16:00
-        </div>
-        <div
-          class="horario"
-          onclick="selecionarHorario(this, '17:00')"
-        >
-          17:00
-        </div>
-        <div
-          class="horario"
-          onclick="selecionarHorario(this, '18:00')"
-        >
-          18:00
-        </div>
-        <div
-          class="horario"
-          onclick="selecionarHorario(this, '19:00')"
-        >
-          19:00
-        </div>
+
+      <div class="titulo">
+        Escolha o horário
       </div>
+
+
+      <div
+        id="mensagemHorarios"
+        class="carregando"
+      >
+        Escolha uma data para ver os horários.
+      </div>
+
+
+      <div
+        class="horarios"
+        id="listaHorarios"
+      >
+
+      </div>
+
+
       <div
         id="horarioConfirmado"
         class="horario-confirmado"
-      ></div>
+      >
+
+      </div>
+
     </div>
-    <!-- BOTÃO -->
-    <button onclick="mostrarResumo()">
+
+
+    <!-- CONTINUAR -->
+
+    <button
+      onclick="mostrarResumo()"
+    >
       CONTINUAR
     </button>
+
+
     <!-- RESUMO -->
-    <div class="card" id="resumo">
+
+    <div
+      class="card"
+      id="resumo"
+    >
+
       <div class="titulo">
         Confira seu agendamento
       </div>
+
+
       <div class="resumo-item">
-        <strong>Nome:</strong>
+
+        <strong>
+          Nome:
+        </strong>
+
         <span id="resumoNome"></span>
+
       </div>
+
+
       <div class="resumo-item">
-        <strong>WhatsApp:</strong>
+
+        <strong>
+          WhatsApp:
+        </strong>
+
         <span id="resumoTelefone"></span>
+
       </div>
+
+
       <div class="resumo-item">
-        <strong>Serviço:</strong>
+
+        <strong>
+          Serviço:
+        </strong>
+
         <span id="resumoServico"></span>
+
       </div>
+
+
       <div class="resumo-item">
-        <strong>Valor:</strong>
-        R$ <span id="resumoPreco"></span>
+
+        <strong>
+          Valor:
+        </strong>
+
+        R$
+
+        <span id="resumoPreco"></span>
+
       </div>
+
+
       <div class="resumo-item">
-        <strong>Data:</strong>
+
+        <strong>
+          Data:
+        </strong>
+
         <span id="resumoData"></span>
+
       </div>
+
+
       <div class="resumo-item">
-        <strong>Horário:</strong>
+
+        <strong>
+          Horário:
+        </strong>
+
         <span id="resumoHorario"></span>
+
       </div>
+
+
       <br>
-      <button onclick="confirmarAgendamento()">
+
+
+      <button
+        onclick="confirmarAgendamento()"
+      >
         CONFIRMAR AGENDAMENTO
       </button>
+
+
       <button
         class="botao-secundario"
         onclick="voltarFormulario()"
       >
         VOLTAR
       </button>
+
+
       <div
         id="erro"
         class="erro"
       ></div>
+
+
     </div>
+
+
     <!-- CONFIRMAÇÃO -->
-    <div class="card" id="confirmacao">
+
+    <div
+      class="card"
+      id="confirmacao"
+    >
+
       <div class="confirmacao">
+
         <div class="icone">
           ✅
         </div>
+
+
         <h2>
           Agendamento confirmado!
         </h2>
+
+
         <p>
           Seu horário foi reservado com sucesso.
         </p>
+
+
         <div class="resumo-item">
-          <strong>Serviço:</strong>
-          <span id="confirmacaoServico"></span>
+
+          <strong>
+            Serviço:
+          </strong>
+
+          <span
+            id="confirmacaoServico"
+          ></span>
+
         </div>
+
+
         <div class="resumo-item">
-          <strong>Data:</strong>
-          <span id="confirmacaoData"></span>
+
+          <strong>
+            Data:
+          </strong>
+
+          <span
+            id="confirmacaoData"
+          ></span>
+
         </div>
+
+
         <div class="resumo-item">
-          <strong>Horário:</strong>
-          <span id="confirmacaoHorario"></span>
+
+          <strong>
+            Horário:
+          </strong>
+
+          <span
+            id="confirmacaoHorario"
+          ></span>
+
         </div>
+
+
         <br>
-        <button onclick="novoAgendamento()">
+
+
+        <button
+          onclick="novoAgendamento()"
+        >
           NOVO AGENDAMENTO
         </button>
+
+
       </div>
+
     </div>
+
+
   </div>
+
+
   <script>
+
+
     let servicoSelecionado = "";
+
     let precoSelecionado = 0;
+
     let horarioSelecionado = "";
-    // DATA MÍNIMA = HOJE
-    const campoData = document.getElementById("data");
-    const hoje = new Date();
-    const ano = hoje.getFullYear();
-    const mes = String(
-      hoje.getMonth() + 1
-    ).padStart(2, "0");
-    const dia = String(
-      hoje.getDate()
-    ).padStart(2, "0");
+
+
+    const horariosDisponiveis = [
+
+      "09:00",
+
+      "10:00",
+
+      "11:00",
+
+      "13:00",
+
+      "14:00",
+
+      "15:00",
+
+      "16:00",
+
+      "17:00",
+
+      "18:00",
+
+      "19:00"
+
+    ];
+
+
+    // DATA MÍNIMA
+
+    const campoData =
+      document.getElementById(
+        "data"
+      );
+
+
+    const hoje =
+      new Date();
+
+
+    const ano =
+      hoje.getFullYear();
+
+
+    const mes =
+      String(
+        hoje.getMonth() + 1
+      ).padStart(2, "0");
+
+
+    const dia =
+      String(
+        hoje.getDate()
+      ).padStart(2, "0");
+
+
     const dataHoje =
       `${ano}-${mes}-${dia}`;
-    campoData.min = dataHoje;
-    // SELECIONAR SERVIÇO
+
+
+    campoData.min =
+      dataHoje;
+
+
+    campoData.value =
+      dataHoje;
+
+
+    // SERVIÇO
+
     function selecionarServico(
       elemento,
       servico,
       preco
     ) {
+
+
       document
         .querySelectorAll(".servico")
         .forEach(item => {
+
           item.classList.remove(
             "selecionado"
           );
+
         });
+
+
       elemento.classList.add(
         "selecionado"
       );
-      servicoSelecionado = servico;
-      precoSelecionado = preco;
+
+
+      servicoSelecionado =
+        servico;
+
+
+      precoSelecionado =
+        preco;
+
     }
-    // SELECIONAR HORÁRIO
+
+
+    // CARREGAR HORÁRIOS
+
+    async function carregarHorarios() {
+
+
+      const data =
+        document.getElementById(
+          "data"
+        ).value;
+
+
+      const lista =
+        document.getElementById(
+          "listaHorarios"
+        );
+
+
+      const mensagem =
+        document.getElementById(
+          "mensagemHorarios"
+        );
+
+
+      const confirmacao =
+        document.getElementById(
+          "horarioConfirmado"
+        );
+
+
+      horarioSelecionado =
+        "";
+
+
+      confirmacao.style.display =
+        "none";
+
+
+      lista.innerHTML =
+        "";
+
+
+      if (!data) {
+
+        mensagem.textContent =
+          "Escolha uma data para ver os horários.";
+
+        return;
+
+      }
+
+
+      mensagem.textContent =
+        "Carregando horários...";
+
+
+      try {
+
+
+        const resultado =
+          await supabaseClient
+            .from("agendamentos")
+            .select("horario")
+            .eq("data", data);
+
+
+        if (resultado.error) {
+
+          console.error(
+            resultado.error
+          );
+
+
+          mensagem.textContent =
+            "Erro ao carregar os horários.";
+
+          return;
+
+        }
+
+
+        const horariosOcupados =
+          resultado.data.map(
+            agendamento =>
+              agendamento.horario
+          );
+
+
+        mensagem.textContent =
+          "Escolha um horário:";
+
+
+        horariosDisponiveis.forEach(
+          horario => {
+
+
+            const botao =
+              document.createElement(
+                "div"
+              );
+
+
+            botao.className =
+              "horario";
+
+
+            botao.textContent =
+              horario;
+
+
+            if (
+              horariosOcupados.includes(
+                horario
+              )
+            ) {
+
+
+              botao.classList.add(
+                "ocupado"
+              );
+
+
+              botao.textContent =
+                horario +
+                " — OCUPADO";
+
+
+            } else {
+
+
+              botao.onclick =
+                function() {
+
+                  selecionarHorario(
+                    botao,
+                    horario
+                  );
+
+                };
+
+            }
+
+
+            lista.appendChild(
+              botao
+            );
+
+
+          }
+        );
+
+
+      } catch (erro) {
+
+        console.error(
+          erro
+        );
+
+
+        mensagem.textContent =
+          "Erro ao carregar os horários.";
+
+      }
+
+    }
+
+
+    // HORÁRIO
+
     function selecionarHorario(
       elemento,
       horario
     ) {
+
+
+      if (
+        elemento.classList.contains(
+          "ocupado"
+        )
+      ) {
+
+        return;
+
+      }
+
+
       document
         .querySelectorAll(".horario")
         .forEach(item => {
+
           item.classList.remove(
             "selecionado"
           );
+
         });
+
+
       elemento.classList.add(
         "selecionado"
       );
-      horarioSelecionado = horario;
-      const confirmacaoHorario =
+
+
+      horarioSelecionado =
+        horario;
+
+
+      const confirmacao =
         document.getElementById(
           "horarioConfirmado"
         );
-      confirmacaoHorario.style.display =
+
+
+      confirmacao.style.display =
         "block";
-      confirmacaoHorario.innerHTML =
+
+
+      confirmacao.innerHTML =
         "🕐 Horário selecionado: <strong>"
-        + horario +
+        +
+        horario
+        +
         "</strong>";
+
     }
-    // MOSTRAR RESUMO
+
+
+    // RESUMO
+
     function mostrarResumo() {
+
+
       const nome =
         document.getElementById(
           "nome"
         ).value.trim();
+
+
       const telefone =
         document.getElementById(
           "telefone"
         ).value.trim();
+
+
       const data =
         document.getElementById(
           "data"
         ).value;
+
+
       if (!nome) {
+
         alert(
           "Digite seu nome."
         );
+
         return;
+
       }
+
+
       if (!telefone) {
+
         alert(
           "Digite seu WhatsApp."
         );
+
         return;
+
       }
+
+
       if (!servicoSelecionado) {
+
         alert(
           "Escolha um serviço."
         );
+
         return;
+
       }
+
+
       if (!data) {
+
         alert(
           "Escolha uma data."
         );
+
         return;
+
       }
+
+
       if (!horarioSelecionado) {
+
         alert(
           "Escolha um horário."
         );
+
         return;
+
       }
+
+
       document.getElementById(
         "resumoNome"
-      ).textContent = nome;
+      ).textContent =
+        nome;
+
+
       document.getElementById(
         "resumoTelefone"
-      ).textContent = telefone;
+      ).textContent =
+        telefone;
+
+
       document.getElementById(
         "resumoServico"
       ).textContent =
         servicoSelecionado;
+
+
       document.getElementById(
         "resumoPreco"
       ).textContent =
-        precoSelecionado.toFixed(2)
-        .replace(".", ",");
+        precoSelecionado
+          .toFixed(2)
+          .replace(".", ",");
+
+
       document.getElementById(
         "resumoData"
       ).textContent =
         formatarData(data);
+
+
       document.getElementById(
         "resumoHorario"
       ).textContent =
         horarioSelecionado;
+
+
       document.getElementById(
         "resumo"
       ).style.display =
         "block";
+
+
       document
-        .getElementById("resumo")
+        .getElementById(
+          "resumo"
+        )
         .scrollIntoView({
           behavior: "smooth"
         });
+
     }
-    // FORMATAR DATA
-    function formatarData(data) {
+
+
+    // DATA
+
+    function formatarData(
+      data
+    ) {
+
       const partes =
         data.split("-");
+
+
       return (
-        partes[2] +
-        "/" +
-        partes[1] +
-        "/" +
+        partes[2]
+        +
+        "/"
+        +
+        partes[1]
+        +
+        "/"
+        +
         partes[0]
       );
+
     }
+
+
     // VOLTAR
+
     function voltarFormulario() {
+
       document.getElementById(
         "resumo"
       ).style.display =
         "none";
+
+
       window.scrollTo({
+
         top: 0,
+
         behavior: "smooth"
+
       });
+
     }
-    // CONFIRMAR AGENDAMENTO
+
+
+    // CONFIRMAR
+
     async function confirmarAgendamento() {
+
+
       const nome =
         document.getElementById(
           "nome"
         ).value.trim();
+
+
       const telefone =
         document.getElementById(
           "telefone"
         ).value.trim();
+
+
       const data =
         document.getElementById(
           "data"
         ).value;
-      const agendamento = {
-        nome: nome,
-        telefone: telefone,
-        servico: servicoSelecionado,
-        preco: precoSelecionado,
-        data: data,
-        horario: horarioSelecionado
-      };
+
+
       const erro =
         document.getElementById(
           "erro"
         );
+
+
       erro.style.display =
         "none";
+
+
+      // VERIFICAR NOVAMENTE
+      // ANTES DE SALVAR
+
+      const verificacao =
+        await supabaseClient
+          .from("agendamentos")
+          .select("id")
+          .eq("data", data)
+          .eq(
+            "horario",
+            horarioSelecionado
+          );
+
+
+      if (
+        verificacao.error
+      ) {
+
+        console.error(
+          verificacao.error
+        );
+
+
+        erro.textContent =
+          "Não foi possível verificar o horário.";
+
+
+        erro.style.display =
+          "block";
+
+
+        return;
+
+      }
+
+
+      if (
+        verificacao.data.length > 0
+      ) {
+
+        erro.textContent =
+          "Esse horário acabou de ser ocupado. Escolha outro.";
+
+
+        erro.style.display =
+          "block";
+
+
+        carregarHorarios();
+
+
+        return;
+
+      }
+
+
+      const agendamento = {
+
+        nome: nome,
+
+        telefone: telefone,
+
+        servico:
+          servicoSelecionado,
+
+        preco:
+          precoSelecionado,
+
+        data: data,
+
+        horario:
+          horarioSelecionado
+
+      };
+
+
       try {
+
+
         const resultado =
           await supabaseClient
             .from("agendamentos")
             .insert([
               agendamento
             ]);
-        if (resultado.error) {
+
+
+        if (
+          resultado.error
+        ) {
+
           console.error(
             resultado.error
           );
+
+
           erro.textContent =
-            "Não foi possível confirmar o agendamento. Verifique a configuração do Supabase.";
+            "Não foi possível confirmar o agendamento.";
+
+
           erro.style.display =
             "block";
+
+
           return;
+
         }
-        // PREENCHER CONFIRMAÇÃO
+
+
         document.getElementById(
           "confirmacaoServico"
         ).textContent =
           servicoSelecionado;
+
+
         document.getElementById(
           "confirmacaoData"
         ).textContent =
           formatarData(data);
+
+
         document.getElementById(
           "confirmacaoHorario"
         ).textContent =
           horarioSelecionado;
-        // ESCONDER RESUMO
+
+
         document.getElementById(
           "resumo"
         ).style.display =
           "none";
-        // MOSTRAR CONFIRMAÇÃO
+
+
         document.getElementById(
           "confirmacao"
         ).style.display =
           "block";
+
+
         document
           .getElementById(
             "confirmacao"
@@ -622,18 +1466,43 @@
           .scrollIntoView({
             behavior: "smooth"
           });
+
+
       } catch (e) {
+
+
         console.error(e);
+
+
         erro.textContent =
           "Ocorreu um erro ao confirmar o agendamento.";
+
+
         erro.style.display =
           "block";
+
       }
+
     }
+
+
     // NOVO AGENDAMENTO
+
     function novoAgendamento() {
+
       location.reload();
+
     }
+
+
+    // CARREGAR HORÁRIOS
+    // ASSIM QUE A PÁGINA ABRIR
+
+    carregarHorarios();
+
   </script>
+
+
 </body>
+
 </html>
