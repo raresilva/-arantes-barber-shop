@@ -1,18 +1,259 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arantes Barber Shop</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arantes Barber Shop</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #111;
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #181818;
+      padding: 25px 20px;
+      text-align: center;
+      border-bottom: 1px solid #333;
+    }
+
+    header h1 {
+      font-size: 28px;
+      letter-spacing: 2px;
+    }
+
+    header p {
+      color: #aaa;
+      margin-top: 8px;
+    }
+
+    main {
+      width: 100%;
+      max-width: 600px;
+      margin: auto;
+      padding: 25px 18px;
+    }
+
+    .card {
+      background: #1c1c1c;
+      border: 1px solid #303030;
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+
+    .card h2 {
+      margin-bottom: 18px;
+      font-size: 21px;
+    }
+
+    label {
+      display: block;
+      margin: 15px 0 7px;
+      color: #ccc;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid #444;
+      background: #111;
+      color: white;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 10px;
+      background: #fff;
+      color: #111;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: 0.85;
+    }
+
+    .servicos {
+      display: grid;
+      gap: 10px;
+    }
+
+    .servico {
+      background: #111;
+      border: 1px solid #444;
+      border-radius: 10px;
+      padding: 15px;
+      cursor: pointer;
+    }
+
+    .servico:hover {
+      border-color: #fff;
+    }
+
+    .servico strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .preco {
+      color: #aaa;
+    }
+
+    .sucesso {
+      display: none;
+      background: #17351f;
+      border: 1px solid #2d7040;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 15px;
+      line-height: 1.6;
+    }
+
+    footer {
+      text-align: center;
+      color: #666;
+      padding: 30px 15px;
+      font-size: 13px;
+    }
+  </style>
 </head>
 
 <body>
 
-    <h1>Arantes Barber Shop</h1>
+  <header>
+    <h1>ARANTES BARBER SHOP</h1>
+    <p>Seu estilo começa aqui.</p>
+  </header>
 
-    <p>Sistema de Agendamento</p>
+  <main>
 
-    <button>Agendar horário</button>
+    <div class="card">
+      <h2>✂️ Agendar horário</h2>
+
+      <label for="nome">Seu nome</label>
+      <input type="text" id="nome" placeholder="Digite seu nome">
+
+      <label for="telefone">WhatsApp</label>
+      <input type="tel" id="telefone" placeholder="(00) 00000-0000">
+
+      <label>Escolha o serviço</label>
+
+      <div class="servicos">
+
+        <div class="servico" onclick="selecionarServico('Corte de cabelo', 40)">
+          <strong>Corte de cabelo</strong>
+          <span class="preco">R$ 40,00</span>
+        </div>
+
+        <div class="servico" onclick="selecionarServico('Barba', 35)">
+          <strong>Barba</strong>
+          <span class="preco">R$ 35,00</span>
+        </div>
+
+        <div class="servico" onclick="selecionarServico('Corte + Barba', 75)">
+          <strong>Corte + Barba</strong>
+          <span class="preco">R$ 75,00</span>
+        </div>
+
+      </div>
+
+      <label for="data">Data</label>
+      <input type="date" id="data">
+
+      <label for="horario">Horário</label>
+      <select id="horario">
+        <option value="">Selecione um horário</option>
+        <option>09:00</option>
+        <option>09:30</option>
+        <option>10:00</option>
+        <option>10:30</option>
+        <option>11:00</option>
+        <option>11:30</option>
+        <option>13:00</option>
+        <option>13:30</option>
+        <option>14:00</option>
+        <option>14:30</option>
+        <option>15:00</option>
+        <option>15:30</option>
+        <option>16:00</option>
+        <option>16:30</option>
+        <option>17:00</option>
+        <option>17:30</option>
+        <option>18:00</option>
+        <option>18:30</option>
+        <option>19:00</option>
+      </select>
+
+      <button onclick="agendar()">CONFIRMAR AGENDAMENTO</button>
+
+      <div class="sucesso" id="sucesso"></div>
+    </div>
+
+    <div class="card">
+      <h2>📋 Meus agendamentos</h2>
+      <p style="color:#aaa;">
+        Depois vamos conectar esta área ao banco de dados para o cliente conseguir consultar e cancelar seus horários.
+      </p>
+    </div>
+
+  </main>
+
+  <footer>
+    © 2026 Arantes Barber Shop
+  </footer>
+
+  <script>
+    let servicoSelecionado = "";
+    let precoSelecionado = 0;
+
+    function selecionarServico(servico, preco) {
+      servicoSelecionado = servico;
+      precoSelecionado = preco;
+
+      alert("Serviço selecionado: " + servico);
+    }
+
+    function agendar() {
+      const nome = document.getElementById("nome").value;
+      const telefone = document.getElementById("telefone").value;
+      const data = document.getElementById("data").value;
+      const horario = document.getElementById("horario").value;
+
+      if (!nome || !telefone || !servicoSelecionado || !data || !horario) {
+        alert("Preencha todos os campos e escolha um serviço.");
+        return;
+      }
+
+      const sucesso = document.getElementById("sucesso");
+
+      sucesso.style.display = "block";
+
+      sucesso.innerHTML = `
+        <strong>✅ Agendamento solicitado!</strong><br><br>
+        Cliente: ${nome}<br>
+        Serviço: ${servicoSelecionado}<br>
+        Data: ${data}<br>
+        Horário: ${horario}<br>
+        Valor: R$ ${precoSelecionado.toFixed(2).replace(".", ",")}
+      `;
+    }
+  </script>
 
 </body>
 </html>
