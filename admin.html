@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,11 +10,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600&display=swap"
+    rel="stylesheet"
+  >
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -31,7 +36,9 @@
       display: none !important;
     }
 
-    /* LOGIN */
+    /* ==========================
+       LOGIN
+    ========================== */
 
     .login-container {
       min-height: 100vh;
@@ -105,7 +112,9 @@
       line-height: 1.4;
     }
 
-    /* PAINEL */
+    /* ==========================
+       PAINEL
+    ========================== */
 
     .container {
       width: 100%;
@@ -147,6 +156,10 @@
       cursor: pointer;
     }
 
+    /* ==========================
+       CARDS
+    ========================== */
+
     .cards {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -171,6 +184,10 @@
       font-size: 26px;
       font-weight: 700;
     }
+
+    /* ==========================
+       AGENDA
+    ========================== */
 
     .section {
       margin-top: 26px;
@@ -236,6 +253,7 @@
     .service {
       color: #aaa;
       font-size: 13px;
+      margin-bottom: 4px;
     }
 
     .price {
@@ -244,29 +262,49 @@
       font-size: 15px;
     }
 
-    /* BOTÃO CANCELAR */
+    /* ==========================
+       BOTÕES DO AGENDAMENTO
+    ========================== */
+
+    .appointment-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .whatsapp-button {
+      width: 100%;
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      background: #25D366;
+      color: #fff;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .whatsapp-button:active {
+      opacity: .85;
+    }
 
     .cancel-button {
       width: 100%;
-      margin-top: 16px;
-      padding: 11px 14px;
-      border-radius: 9px;
-      border: 1px solid #4a2424;
-      background: #211313;
-      color: #ff7777;
-      font-size: 13px;
+      border: 1px solid #3a2525;
+      border-radius: 10px;
+      padding: 12px;
+      background: #181111;
+      color: #ff6b6b;
       font-weight: 600;
+      font-size: 13px;
       cursor: pointer;
-      transition: 0.2s;
-    }
-
-    .cancel-button:hover {
-      background: #321818;
-      border-color: #713535;
     }
 
     .cancel-button:active {
-      transform: scale(0.98);
+      opacity: .8;
     }
 
     @media (min-width: 700px) {
@@ -279,13 +317,29 @@
         padding: 35px 30px 50px;
       }
 
+      .appointment-actions {
+        flex-direction: row;
+      }
+
+      .whatsapp-button,
+      .cancel-button {
+        width: auto;
+        flex: 1;
+      }
+
     }
+
   </style>
+
 </head>
+
 
 <body>
 
-  <!-- LOGIN -->
+
+  <!-- ==========================
+       LOGIN
+  ========================== -->
 
   <div
     id="loginContainer"
@@ -345,7 +399,9 @@
   </div>
 
 
-  <!-- PAINEL -->
+  <!-- ==========================
+       PAINEL
+  ========================== -->
 
   <div
     id="adminPanel"
@@ -376,7 +432,9 @@
       </header>
 
 
-      <!-- CARDS -->
+      <!-- ==========================
+           CARDS
+      ========================== -->
 
       <section class="cards">
 
@@ -434,7 +492,9 @@
       </section>
 
 
-      <!-- AGENDA -->
+      <!-- ==========================
+           AGENDA
+      ========================== -->
 
       <section class="section">
 
@@ -573,14 +633,10 @@
         "hidden"
       );
 
-      /* DEIXA A DATA DE HOJE SELECIONADA */
-
       dateFilter.value =
         obterDataHoje();
 
-      carregarAgendamentos(
-        dateFilter.value
-      );
+      carregarAgendamentos();
 
     }
 
@@ -717,19 +773,17 @@
         new Date();
 
 
-      /* DATA DE HOJE */
-
       const hoje =
         obterDataHoje();
 
-
-      /* DATA QUE SERÁ CONSULTADA */
 
       const dataBusca =
         dataSelecionada || hoje;
 
 
-      /* BUSCAR NO SUPABASE */
+      /* ==========================
+         BUSCAR NO SUPABASE
+      ========================== */
 
       const {
         data: agendamentos,
@@ -961,52 +1015,88 @@
             "appointment";
 
 
+          /* ==========================
+             WHATSAPP
+          ========================== */
+
+          let telefone =
+            agendamento.telefone || "";
+
+
+          telefone =
+            telefone.replace(
+              /\D/g,
+              ""
+            );
+
+
+          /*
+            Se o número tiver 10 ou 11 dígitos,
+            adicionamos o código do Brasil.
+          */
+
+          if (
+            telefone.length === 10 ||
+            telefone.length === 11
+          ) {
+
+            telefone =
+              "55" +
+              telefone;
+
+          }
+
+
+          const mensagem =
+            encodeURIComponent(
+              `Olá, ${agendamento.nome}! Aqui é da Arantes Barbershop. Estou entrando em contato sobre seu agendamento de ${agendamento.servico} às ${agendamento.horario}.`
+            );
+
+
+          const whatsappLink =
+            telefone
+              ? `https://wa.me/${telefone}?text=${mensagem}`
+              : "#";
+
+
+          /* ==========================
+             HTML DO AGENDAMENTO
+          ========================== */
+
           item.innerHTML = `
 
             <div class="appointment-top">
 
               <div class="time">
-
                 ${agendamento.horario}
-
               </div>
 
-
               <div class="status">
-
                 Confirmado
-
               </div>
 
             </div>
 
 
             <div class="client">
-
               ${agendamento.nome}
-
             </div>
 
 
             <div class="service">
-
               ${agendamento.servico}
-
             </div>
 
 
             <div class="service">
-
               ${
                 agendamento.telefone ||
                 "Telefone não informado"
               }
-
             </div>
 
 
             <div class="price">
-
               R$ ${
                 Number(
                   agendamento.preco
@@ -1017,16 +1107,50 @@
                   ","
                 )
               }
-
             </div>
 
 
-            <button
-              class="cancel-button"
-              onclick="cancelarAgendamento('${agendamento.id}')"
-            >
-              Cancelar agendamento
-            </button>
+            <div class="appointment-actions">
+
+              ${
+                telefone
+                ?
+
+                `
+                  <a
+                    href="${whatsappLink}"
+                    target="_blank"
+                    class="whatsapp-button"
+                  >
+                    💬 Chamar no WhatsApp
+                  </a>
+                `
+
+                :
+
+                `
+                  <button
+                    class="whatsapp-button"
+                    disabled
+                    style="
+                      opacity:.4;
+                      cursor:not-allowed;
+                    "
+                  >
+                    📵 Sem telefone
+                  </button>
+                `
+              }
+
+
+              <button
+                class="cancel-button"
+                onclick="cancelarAgendamento('${agendamento.id}')"
+              >
+                Cancelar agendamento
+              </button>
+
+            </div>
 
           `;
 
@@ -1062,8 +1186,6 @@
       }
 
 
-      /* EXCLUIR DO SUPABASE */
-
       const {
         error
       } =
@@ -1075,8 +1197,6 @@
             id
           );
 
-
-      /* ERRO */
 
       if (error) {
 
@@ -1094,14 +1214,10 @@
       }
 
 
-      /* SUCESSO */
-
       alert(
         "Agendamento cancelado com sucesso!"
       );
 
-
-      /* ATUALIZAR A AGENDA */
 
       carregarAgendamentos(
         dateFilter.value
@@ -1145,4 +1261,5 @@
   </script>
 
 </body>
+
 </html>
