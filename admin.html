@@ -2,20 +2,31 @@
 <html lang="pt-BR">
 
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>Painel — Arantes Barbershop</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600&display=swap"
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap"
     rel="stylesheet"
   >
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 
   <style>
 
@@ -25,309 +36,840 @@
       padding: 0;
     }
 
-    body {
-      font-family: "Inter", sans-serif;
-      background: #0b0b0b;
-      color: #fff;
-      min-height: 100vh;
+
+    :root {
+
+      --black: #080808;
+
+      --black-2: #0e0e0e;
+
+      --card: #141414;
+
+      --card-2: #191919;
+
+      --border: #292929;
+
+      --text: #ffffff;
+
+      --muted: #8c8c8c;
+
+      --muted-2: #b5b5b5;
+
+      --red: #c62828;
+
+      --red-light: #e53935;
+
+      --green: #25D366;
+
     }
+
+
+    body {
+
+      font-family: "Inter", sans-serif;
+
+      background:
+        radial-gradient(
+          circle at top right,
+          rgba(198, 40, 40, .10),
+          transparent 35%
+        ),
+        var(--black);
+
+      color: var(--text);
+
+      min-height: 100vh;
+
+    }
+
+
+    button,
+    input {
+
+      font-family: inherit;
+
+    }
+
 
     .hidden {
+
       display: none !important;
+
     }
 
-    /* ==========================
+
+    /* =================================
        LOGIN
-    ========================== */
+    ================================= */
 
     .login-container {
+
       min-height: 100vh;
+
       display: flex;
+
       align-items: center;
+
       justify-content: center;
-      padding: 20px;
+
+      padding: 22px;
+
     }
+
 
     .login-box {
+
       width: 100%;
-      max-width: 400px;
-      background: #141414;
-      border: 1px solid #252525;
-      border-radius: 18px;
-      padding: 28px 22px;
+
+      max-width: 410px;
+
+      background: rgba(20,20,20,.96);
+
+      border: 1px solid var(--border);
+
+      border-radius: 22px;
+
+      padding: 34px 24px;
+
+      box-shadow:
+        0 25px 70px rgba(0,0,0,.55);
+
     }
 
-    .logo {
+
+    .login-logo {
+
+      width: 58px;
+
+      height: 58px;
+
+      border-radius: 16px;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      background: var(--red);
+
+      color: white;
+
       font-family: "Oswald", sans-serif;
-      font-size: 30px;
-      letter-spacing: 1px;
-      margin-bottom: 4px;
+
+      font-size: 25px;
+
+      font-weight: 700;
+
+      margin-bottom: 18px;
+
+      box-shadow:
+        0 10px 30px rgba(198,40,40,.25);
+
     }
 
-    .subtitle {
-      color: #888;
-      font-size: 13px;
-      margin-bottom: 28px;
+
+    .login-title {
+
+      font-family: "Oswald", sans-serif;
+
+      font-size: 32px;
+
+      letter-spacing: 1px;
+
     }
+
+
+    .login-subtitle {
+
+      color: var(--muted);
+
+      font-size: 13px;
+
+      margin-top: 5px;
+
+      margin-bottom: 30px;
+
+    }
+
 
     label {
+
       display: block;
-      color: #aaa;
-      font-size: 13px;
+
+      color: var(--muted-2);
+
+      font-size: 12px;
+
+      font-weight: 600;
+
       margin-bottom: 7px;
+
     }
+
 
     input {
+
       width: 100%;
-      background: #0d0d0d;
-      color: #fff;
-      border: 1px solid #2c2c2c;
-      border-radius: 10px;
-      padding: 13px;
+
+      background: #0b0b0b;
+
+      color: white;
+
+      border: 1px solid var(--border);
+
+      border-radius: 11px;
+
+      padding: 14px;
+
       outline: none;
-      margin-bottom: 16px;
+
+      margin-bottom: 17px;
+
       font-size: 14px;
+
     }
+
 
     input:focus {
-      border-color: #555;
+
+      border-color: var(--red);
+
     }
+
 
     .login-button {
+
       width: 100%;
+
       border: none;
-      border-radius: 10px;
-      padding: 14px;
-      background: #fff;
-      color: #000;
-      font-weight: 700;
+
+      border-radius: 11px;
+
+      padding: 15px;
+
+      background: var(--red);
+
+      color: white;
+
+      font-weight: 800;
+
       font-size: 14px;
+
       cursor: pointer;
+
+      transition: .2s;
+
     }
+
+
+    .login-button:active {
+
+      transform: scale(.98);
+
+    }
+
 
     .error {
-      color: #ff6b6b;
+
+      color: #ff7777;
+
       font-size: 13px;
+
       margin-top: 14px;
-      line-height: 1.4;
+
     }
 
-    /* ==========================
-       PAINEL
-    ========================== */
+
+    /* =================================
+       CONTAINER
+    ================================= */
 
     .container {
+
       width: 100%;
+
       max-width: 1200px;
+
       margin: 0 auto;
-      padding: 24px 18px 40px;
+
+      padding: 22px 16px 45px;
+
     }
+
+
+    /* =================================
+       HEADER
+    ================================= */
 
     header {
+
       display: flex;
+
       justify-content: space-between;
+
       align-items: center;
-      gap: 16px;
-      margin-bottom: 28px;
+
+      gap: 15px;
+
+      margin-bottom: 25px;
+
     }
+
+
+    .brand {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 12px;
+
+    }
+
+
+    .brand-icon {
+
+      width: 46px;
+
+      height: 46px;
+
+      border-radius: 13px;
+
+      background: var(--red);
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      font-family: "Oswald", sans-serif;
+
+      font-weight: 700;
+
+      font-size: 19px;
+
+    }
+
 
     .header-title {
+
       font-family: "Oswald", sans-serif;
-      font-size: 28px;
+
+      font-size: 25px;
+
       letter-spacing: 1px;
+
+      line-height: 1;
+
     }
+
 
     .header-title span {
-      color: #888;
-      font-size: 13px;
+
+      color: var(--muted);
+
       display: block;
+
       font-family: "Inter", sans-serif;
+
+      font-size: 11px;
+
       letter-spacing: 0;
-      margin-top: 3px;
+
+      margin-top: 5px;
+
     }
+
 
     .logout {
-      border: 1px solid #2d2d2d;
-      background: #151515;
-      color: #fff;
-      padding: 10px 14px;
+
+      border: 1px solid var(--border);
+
+      background: #121212;
+
+      color: white;
+
+      padding: 10px 13px;
+
       border-radius: 10px;
-      font-size: 13px;
+
+      font-size: 12px;
+
+      font-weight: 600;
+
       cursor: pointer;
+
     }
 
-    /* ==========================
+
+    /* =================================
+       HERO
+    ================================= */
+
+    .hero {
+
+      background:
+        linear-gradient(
+          135deg,
+          #191919,
+          #0f0f0f
+        );
+
+      border: 1px solid var(--border);
+
+      border-radius: 18px;
+
+      padding: 20px;
+
+      margin-bottom: 16px;
+
+      position: relative;
+
+      overflow: hidden;
+
+    }
+
+
+    .hero::after {
+
+      content: "";
+
+      position: absolute;
+
+      width: 150px;
+
+      height: 150px;
+
+      border-radius: 50%;
+
+      background: rgba(198,40,40,.12);
+
+      right: -60px;
+
+      top: -70px;
+
+    }
+
+
+    .hero-small {
+
+      color: var(--muted);
+
+      font-size: 11px;
+
+      text-transform: uppercase;
+
+      letter-spacing: 1.4px;
+
+      margin-bottom: 7px;
+
+    }
+
+
+    .hero-title {
+
+      font-family: "Oswald", sans-serif;
+
+      font-size: 29px;
+
+      letter-spacing: .5px;
+
+    }
+
+
+    .hero-date {
+
+      color: var(--muted-2);
+
+      font-size: 13px;
+
+      margin-top: 5px;
+
+    }
+
+
+    /* =================================
        CARDS
-    ========================== */
+    ================================= */
 
     .cards {
+
       display: grid;
+
       grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
+
+      gap: 10px;
+
       margin-bottom: 28px;
+
     }
+
 
     .card {
-      background: #141414;
-      border: 1px solid #242424;
-      border-radius: 14px;
-      padding: 18px;
+
+      background: var(--card);
+
+      border: 1px solid var(--border);
+
+      border-radius: 16px;
+
+      padding: 16px;
+
+      min-height: 105px;
+
+      position: relative;
+
+      overflow: hidden;
+
     }
+
+
+    .card::before {
+
+      content: "";
+
+      position: absolute;
+
+      left: 0;
+
+      top: 0;
+
+      width: 3px;
+
+      height: 100%;
+
+      background: var(--red);
+
+    }
+
 
     .card-title {
-      color: #999;
-      font-size: 12px;
-      margin-bottom: 10px;
+
+      color: var(--muted);
+
+      font-size: 11px;
+
+      font-weight: 600;
+
+      margin-bottom: 11px;
+
     }
+
 
     .card-value {
-      font-size: 26px;
-      font-weight: 700;
+
+      font-size: 24px;
+
+      font-weight: 800;
+
+      letter-spacing: -.5px;
+
     }
 
-    /* ==========================
-       AGENDA
-    ========================== */
+
+    /* =================================
+       AGENDA HEADER
+    ================================= */
 
     .section {
-      margin-top: 26px;
+
+      margin-top: 24px;
+
     }
+
 
     .section-header {
+
       display: flex;
+
       justify-content: space-between;
+
       align-items: center;
+
       gap: 12px;
-      margin-bottom: 14px;
+
+      margin-bottom: 15px;
+
     }
+
 
     h2 {
+
       font-family: "Oswald", sans-serif;
-      font-size: 23px;
+
+      font-size: 25px;
+
       letter-spacing: .5px;
+
     }
+
+
+    .section-subtitle {
+
+      color: var(--muted);
+
+      font-size: 11px;
+
+      margin-top: 3px;
+
+    }
+
 
     .date {
-      background: #141414;
-      color: #fff;
-      border: 1px solid #2d2d2d;
+
+      width: auto;
+
+      min-width: 145px;
+
+      background: var(--card);
+
+      color: white;
+
+      border: 1px solid var(--border);
+
       padding: 10px;
-      border-radius: 9px;
-      font-size: 13px;
+
+      border-radius: 10px;
+
+      font-size: 12px;
+
+      margin: 0;
+
     }
+
+
+    /* =================================
+       APPOINTMENT
+    ================================= */
 
     .appointment {
-      background: #141414;
-      border: 1px solid #242424;
-      border-radius: 14px;
-      padding: 16px;
-      margin-bottom: 10px;
+
+      background:
+        linear-gradient(
+          145deg,
+          #171717,
+          #111111
+        );
+
+      border: 1px solid var(--border);
+
+      border-radius: 17px;
+
+      padding: 17px;
+
+      margin-bottom: 11px;
+
+      box-shadow:
+        0 8px 25px rgba(0,0,0,.15);
+
     }
+
 
     .appointment-top {
+
       display: flex;
+
       justify-content: space-between;
+
       align-items: center;
-      margin-bottom: 10px;
+
+      margin-bottom: 14px;
+
     }
+
 
     .time {
-      font-size: 20px;
-      font-weight: 700;
+
+      font-family: "Oswald", sans-serif;
+
+      font-size: 25px;
+
+      color: white;
+
     }
+
 
     .status {
-      font-size: 11px;
-      padding: 5px 8px;
+
+      font-size: 10px;
+
+      font-weight: 700;
+
+      padding: 6px 9px;
+
       border-radius: 20px;
-      background: #222;
-      color: #ddd;
+
+      background: rgba(198,40,40,.12);
+
+      color: #ff7777;
+
+      border: 1px solid rgba(198,40,40,.25);
+
     }
+
 
     .client {
-      font-size: 16px;
-      font-weight: 600;
+
+      font-size: 17px;
+
+      font-weight: 700;
+
       margin-bottom: 5px;
+
     }
+
 
     .service {
-      color: #aaa;
+
+      color: var(--muted-2);
+
       font-size: 13px;
+
       margin-bottom: 4px;
+
     }
+
 
     .price {
-      margin-top: 12px;
-      font-weight: 700;
+
+      color: white;
+
+      margin-top: 11px;
+
       font-size: 15px;
+
+      font-weight: 800;
+
     }
 
-    /* ==========================
-       BOTÕES DO AGENDAMENTO
-    ========================== */
+
+    /* =================================
+       ACTIONS
+    ================================= */
 
     .appointment-actions {
+
       display: flex;
+
       flex-direction: column;
+
       gap: 8px;
+
       margin-top: 16px;
+
     }
+
 
     .whatsapp-button {
+
       width: 100%;
+
       border: none;
+
       border-radius: 10px;
+
       padding: 12px;
-      background: #25D366;
-      color: #fff;
-      font-weight: 700;
+
+      background: var(--green);
+
+      color: white;
+
+      font-weight: 800;
+
       font-size: 13px;
+
       cursor: pointer;
+
       text-align: center;
+
       text-decoration: none;
+
     }
 
-    .whatsapp-button:active {
-      opacity: .85;
-    }
 
     .cancel-button {
+
       width: 100%;
-      border: 1px solid #3a2525;
+
+      border: 1px solid #3b2525;
+
       border-radius: 10px;
+
       padding: 12px;
+
       background: #181111;
-      color: #ff6b6b;
+
+      color: #ff7777;
+
       font-weight: 600;
+
       font-size: 13px;
+
       cursor: pointer;
+
     }
 
-    .cancel-button:active {
-      opacity: .8;
+
+    .empty {
+
+      background: var(--card);
+
+      border: 1px dashed #333;
+
+      border-radius: 16px;
+
+      padding: 35px 18px;
+
+      text-align: center;
+
+      color: var(--muted);
+
+      font-size: 13px;
+
     }
+
+
+    /* =================================
+       DESKTOP
+    ================================= */
 
     @media (min-width: 700px) {
 
-      .cards {
-        grid-template-columns: repeat(4, 1fr);
+      .container {
+
+        padding: 35px 30px 55px;
+
       }
 
-      .container {
-        padding: 35px 30px 50px;
+
+      .cards {
+
+        grid-template-columns:
+          repeat(4, 1fr);
+
+        gap: 12px;
+
       }
+
 
       .appointment-actions {
+
         flex-direction: row;
+
       }
+
 
       .whatsapp-button,
       .cancel-button {
-        width: auto;
+
         flex: 1;
+
       }
 
     }
+
 
   </style>
 
@@ -337,9 +879,9 @@
 <body>
 
 
-  <!-- ==========================
+  <!-- =================================
        LOGIN
-  ========================== -->
+  ================================= -->
 
   <div
     id="loginContainer"
@@ -348,13 +890,18 @@
 
     <div class="login-box">
 
-      <div class="logo">
+      <div class="login-logo">
+        A
+      </div>
+
+      <div class="login-title">
         ARANTES
       </div>
 
-      <div class="subtitle">
+      <div class="login-subtitle">
         Painel administrativo
       </div>
+
 
       <form id="loginForm">
 
@@ -369,6 +916,7 @@
           required
         >
 
+
         <label for="password">
           Senha
         </label>
@@ -380,12 +928,14 @@
           required
         >
 
+
         <button
           type="submit"
           class="login-button"
         >
-          Entrar
+          ENTRAR NO PAINEL
         </button>
+
 
         <div
           id="loginError"
@@ -399,9 +949,9 @@
   </div>
 
 
-  <!-- ==========================
+  <!-- =================================
        PAINEL
-  ========================== -->
+  ================================= -->
 
   <div
     id="adminPanel"
@@ -410,17 +960,29 @@
 
     <div class="container">
 
+
+      <!-- HEADER -->
+
       <header>
 
-        <div class="header-title">
+        <div class="brand">
 
-          ARANTES
+          <div class="brand-icon">
+            A
+          </div>
 
-          <span>
-            Painel administrativo
-          </span>
+          <div class="header-title">
+
+            ARANTES
+
+            <span>
+              Painel administrativo
+            </span>
+
+          </div>
 
         </div>
+
 
         <button
           id="logoutButton"
@@ -432,16 +994,37 @@
       </header>
 
 
-      <!-- ==========================
-           CARDS
-      ========================== -->
+      <!-- HERO -->
+
+      <div class="hero">
+
+        <div class="hero-small">
+          Gestão da barbearia
+        </div>
+
+        <div class="hero-title">
+          Sua agenda, no controle.
+        </div>
+
+        <div
+          id="heroDate"
+          class="hero-date"
+        >
+          Hoje
+        </div>
+
+      </div>
+
+
+      <!-- CARDS -->
 
       <section class="cards">
 
+
         <div class="card">
 
           <div class="card-title">
-            Agendamentos
+            AGENDAMENTOS
           </div>
 
           <div class="card-value">
@@ -454,7 +1037,7 @@
         <div class="card">
 
           <div class="card-title">
-            Clientes
+            CLIENTES
           </div>
 
           <div class="card-value">
@@ -467,7 +1050,7 @@
         <div class="card">
 
           <div class="card-title">
-            Valor previsto
+            VALOR PREVISTO
           </div>
 
           <div class="card-value">
@@ -480,7 +1063,7 @@
         <div class="card">
 
           <div class="card-title">
-            Próximo horário
+            PRÓXIMO HORÁRIO
           </div>
 
           <div class="card-value">
@@ -489,20 +1072,29 @@
 
         </div>
 
+
       </section>
 
 
-      <!-- ==========================
-           AGENDA
-      ========================== -->
+      <!-- AGENDA -->
 
       <section class="section">
 
+
         <div class="section-header">
 
-          <h2>
-            Agenda
-          </h2>
+          <div>
+
+            <h2>
+              Agenda
+            </h2>
+
+            <div class="section-subtitle">
+              Agendamentos do dia selecionado
+            </div>
+
+          </div>
+
 
           <input
             type="date"
@@ -515,23 +1107,15 @@
 
         <div id="appointmentsList">
 
-          <div
-            style="
-              background:#141414;
-              border:1px dashed #303030;
-              border-radius:14px;
-              padding:28px 18px;
-              text-align:center;
-              color:#888;
-              font-size:14px;
-            "
-          >
+          <div class="empty">
             Nenhum agendamento carregado.
           </div>
 
         </div>
 
+
       </section>
+
 
     </div>
 
@@ -540,12 +1124,14 @@
 
   <script>
 
-    /* ==========================
+
+    /* =================================
        SUPABASE
-    ========================== */
+    ================================= */
 
     const SUPABASE_URL =
       "https://bgmcryfcwjikuttwftgp.supabase.co";
+
 
     const SUPABASE_KEY =
       "sb_publishable_C0Tahq5Lffw4ukCwj9WXHQ_HtDbD6PU";
@@ -558,34 +1144,39 @@
       );
 
 
-    /* ==========================
+    /* =================================
        ELEMENTOS
-    ========================== */
+    ================================= */
 
     const loginContainer =
       document.getElementById(
         "loginContainer"
       );
 
+
     const adminPanel =
       document.getElementById(
         "adminPanel"
       );
+
 
     const loginForm =
       document.getElementById(
         "loginForm"
       );
 
+
     const loginError =
       document.getElementById(
         "loginError"
       );
 
+
     const logoutButton =
       document.getElementById(
         "logoutButton"
       );
+
 
     const dateFilter =
       document.getElementById(
@@ -593,14 +1184,21 @@
       );
 
 
-    /* ==========================
+    const heroDate =
+      document.getElementById(
+        "heroDate"
+      );
+
+
+    /* =================================
        DATA DE HOJE
-    ========================== */
+    ================================= */
 
     function obterDataHoje() {
 
       const agora =
         new Date();
+
 
       return [
 
@@ -619,9 +1217,46 @@
     }
 
 
-    /* ==========================
+    /* =================================
+       DATA FORMATADA
+    ================================= */
+
+    function formatarData(
+      data
+    ) {
+
+      if (!data) {
+        return "";
+      }
+
+
+      const partes =
+        data.split("-");
+
+
+      if (
+        partes.length !== 3
+      ) {
+
+        return data;
+
+      }
+
+
+      return (
+        partes[2] +
+        "/" +
+        partes[1] +
+        "/" +
+        partes[0]
+      );
+
+    }
+
+
+    /* =================================
        MOSTRAR PAINEL
-    ========================== */
+    ================================= */
 
     function mostrarPainel() {
 
@@ -629,27 +1264,38 @@
         "hidden"
       );
 
+
       adminPanel.classList.remove(
         "hidden"
       );
 
+
       dateFilter.value =
         obterDataHoje();
+
+
+      heroDate.textContent =
+        "Hoje • " +
+        formatarData(
+          obterDataHoje()
+        );
+
 
       carregarAgendamentos();
 
     }
 
 
-    /* ==========================
+    /* =================================
        MOSTRAR LOGIN
-    ========================== */
+    ================================= */
 
     function mostrarLogin() {
 
       adminPanel.classList.add(
         "hidden"
       );
+
 
       loginContainer.classList.remove(
         "hidden"
@@ -658,15 +1304,16 @@
     }
 
 
-    /* ==========================
+    /* =================================
        LOGIN
-    ========================== */
+    ================================= */
 
     loginForm.addEventListener(
       "submit",
       async function(event) {
 
         event.preventDefault();
+
 
         loginError.classList.add(
           "hidden"
@@ -704,9 +1351,11 @@
           loginError.textContent =
             "E-mail ou senha incorretos.";
 
+
           loginError.classList.remove(
             "hidden"
           );
+
 
           return;
 
@@ -719,9 +1368,9 @@
     );
 
 
-    /* ==========================
+    /* =================================
        LOGOUT
-    ========================== */
+    ================================= */
 
     logoutButton.addEventListener(
       "click",
@@ -729,15 +1378,16 @@
 
         await supabaseClient.auth.signOut();
 
+
         mostrarLogin();
 
       }
     );
 
 
-    /* ==========================
+    /* =================================
        VERIFICAR SESSÃO
-    ========================== */
+    ================================= */
 
     async function verificarSessao() {
 
@@ -761,9 +1411,9 @@
     }
 
 
-    /* ==========================
+    /* =================================
        CARREGAR AGENDAMENTOS
-    ========================== */
+    ================================= */
 
     async function carregarAgendamentos(
       dataSelecionada = null
@@ -781,9 +1431,7 @@
         dataSelecionada || hoje;
 
 
-      /* ==========================
-         BUSCAR NO SUPABASE
-      ========================== */
+      /* BUSCAR */
 
       const {
         data: agendamentos,
@@ -813,6 +1461,7 @@
           error
         );
 
+
         return;
 
       }
@@ -824,9 +1473,7 @@
         );
 
 
-      /* ==========================
-         QUANTIDADE
-      ========================== */
+      /* QUANTIDADE */
 
       const quantidade =
         agendamentos
@@ -834,9 +1481,7 @@
           : 0;
 
 
-      /* ==========================
-         FATURAMENTO
-      ========================== */
+      /* FATURAMENTO */
 
       const faturamento =
         (agendamentos || [])
@@ -856,9 +1501,7 @@
           );
 
 
-      /* ==========================
-         CLIENTES
-      ========================== */
+      /* CLIENTES */
 
       const clientesUnicos =
         new Set(
@@ -878,14 +1521,14 @@
         ).size;
 
 
-      /* ==========================
-         PRÓXIMO HORÁRIO
-      ========================== */
+      /* PRÓXIMO */
 
       let proximo = null;
 
 
-      if (dataBusca === hoje) {
+      if (
+        dataBusca === hoje
+      ) {
 
         const horaAtual =
           agora
@@ -918,9 +1561,7 @@
       }
 
 
-      /* ==========================
-         ATUALIZAR CARDS
-      ========================== */
+      /* ATUALIZAR CARDS */
 
       document.querySelector(
         ".card:nth-child(1) .card-value"
@@ -957,9 +1598,30 @@
           : "—";
 
 
-      /* ==========================
-         SEM AGENDAMENTOS
-      ========================== */
+      /* DATA DO HERO */
+
+      if (
+        dataBusca === hoje
+      ) {
+
+        heroDate.textContent =
+          "Hoje • " +
+          formatarData(
+            dataBusca
+          );
+
+      } else {
+
+        heroDate.textContent =
+          "Data selecionada • " +
+          formatarData(
+            dataBusca
+          );
+
+      }
+
+
+      /* SEM AGENDAMENTOS */
 
       if (
         !agendamentos ||
@@ -968,15 +1630,7 @@
 
         lista.innerHTML = `
 
-          <div style="
-            background:#141414;
-            border:1px dashed #303030;
-            border-radius:14px;
-            padding:28px 18px;
-            text-align:center;
-            color:#888;
-            font-size:14px;
-          ">
+          <div class="empty">
 
             Nenhum agendamento para esta data.
 
@@ -984,26 +1638,24 @@
 
         `;
 
+
         return;
 
       }
 
 
-      /* ==========================
-         LIMPAR LISTA
-      ========================== */
+      /* LIMPAR */
 
       lista.innerHTML = "";
 
 
-      /* ==========================
-         MOSTRAR AGENDAMENTOS
-      ========================== */
+      /* MOSTRAR */
 
       agendamentos.forEach(
         (
           agendamento
         ) => {
+
 
           const item =
             document.createElement(
@@ -1015,9 +1667,7 @@
             "appointment";
 
 
-          /* ==========================
-             WHATSAPP
-          ========================== */
+          /* TELEFONE */
 
           let telefone =
             agendamento.telefone || "";
@@ -1029,11 +1679,6 @@
               ""
             );
 
-
-          /*
-            Se o número tiver 10 ou 11 dígitos,
-            adicionamos o código do Brasil.
-          */
 
           if (
             telefone.length === 10 ||
@@ -1047,21 +1692,29 @@
           }
 
 
+          /* MENSAGEM */
+
           const mensagem =
             encodeURIComponent(
+
               `Olá, ${agendamento.nome}! Aqui é da Arantes Barbershop. Estou entrando em contato sobre seu agendamento de ${agendamento.servico} às ${agendamento.horario}.`
+
             );
 
 
           const whatsappLink =
             telefone
-              ? `https://wa.me/${telefone}?text=${mensagem}`
-              : "#";
+
+              ?
+
+              `https://wa.me/${telefone}?text=${mensagem}`
+
+              :
+
+              "#";
 
 
-          /* ==========================
-             HTML DO AGENDAMENTO
-          ========================== */
+          /* HTML */
 
           item.innerHTML = `
 
@@ -1097,6 +1750,7 @@
 
 
             <div class="price">
+
               R$ ${
                 Number(
                   agendamento.preco
@@ -1107,16 +1761,20 @@
                   ","
                 )
               }
+
             </div>
 
 
             <div class="appointment-actions">
 
+
               ${
                 telefone
+
                 ?
 
                 `
+
                   <a
                     href="${whatsappLink}"
                     target="_blank"
@@ -1124,11 +1782,13 @@
                   >
                     💬 Chamar no WhatsApp
                   </a>
+
                 `
 
                 :
 
                 `
+
                   <button
                     class="whatsapp-button"
                     disabled
@@ -1139,7 +1799,9 @@
                   >
                     📵 Sem telefone
                   </button>
+
                 `
+
               }
 
 
@@ -1150,6 +1812,7 @@
                 Cancelar agendamento
               </button>
 
+
             </div>
 
           `;
@@ -1159,15 +1822,16 @@
             item
           );
 
+
         }
       );
 
     }
 
 
-    /* ==========================
+    /* =================================
        CANCELAR AGENDAMENTO
-    ========================== */
+    ================================= */
 
     async function cancelarAgendamento(
       id
@@ -1205,9 +1869,11 @@
           error
         );
 
+
         alert(
           "Não foi possível cancelar o agendamento."
         );
+
 
         return;
 
@@ -1226,9 +1892,9 @@
     }
 
 
-    /* ==========================
+    /* =================================
        FILTRO DE DATA
-    ========================== */
+    ================================= */
 
     dateFilter.addEventListener(
       "change",
@@ -1252,13 +1918,15 @@
     );
 
 
-    /* ==========================
-       INICIAR SISTEMA
-    ========================== */
+    /* =================================
+       INICIAR
+    ================================= */
 
     verificarSessao();
 
+
   </script>
+
 
 </body>
 
