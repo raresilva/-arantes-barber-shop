@@ -1,890 +1,2917 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1"
+>
+
 <title>Arantes Barbershop — Agendamento</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link
+  rel="preconnect"
+  href="https://fonts.googleapis.com"
+  crossorigin
+>
+
+<link
+  href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap"
+  rel="stylesheet"
+>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
 <style>
-  /* ============================================================
-     CONFIGURAÇÃO DO SUPABASE
-     ------------------------------------------------------------
-     Cole aqui a URL e a CHAVE PUBLICÁVEL (anon/public) do seu
-     projeto Supabase. NÃO cole a chave secreta (service_role).
-     Essas variáveis ficam definidas no <script> lá embaixo,
-     bem no início — procure por "COLE_AQUI".
-     ============================================================ */
 
-  :root{
-    --preto: #0c0c0d;
-    --preto-2: #16171a;
-    --branco: #f5f4f1;
-    --cinza-claro: #c9c9c6;
-    --cinza-medio: #86867f;
-    --cinza-escuro: #2b2c2f;
-    --linha: #3a3b3e;
-    --ok: #e8e6df;
-    --erro: #d9534f;
-    --radius: 3px;
-    --serif-headline: 'Oswald', sans-serif;
-    --sans-body: 'Inter', sans-serif;
-  }
+/* ============================================================
+   CORES
+============================================================ */
 
-  *{ box-sizing: border-box; }
-  html,body{ margin:0; padding:0; }
+:root{
 
-  body{
-    background: var(--preto);
-    color: var(--branco);
-    font-family: var(--sans-body);
-    min-height: 100vh;
-    line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
-  }
+  --preto: #07090c;
 
-  button{ font-family: inherit; }
+  --preto-2: #0d1117;
 
-  /* ---------- barra de topo ---------- */
-  header.topbar{
-    position: sticky;
-    top: 0;
-    z-index: 20;
-    background: var(--preto);
-    border-bottom: 1px solid var(--linha);
-    padding: 18px 20px 16px;
-  }
-  .brand{
-    font-family: var(--serif-headline);
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    font-size: 22px;
-    color: var(--branco);
-    display:flex;
-    align-items:center;
-    gap: 10px;
-  }
-  .brand .pole{
-    width: 8px;
-    height: 28px;
-    border-radius: 4px;
-    background: repeating-linear-gradient(
-      45deg,
-      var(--branco) 0 4px,
-      var(--preto) 4px 8px,
-      var(--branco) 8px 12px,
-      var(--cinza-medio) 12px 16px
+  --preto-3: #111720;
+
+  --azul: #0B1F3A;
+
+  --azul-2: #102B4F;
+
+  --azul-light: #163A63;
+
+  --azul-brilho: #28588D;
+
+  --branco: #f5f7fa;
+
+  --cinza-claro: #c3c9d1;
+
+  --cinza-medio: #7f8995;
+
+  --cinza-escuro: #202833;
+
+  --linha: #29323e;
+
+  --erro: #e05252;
+
+  --verde: #25D366;
+
+  --radius: 12px;
+
+  --serif-headline: 'Oswald', sans-serif;
+
+  --sans-body: 'Inter', sans-serif;
+
+}
+
+
+/* ============================================================
+   RESET
+============================================================ */
+
+*{
+
+  box-sizing: border-box;
+
+}
+
+
+html,
+body{
+
+  margin: 0;
+
+  padding: 0;
+
+}
+
+
+body{
+
+  background:
+
+    radial-gradient(
+      circle at top right,
+      rgba(11,31,58,.38),
+      transparent 38%
+    ),
+
+    radial-gradient(
+      circle at bottom left,
+      rgba(22,58,99,.12),
+      transparent 35%
+    ),
+
+    var(--preto);
+
+  color: var(--branco);
+
+  font-family: var(--sans-body);
+
+  min-height: 100vh;
+
+  line-height: 1.5;
+
+  -webkit-font-smoothing: antialiased;
+
+}
+
+
+button{
+
+  font-family: inherit;
+
+}
+
+
+/* ============================================================
+   TOPO
+============================================================ */
+
+header.topbar{
+
+  position: sticky;
+
+  top: 0;
+
+  z-index: 20;
+
+  background:
+
+    rgba(7,9,12,.94);
+
+  backdrop-filter: blur(12px);
+
+  border-bottom: 1px solid var(--linha);
+
+  padding: 17px 20px 15px;
+
+}
+
+
+.brand{
+
+  font-family: var(--serif-headline);
+
+  font-weight: 600;
+
+  letter-spacing: .05em;
+
+  font-size: 22px;
+
+  color: var(--branco);
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+
+}
+
+
+.brand .pole{
+
+  width: 7px;
+
+  height: 30px;
+
+  border-radius: 5px;
+
+  background:
+
+    linear-gradient(
+      180deg,
+      var(--azul-light),
+      var(--azul),
+      var(--azul-brilho)
     );
-    flex-shrink: 0;
-  }
-  .brand small{
-    display:block;
-    font-family: var(--sans-body);
-    font-weight: 400;
-    letter-spacing: 0.02em;
-    font-size: 11px;
-    color: var(--cinza-medio);
-    margin-top: 2px;
+
+  box-shadow:
+
+    0 0 18px rgba(22,58,99,.45);
+
+  flex-shrink: 0;
+
+}
+
+
+.brand small{
+
+  display: block;
+
+  font-family: var(--sans-body);
+
+  font-weight: 400;
+
+  letter-spacing: .02em;
+
+  font-size: 11px;
+
+  color: var(--cinza-medio);
+
+  margin-top: 2px;
+
+}
+
+
+/* ============================================================
+   PASSOS
+============================================================ */
+
+.steps{
+
+  display: flex;
+
+  gap: 6px;
+
+  max-width: 520px;
+
+  margin: 14px auto 0;
+
+  padding: 0 20px;
+
+}
+
+
+.steps .dot{
+
+  flex: 1;
+
+  height: 4px;
+
+  background: var(--cinza-escuro);
+
+  border-radius: 5px;
+
+  transition:
+    background .25s ease,
+    box-shadow .25s ease;
+
+}
+
+
+.steps .dot.active{
+
+  background: var(--azul-light);
+
+  box-shadow:
+    0 0 10px rgba(22,58,99,.45);
+
+}
+
+
+.steps .dot.done{
+
+  background: var(--azul-brilho);
+
+}
+
+
+/* ============================================================
+   CONTEÚDO
+============================================================ */
+
+main{
+
+  max-width: 520px;
+
+  margin: 0 auto;
+
+  padding: 30px 20px 60px;
+
+}
+
+
+.panel{
+
+  display: none;
+
+}
+
+
+.panel.visible{
+
+  display: block;
+
+  animation: fade-in .35s ease;
+
+}
+
+
+@keyframes fade-in{
+
+  from{
+
+    opacity: 0;
+
+    transform: translateY(7px);
+
   }
 
-  /* ---------- passos ---------- */
-  .steps{
-    display:flex;
-    gap: 6px;
-    max-width: 520px;
-    margin: 14px auto 0;
-    padding: 0 20px;
+  to{
+
+    opacity: 1;
+
+    transform: translateY(0);
+
   }
-  .steps .dot{
-    flex:1;
-    height: 3px;
-    background: var(--cinza-escuro);
-    border-radius: 2px;
-    transition: background .25s ease;
+
+}
+
+
+/* ============================================================
+   TÍTULOS
+============================================================ */
+
+h1.title{
+
+  font-family: var(--serif-headline);
+
+  font-weight: 600;
+
+  font-size: 29px;
+
+  letter-spacing: .02em;
+
+  margin: 0 0 5px;
+
+}
+
+
+p.subtitle{
+
+  color: var(--cinza-medio);
+
+  font-size: 14px;
+
+  margin: 0 0 28px;
+
+}
+
+
+/* ============================================================
+   CAMPOS
+============================================================ */
+
+label{
+
+  display: block;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  color: var(--cinza-claro);
+
+  margin: 0 0 7px;
+
+}
+
+
+.field{
+
+  margin-bottom: 18px;
+
+}
+
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"]{
+
+  width: 100%;
+
+  background: var(--preto-2);
+
+  border: 1px solid var(--linha);
+
+  color: var(--branco);
+
+  padding: 14px;
+
+  border-radius: var(--radius);
+
+  font-size: 16px;
+
+  font-family: var(--sans-body);
+
+  transition:
+    border-color .2s ease,
+    box-shadow .2s ease;
+
+}
+
+
+input:focus{
+
+  outline: none;
+
+  border-color: var(--azul-light);
+
+  box-shadow:
+
+    0 0 0 3px rgba(22,58,99,.18);
+
+}
+
+
+input::placeholder{
+
+  color: #68727e;
+
+}
+
+
+.error-text{
+
+  color: var(--erro);
+
+  font-size: 13px;
+
+  margin-top: -10px;
+
+  margin-bottom: 16px;
+
+  min-height: 16px;
+
+}
+
+
+/* ============================================================
+   BOTÕES
+============================================================ */
+
+.btn{
+
+  display: block;
+
+  width: 100%;
+
+  padding: 15px 18px;
+
+  border-radius: var(--radius);
+
+  border: 1px solid var(--azul-light);
+
+  background:
+
+    linear-gradient(
+      135deg,
+      var(--azul-light),
+      var(--azul)
+    );
+
+  color: white;
+
+  font-weight: 700;
+
+  font-size: 14px;
+
+  letter-spacing: .02em;
+
+  cursor: pointer;
+
+  transition:
+
+    opacity .15s ease,
+
+    transform .1s ease,
+
+    box-shadow .2s ease;
+
+  box-shadow:
+
+    0 8px 25px rgba(11,31,58,.28);
+
+}
+
+
+.btn:hover{
+
+  box-shadow:
+
+    0 10px 30px rgba(22,58,99,.35);
+
+}
+
+
+.btn:active{
+
+  transform: scale(.98);
+
+}
+
+
+.btn:disabled{
+
+  opacity: .4;
+
+  cursor: not-allowed;
+
+}
+
+
+.btn.secondary{
+
+  background: transparent;
+
+  color: var(--branco);
+
+  border: 1px solid var(--linha);
+
+  box-shadow: none;
+
+}
+
+
+.btn.secondary:hover{
+
+  border-color: var(--azul-light);
+
+  background: rgba(11,31,58,.15);
+
+}
+
+
+.btn-row{
+
+  display: flex;
+
+  gap: 10px;
+
+  margin-top: 8px;
+
+}
+
+
+.btn-row .btn{
+
+  flex: 1;
+
+}
+
+
+/* ============================================================
+   SERVIÇOS
+============================================================ */
+
+.service-card{
+
+  border: 1px solid var(--linha);
+
+  border-radius: var(--radius);
+
+  padding: 17px;
+
+  margin-bottom: 12px;
+
+  cursor: pointer;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  transition:
+
+    border-color .2s ease,
+
+    background .2s ease,
+
+    transform .15s ease;
+
+  background:
+
+    linear-gradient(
+      145deg,
+      var(--preto-3),
+      var(--preto-2)
+    );
+
+}
+
+
+.service-card:hover{
+
+  border-color: var(--azul-light);
+
+}
+
+
+.service-card:active{
+
+  transform: scale(.99);
+
+}
+
+
+.service-card.selected{
+
+  border-color: var(--azul-light);
+
+  background:
+
+    linear-gradient(
+      145deg,
+      rgba(22,58,99,.34),
+      rgba(11,31,58,.30)
+    );
+
+  box-shadow:
+
+    0 8px 25px rgba(11,31,58,.18);
+
+}
+
+
+.service-card .name{
+
+  font-family: var(--serif-headline);
+
+  font-weight: 500;
+
+  font-size: 18px;
+
+}
+
+
+.service-card .desc{
+
+  font-size: 12px;
+
+  color: var(--cinza-medio);
+
+  margin-top: 3px;
+
+}
+
+
+.service-card .price{
+
+  font-family: var(--serif-headline);
+
+  font-size: 18px;
+
+  color: white;
+
+  white-space: nowrap;
+
+  margin-left: 12px;
+
+}
+
+
+.service-card.selected .price{
+
+  color: #b9d5f3;
+
+}
+
+
+.service-card .check{
+
+  width: 19px;
+
+  height: 19px;
+
+  border-radius: 50%;
+
+  border: 1px solid var(--cinza-medio);
+
+  margin-right: 12px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  transition: .2s;
+
+}
+
+
+.service-card.selected .check{
+
+  border-color: var(--azul-light);
+
+  background: var(--azul-light);
+
+}
+
+
+.service-card.selected .check::after{
+
+  content: "";
+
+  width: 7px;
+
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: white;
+
+}
+
+
+.service-card-inner{
+
+  display: flex;
+
+  align-items: center;
+
+  flex: 1;
+
+}
+
+
+/* ============================================================
+   HORÁRIOS
+============================================================ */
+
+.slots-grid{
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, 1fr);
+
+  gap: 10px;
+
+  margin: 7px 0 20px;
+
+}
+
+
+.slot{
+
+  border: 1px solid var(--linha);
+
+  border-radius: var(--radius);
+
+  padding: 14px 10px;
+
+  text-align: center;
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  background: var(--preto-2);
+
+  color: var(--branco);
+
+  transition:
+
+    border-color .2s ease,
+
+    background .2s ease,
+
+    transform .1s ease;
+
+}
+
+
+.slot:hover{
+
+  border-color: var(--azul-light);
+
+}
+
+
+.slot:active{
+
+  transform: scale(.98);
+
+}
+
+
+.slot.selected{
+
+  border-color: var(--azul-light);
+
+  background:
+
+    linear-gradient(
+      135deg,
+      var(--azul-light),
+      var(--azul)
+    );
+
+  color: white;
+
+  box-shadow:
+
+    0 7px 20px rgba(11,31,58,.3);
+
+}
+
+
+.slot.busy{
+
+  color: var(--cinza-medio);
+
+  background: transparent;
+
+  border-style: dashed;
+
+  cursor: not-allowed;
+
+  text-decoration: line-through;
+
+  opacity: .5;
+
+}
+
+
+.slot.busy:hover{
+
+  border-color: var(--linha);
+
+}
+
+
+.slots-empty,
+.slots-loading{
+
+  color: var(--cinza-medio);
+
+  font-size: 14px;
+
+  padding: 14px 0;
+
+}
+
+
+/* ============================================================
+   RESUMO
+============================================================ */
+
+.summary-box{
+
+  border: 1px solid var(--linha);
+
+  border-radius: var(--radius);
+
+  padding: 18px;
+
+  margin-bottom: 22px;
+
+  background:
+
+    linear-gradient(
+      145deg,
+      var(--preto-3),
+      var(--preto-2)
+    );
+
+}
+
+
+.summary-row{
+
+  display: flex;
+
+  justify-content: space-between;
+
+  padding: 11px 0;
+
+  border-bottom: 1px solid var(--linha);
+
+  font-size: 14px;
+
+  gap: 12px;
+
+}
+
+
+.summary-row:last-child{
+
+  border-bottom: none;
+
+}
+
+
+.summary-row .k{
+
+  color: var(--cinza-medio);
+
+}
+
+
+.summary-row .v{
+
+  text-align: right;
+
+  font-weight: 600;
+
+}
+
+
+.summary-row.total .v{
+
+  font-family: var(--serif-headline);
+
+  font-size: 20px;
+
+  color: #b9d5f3;
+
+}
+
+
+/* ============================================================
+   CONFIRMAÇÃO
+============================================================ */
+
+.confirm-wrap{
+
+  text-align: center;
+
+  padding-top: 20px;
+
+}
+
+
+.confirm-badge{
+
+  width: 68px;
+
+  height: 68px;
+
+  border-radius: 50%;
+
+  border: 1px solid var(--azul-light);
+
+  background:
+
+    radial-gradient(
+      circle,
+      rgba(22,58,99,.35),
+      rgba(11,31,58,.15)
+    );
+
+  color: #b9d5f3;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  margin: 0 auto 22px;
+
+  font-size: 29px;
+
+  box-shadow:
+
+    0 0 30px rgba(22,58,99,.25);
+
+}
+
+
+.confirm-title{
+
+  font-family: var(--serif-headline);
+
+  font-size: 27px;
+
+  margin: 0 0 6px;
+
+}
+
+
+.confirm-sub{
+
+  color: var(--cinza-medio);
+
+  font-size: 14px;
+
+  margin: 0 0 26px;
+
+}
+
+
+.confirm-box{
+
+  text-align: left;
+
+  border: 1px solid var(--linha);
+
+  border-radius: var(--radius);
+
+  padding: 18px;
+
+  margin-bottom: 26px;
+
+  background:
+
+    linear-gradient(
+      145deg,
+      var(--preto-3),
+      var(--preto-2)
+    );
+
+}
+
+
+/* ============================================================
+   ERRO SUPERIOR
+============================================================ */
+
+.top-error{
+
+  background: rgba(217,83,79,.10);
+
+  border: 1px solid rgba(217,83,79,.65);
+
+  color: #f0c2c2;
+
+  padding: 12px 14px;
+
+  border-radius: var(--radius);
+
+  font-size: 13px;
+
+  margin-bottom: 18px;
+
+  display: none;
+
+}
+
+
+.top-error.visible{
+
+  display: block;
+
+}
+
+
+/* ============================================================
+   LOADING
+============================================================ */
+
+.spinner{
+
+  display: inline-block;
+
+  width: 16px;
+
+  height: 16px;
+
+  border: 2px solid rgba(255,255,255,.20);
+
+  border-top-color: white;
+
+  border-radius: 50%;
+
+  animation: spin .7s linear infinite;
+
+  vertical-align: -3px;
+
+  margin-right: 8px;
+
+}
+
+
+.btn.secondary .spinner{
+
+  border: 2px solid rgba(245,247,250,.25);
+
+  border-top-color: var(--branco);
+
+}
+
+
+@keyframes spin{
+
+  to{
+
+    transform: rotate(360deg);
+
   }
-  .steps .dot.active{ background: var(--branco); }
-  .steps .dot.done{ background: var(--cinza-claro); }
+
+}
+
+
+/* ============================================================
+   MOBILE PEQUENO
+============================================================ */
+
+@media (max-width: 360px){
+
+  .slots-grid{
+
+    grid-template-columns:
+      repeat(2, 1fr);
+
+  }
+
+}
+
+
+/* ============================================================
+   DESKTOP
+============================================================ */
+
+@media (min-width: 700px){
 
   main{
-    max-width: 520px;
-    margin: 0 auto;
-    padding: 28px 20px 60px;
+
+    padding-top: 40px;
+
   }
 
-  .panel{ display:none; }
-  .panel.visible{ display:block; animation: fade-in .35s ease; }
-  @keyframes fade-in{
-    from{ opacity:0; transform: translateY(6px); }
-    to{ opacity:1; transform: translateY(0); }
-  }
-
-  h1.title{
-    font-family: var(--serif-headline);
-    font-weight: 500;
-    font-size: 26px;
-    letter-spacing: 0.01em;
-    margin: 0 0 4px;
-  }
-  p.subtitle{
-    color: var(--cinza-medio);
-    font-size: 14.5px;
-    margin: 0 0 26px;
-  }
-
-  label{
-    display:block;
-    font-size: 13px;
-    color: var(--cinza-claro);
-    margin: 0 0 6px;
-  }
-  .field{ margin-bottom: 18px; }
-  input[type="text"],
-  input[type="email"],
-  input[type="tel"],
-  input[type="date"]{
-    width: 100%;
-    background: var(--preto-2);
-    border: 1px solid var(--linha);
-    color: var(--branco);
-    padding: 13px 14px;
-    border-radius: var(--radius);
-    font-size: 16px;
-    font-family: var(--sans-body);
-  }
-  input:focus{
-    outline: none;
-    border-color: var(--branco);
-  }
-  input::placeholder{ color: var(--cinza-medio); }
-
-  .error-text{
-    color: var(--erro);
-    font-size: 13px;
-    margin-top: -10px;
-    margin-bottom: 16px;
-    min-height: 16px;
-  }
-
-  /* ---------- botões ---------- */
-  .btn{
-    display:block;
-    width: 100%;
-    padding: 15px 18px;
-    border-radius: var(--radius);
-    border: 1px solid var(--branco);
-    background: var(--branco);
-    color: var(--preto);
-    font-weight: 600;
-    font-size: 15px;
-    letter-spacing: 0.01em;
-    cursor: pointer;
-    transition: opacity .15s ease, transform .1s ease;
-  }
-  .btn:active{ transform: scale(0.98); }
-  .btn:disabled{
-    opacity: 0.35;
-    cursor: not-allowed;
-  }
-  .btn.secondary{
-    background: transparent;
-    color: var(--branco);
-    border: 1px solid var(--linha);
-  }
-  .btn-row{
-    display:flex;
-    gap: 10px;
-    margin-top: 8px;
-  }
-  .btn-row .btn{ flex:1; }
-
-  /* ---------- cards de serviço ---------- */
   .service-card{
-    border: 1px solid var(--linha);
-    border-radius: var(--radius);
-    padding: 16px 16px;
-    margin-bottom: 12px;
-    cursor: pointer;
-    display:flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: border-color .15s ease, background .15s ease;
-    background: var(--preto-2);
-  }
-  .service-card:hover{ border-color: var(--cinza-medio); }
-  .service-card.selected{
-    border-color: var(--branco);
-    background: var(--cinza-escuro);
-  }
-  .service-card .name{
-    font-family: var(--serif-headline);
-    font-weight: 500;
-    font-size: 17px;
-  }
-  .service-card .desc{
-    font-size: 12.5px;
-    color: var(--cinza-medio);
-    margin-top: 2px;
-  }
-  .service-card .price{
-    font-family: var(--serif-headline);
-    font-size: 17px;
-    color: var(--branco);
-    white-space: nowrap;
-    margin-left: 12px;
-  }
-  .service-card .check{
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    border: 1px solid var(--cinza-medio);
-    margin-right: 12px;
-    flex-shrink: 0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  }
-  .service-card.selected .check{
-    border-color: var(--branco);
-    background: var(--branco);
-  }
-  .service-card.selected .check::after{
-    content:"";
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--preto);
-  }
-  .service-card-inner{ display:flex; align-items:center; flex:1; }
 
-  /* ---------- horários ---------- */
+    padding: 18px;
+
+  }
+
   .slots-grid{
-    display:grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin: 6px 0 20px;
-  }
-  .slot{
-    border: 1px solid var(--linha);
-    border-radius: var(--radius);
-    padding: 13px 10px;
-    text-align:center;
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
-    background: var(--preto-2);
-    color: var(--branco);
-    transition: border-color .15s ease, background .15s ease;
-  }
-  .slot:hover{ border-color: var(--cinza-medio); }
-  .slot.selected{
-    border-color: var(--branco);
-    background: var(--branco);
-    color: var(--preto);
-  }
-  .slot.busy{
-    color: var(--cinza-medio);
-    background: transparent;
-    border-style: dashed;
-    cursor: not-allowed;
-    text-decoration: line-through;
-    opacity: 0.55;
-  }
-  .slot.busy:hover{ border-color: var(--linha); }
-  .slots-empty, .slots-loading{
-    color: var(--cinza-medio);
-    font-size: 14px;
-    padding: 14px 0;
+
+    grid-template-columns:
+      repeat(5, 1fr);
+
   }
 
-  /* ---------- resumo ---------- */
-  .summary-box{
-    border: 1px solid var(--linha);
-    border-radius: var(--radius);
-    padding: 18px;
-    margin-bottom: 22px;
-    background: var(--preto-2);
-  }
-  .summary-row{
-    display:flex;
-    justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--linha);
-    font-size: 14.5px;
-    gap: 12px;
-  }
-  .summary-row:last-child{ border-bottom: none; }
-  .summary-row .k{ color: var(--cinza-medio); }
-  .summary-row .v{ text-align:right; font-weight: 500; }
-  .summary-row.total .v{
-    font-family: var(--serif-headline);
-    font-size: 19px;
-  }
+}
 
-  /* ---------- confirmação ---------- */
-  .confirm-wrap{ text-align:center; padding-top: 20px; }
-  .confirm-badge{
-    width: 62px; height: 62px;
-    border-radius: 50%;
-    border: 1px solid var(--branco);
-    display:flex; align-items:center; justify-content:center;
-    margin: 0 auto 22px;
-    font-size: 26px;
-  }
-  .confirm-title{
-    font-family: var(--serif-headline);
-    font-size: 24px;
-    margin: 0 0 6px;
-  }
-  .confirm-sub{
-    color: var(--cinza-medio);
-    font-size: 14px;
-    margin: 0 0 26px;
-  }
-  .confirm-box{
-    text-align:left;
-    border: 1px solid var(--linha);
-    border-radius: var(--radius);
-    padding: 18px;
-    margin-bottom: 26px;
-    background: var(--preto-2);
-  }
 
-  .top-error{
-    background: rgba(217,83,79,0.12);
-    border: 1px solid var(--erro);
-    color: var(--ok);
-    padding: 12px 14px;
-    border-radius: var(--radius);
-    font-size: 13.5px;
-    margin-bottom: 18px;
-    display:none;
-  }
-  .top-error.visible{ display:block; }
-
-  .spinner{
-    display:inline-block;
-    width: 16px; height:16px;
-    border: 2px solid rgba(0,0,0,0.25);
-    border-top-color: var(--preto);
-    border-radius: 50%;
-    animation: spin .7s linear infinite;
-    vertical-align: -3px;
-    margin-right: 8px;
-  }
-  .btn.secondary .spinner{
-    border: 2px solid rgba(245,244,241,0.25);
-    border-top-color: var(--branco);
-  }
-  @keyframes spin{ to{ transform: rotate(360deg); } }
-
-  @media (max-width: 360px){
-    .slots-grid{ grid-template-columns: repeat(2, 1fr); }
-  }
 </style>
+
 </head>
+
+
 <body>
 
+
 <header class="topbar">
+
   <div class="brand">
+
     <span class="pole"></span>
+
     <span>
+
       ARANTES BARBERSHOP
-      <small>Agende seu horário</small>
+
+      <small>
+        Agende seu horário
+      </small>
+
     </span>
+
   </div>
-  <div class="steps" id="steps">
-    <div class="dot" data-step="0"></div>
-    <div class="dot" data-step="1"></div>
-    <div class="dot" data-step="2"></div>
-    <div class="dot" data-step="3"></div>
+
+
+  <div
+    class="steps"
+    id="steps"
+  >
+
+    <div
+      class="dot"
+      data-step="0"
+    ></div>
+
+    <div
+      class="dot"
+      data-step="1"
+    ></div>
+
+    <div
+      class="dot"
+      data-step="2"
+    ></div>
+
+    <div
+      class="dot"
+      data-step="3"
+    ></div>
+
   </div>
+
 </header>
+
 
 <main>
 
-  <div class="top-error" id="topError"></div>
 
-  <!-- PASSO 0: DADOS DO CLIENTE -->
-  <section class="panel" id="panel-0">
-    <h1 class="title">Seus dados</h1>
-    <p class="subtitle">Precisamos de algumas informações para confirmar seu horário.</p>
+<div
+  class="top-error"
+  id="topError"
+></div>
 
-    <div class="field">
-      <label for="inputNome">Nome completo</label>
-      <input type="text" id="inputNome" placeholder="Seu nome">
+
+<!-- PASSO 0 -->
+
+<section
+  class="panel"
+  id="panel-0"
+>
+
+  <h1 class="title">
+    Seus dados
+  </h1>
+
+  <p class="subtitle">
+    Precisamos de algumas informações para confirmar seu horário.
+  </p>
+
+
+  <div class="field">
+
+    <label for="inputNome">
+      Nome completo
+    </label>
+
+    <input
+      type="text"
+      id="inputNome"
+      placeholder="Seu nome"
+    >
+
+  </div>
+
+
+  <div
+    class="error-text"
+    id="err-nome"
+  ></div>
+
+
+  <div class="field">
+
+    <label for="inputEmail">
+      E-mail
+    </label>
+
+    <input
+      type="email"
+      id="inputEmail"
+      placeholder="seuemail@exemplo.com"
+    >
+
+  </div>
+
+
+  <div
+    class="error-text"
+    id="err-email"
+  ></div>
+
+
+  <div class="field">
+
+    <label for="inputTelefone">
+      WhatsApp / Telefone
+    </label>
+
+    <input
+      type="tel"
+      id="inputTelefone"
+      placeholder="(11) 91234-5678"
+    >
+
+  </div>
+
+
+  <div
+    class="error-text"
+    id="err-telefone"
+  ></div>
+
+
+  <button
+    class="btn"
+    id="btn-step0-next"
+  >
+    Continuar
+  </button>
+
+</section>
+
+
+<!-- PASSO 1 -->
+
+<section
+  class="panel"
+  id="panel-1"
+>
+
+  <h1 class="title">
+    Escolha o serviço
+  </h1>
+
+  <p class="subtitle">
+    Selecione o que deseja fazer hoje.
+  </p>
+
+
+  <div id="servicesList"></div>
+
+
+  <div
+    class="error-text"
+    id="err-servico"
+  ></div>
+
+
+  <div class="btn-row">
+
+    <button
+      class="btn secondary"
+      data-back="0"
+    >
+      Voltar
+    </button>
+
+
+    <button
+      class="btn"
+      id="btn-step1-next"
+    >
+      Continuar
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- PASSO 2 -->
+
+<section
+  class="panel"
+  id="panel-2"
+>
+
+  <h1 class="title">
+    Data e horário
+  </h1>
+
+  <p class="subtitle">
+    Escolha o dia e um horário disponível.
+  </p>
+
+
+  <div class="field">
+
+    <label for="inputData">
+      Data do atendimento
+    </label>
+
+    <input
+      type="date"
+      id="inputData"
+    >
+
+  </div>
+
+
+  <div
+    class="error-text"
+    id="err-data"
+  ></div>
+
+
+  <label>
+    Horários
+  </label>
+
+
+  <div
+    class="slots-grid"
+    id="slotsGrid"
+  >
+
+    <div class="slots-empty">
+      Escolha uma data para ver os horários.
     </div>
-    <div class="error-text" id="err-nome"></div>
 
-    <div class="field">
-      <label for="inputEmail">E-mail</label>
-      <input type="email" id="inputEmail" placeholder="seuemail@exemplo.com">
-    </div>
-    <div class="error-text" id="err-email"></div>
+  </div>
 
-    <div class="field">
-      <label for="inputTelefone">WhatsApp / Telefone</label>
-      <input type="tel" id="inputTelefone" placeholder="(11) 91234-5678">
-    </div>
-    <div class="error-text" id="err-telefone"></div>
 
-    <button class="btn" id="btn-step0-next">Continuar</button>
-  </section>
+  <div
+    class="error-text"
+    id="err-horario"
+  ></div>
 
-  <!-- PASSO 1: SERVIÇO -->
-  <section class="panel" id="panel-1">
-    <h1 class="title">Escolha o serviço</h1>
-    <p class="subtitle">Selecione o que deseja fazer hoje.</p>
 
-    <div id="servicesList"></div>
-    <div class="error-text" id="err-servico"></div>
+  <div class="btn-row">
 
-    <div class="btn-row">
-      <button class="btn secondary" data-back="0">Voltar</button>
-      <button class="btn" id="btn-step1-next">Continuar</button>
-    </div>
-  </section>
+    <button
+      class="btn secondary"
+      data-back="1"
+    >
+      Voltar
+    </button>
 
-  <!-- PASSO 2: DATA E HORÁRIO -->
-  <section class="panel" id="panel-2">
-    <h1 class="title">Data e horário</h1>
-    <p class="subtitle">Escolha o dia e um horário disponível.</p>
 
-    <div class="field">
-      <label for="inputData">Data do atendimento</label>
-      <input type="date" id="inputData">
-    </div>
-    <div class="error-text" id="err-data"></div>
+    <button
+      class="btn"
+      id="btn-step2-next"
+    >
+      Continuar
+    </button>
 
-    <label>Horários</label>
-    <div class="slots-grid" id="slotsGrid">
-      <div class="slots-empty">Escolha uma data para ver os horários.</div>
-    </div>
-    <div class="error-text" id="err-horario"></div>
+  </div>
 
-    <div class="btn-row">
-      <button class="btn secondary" data-back="1">Voltar</button>
-      <button class="btn" id="btn-step2-next">Continuar</button>
-    </div>
-  </section>
+</section>
 
-  <!-- PASSO 3: RESUMO -->
-  <section class="panel" id="panel-3">
-    <h1 class="title">Confirme seu agendamento</h1>
-    <p class="subtitle">Revise os detalhes antes de confirmar.</p>
 
-    <div class="summary-box">
-      <div class="summary-row"><span class="k">Nome</span><span class="v" id="sum-nome"></span></div>
-      <div class="summary-row"><span class="k">E-mail</span><span class="v" id="sum-email"></span></div>
-      <div class="summary-row"><span class="k">Telefone</span><span class="v" id="sum-telefone"></span></div>
-      <div class="summary-row"><span class="k">Serviço</span><span class="v" id="sum-servico"></span></div>
-      <div class="summary-row"><span class="k">Data</span><span class="v" id="sum-data"></span></div>
-      <div class="summary-row"><span class="k">Horário</span><span class="v" id="sum-horario"></span></div>
-      <div class="summary-row total"><span class="k">Valor</span><span class="v" id="sum-preco"></span></div>
+<!-- PASSO 3 -->
+
+<section
+  class="panel"
+  id="panel-3"
+>
+
+  <h1 class="title">
+    Confirme seu agendamento
+  </h1>
+
+  <p class="subtitle">
+    Revise os detalhes antes de confirmar.
+  </p>
+
+
+  <div class="summary-box">
+
+    <div class="summary-row">
+
+      <span class="k">
+        Nome
+      </span>
+
+      <span
+        class="v"
+        id="sum-nome"
+      ></span>
+
     </div>
 
-    <div class="btn-row">
-      <button class="btn secondary" data-back="2">Voltar</button>
-      <button class="btn" id="btn-confirmar">Confirmar agendamento</button>
+
+    <div class="summary-row">
+
+      <span class="k">
+        E-mail
+      </span>
+
+      <span
+        class="v"
+        id="sum-email"
+      ></span>
+
     </div>
-  </section>
 
-  <!-- PASSO 4: CONFIRMAÇÃO -->
-  <section class="panel" id="panel-4">
-    <div class="confirm-wrap">
-      <div class="confirm-badge">✓</div>
-      <h1 class="confirm-title">Agendamento confirmado</h1>
-      <p class="confirm-sub">Te esperamos na Arantes Barbershop.</p>
 
-      <div class="confirm-box">
-        <div class="summary-row"><span class="k">Serviço</span><span class="v" id="conf-servico"></span></div>
-        <div class="summary-row"><span class="k">Data</span><span class="v" id="conf-data"></span></div>
-        <div class="summary-row"><span class="k">Horário</span><span class="v" id="conf-horario"></span></div>
-        <div class="summary-row"><span class="k">Nome</span><span class="v" id="conf-nome"></span></div>
+    <div class="summary-row">
+
+      <span class="k">
+        Telefone
+      </span>
+
+      <span
+        class="v"
+        id="sum-telefone"
+      ></span>
+
+    </div>
+
+
+    <div class="summary-row">
+
+      <span class="k">
+        Serviço
+      </span>
+
+      <span
+        class="v"
+        id="sum-servico"
+      ></span>
+
+    </div>
+
+
+    <div class="summary-row">
+
+      <span class="k">
+        Data
+      </span>
+
+      <span
+        class="v"
+        id="sum-data"
+      ></span>
+
+    </div>
+
+
+    <div class="summary-row">
+
+      <span class="k">
+        Horário
+      </span>
+
+      <span
+        class="v"
+        id="sum-horario"
+      ></span>
+
+    </div>
+
+
+    <div class="summary-row total">
+
+      <span class="k">
+        Valor
+      </span>
+
+      <span
+        class="v"
+        id="sum-preco"
+      ></span>
+
+    </div>
+
+  </div>
+
+
+  <div class="btn-row">
+
+    <button
+      class="btn secondary"
+      data-back="2"
+    >
+      Voltar
+    </button>
+
+
+    <button
+      class="btn"
+      id="btn-confirmar"
+    >
+      Confirmar agendamento
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- PASSO 4 -->
+
+<section
+  class="panel"
+  id="panel-4"
+>
+
+  <div class="confirm-wrap">
+
+
+    <div class="confirm-badge">
+      ✓
+    </div>
+
+
+    <h1 class="confirm-title">
+      Agendamento confirmado
+    </h1>
+
+
+    <p class="confirm-sub">
+      Te esperamos na Arantes Barbershop.
+    </p>
+
+
+    <div class="confirm-box">
+
+
+      <div class="summary-row">
+
+        <span class="k">
+          Serviço
+        </span>
+
+        <span
+          class="v"
+          id="conf-servico"
+        ></span>
+
       </div>
 
-      <button class="btn" id="btn-novo">Novo agendamento</button>
+
+      <div class="summary-row">
+
+        <span class="k">
+          Data
+        </span>
+
+        <span
+          class="v"
+          id="conf-data"
+        ></span>
+
+      </div>
+
+
+      <div class="summary-row">
+
+        <span class="k">
+          Horário
+        </span>
+
+        <span
+          class="v"
+          id="conf-horario"
+        ></span>
+
+      </div>
+
+
+      <div class="summary-row">
+
+        <span class="k">
+          Nome
+        </span>
+
+        <span
+          class="v"
+          id="conf-nome"
+        ></span>
+
+      </div>
+
+
     </div>
-  </section>
+
+
+    <button
+      class="btn"
+      id="btn-novo"
+    >
+      Novo agendamento
+    </button>
+
+
+  </div>
+
+</section>
+
 
 </main>
 
+
 <script>
-/* ============================================================
-   1) CONFIGURAÇÃO DO SUPABASE — COLE SUAS INFORMAÇÕES AQUI
-   ------------------------------------------------------------
-   Substitua os textos abaixo pela URL e pela chave PUBLICÁVEL
-   (anon / public) do seu projeto Supabase.
-   Você encontra isso em: Project Settings > API.
 
-   NUNCA coloque aqui a "service_role key" (chave secreta).
-   ============================================================ */
-const SUPABASE_URL = "https://bgmcryfcwjikuttwftgp.supabase.co";
-const SUPABASE_KEY = "sb_publishable_C0Tahq5Lffw4ukCwj9WXHQ_HtDbD6PU";
-
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
 
 /* ============================================================
-   2) DADOS FIXOS: SERVIÇOS E HORÁRIOS
-   ============================================================ */
+   SUPABASE
+============================================================ */
+
+const SUPABASE_URL =
+  "https://bgmcryfcwjikuttwftgp.supabase.co";
+
+
+const SUPABASE_KEY =
+  "sb_publishable_C0Tahq5Lffw4ukCwj9WXHQ_HtDbD6PU";
+
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+/* ============================================================
+   SERVIÇOS
+============================================================ */
+
 const SERVICOS = [
-  { id: "corte",       nome: "Corte de cabelo",   desc: "Acabamento na máquina e tesoura", preco: 40 },
-  { id: "barba",        nome: "Barba",              desc: "Modelagem completa com toalha quente", preco: 35 },
-  { id: "corte_barba",  nome: "Corte + Barba",     desc: "Combo completo", preco: 75 }
+
+  {
+    id: "corte",
+    nome: "Corte de cabelo",
+    desc: "Acabamento na máquina e tesoura",
+    preco: 40
+  },
+
+  {
+    id: "barba",
+    nome: "Barba",
+    desc: "Modelagem completa com toalha quente",
+    preco: 35
+  },
+
+  {
+    id: "corte_barba",
+    nome: "Corte + Barba",
+    desc: "Combo completo",
+    preco: 75
+  }
+
 ];
 
-const HORARIOS = ["09:00","10:00","11:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00"];
+
+const HORARIOS = [
+
+  "09:00",
+  "10:00",
+  "11:00",
+  "13:00",
+  "14:00",
+  "15:00",
+  "16:00",
+  "17:00",
+  "18:00",
+  "19:00"
+
+];
+
 
 /* ============================================================
-   3) ESTADO DA APLICAÇÃO
-   ============================================================ */
+   ESTADO
+============================================================ */
+
 const state = {
+
   step: 0,
+
   nome: "",
+
   email: "",
+
   telefone: "",
-  servico: null,   // objeto do SERVICOS
-  data: "",         // "YYYY-MM-DD"
-  horario: "",      // "HH:MM"
+
+  servico: null,
+
+  data: "",
+
+  horario: "",
+
   horariosOcupados: []
+
 };
 
+
 /* ============================================================
-   4) HELPERS DE UI
-   ============================================================ */
+   HELPERS
+============================================================ */
+
 function showTopError(msg){
-  const el = document.getElementById("topError");
+
+  const el =
+    document.getElementById(
+      "topError"
+    );
+
+
   el.textContent = msg;
-  el.classList.add("visible");
-  window.scrollTo({ top: 0, behavior: "smooth" });
+
+  el.classList.add(
+    "visible"
+  );
+
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
 }
+
+
 function hideTopError(){
-  document.getElementById("topError").classList.remove("visible");
+
+  document
+    .getElementById("topError")
+    .classList.remove(
+      "visible"
+    );
+
 }
-function setFieldError(id, msg){
-  document.getElementById(id).textContent = msg || "";
+
+
+function setFieldError(
+  id,
+  msg
+){
+
+  document
+    .getElementById(id)
+    .textContent =
+      msg || "";
+
 }
+
+
 function clearFieldErrors(){
-  document.querySelectorAll(".error-text").forEach(function(e){ e.textContent = ""; });
+
+  document
+    .querySelectorAll(
+      ".error-text"
+    )
+    .forEach(
+      function(e){
+
+        e.textContent = "";
+
+      }
+    );
+
 }
+
+
 function formatPreco(v){
-  return "R$ " + v.toFixed(2).replace(".", ",");
+
+  return (
+    "R$ " +
+    v
+      .toFixed(2)
+      .replace(".", ",")
+  );
+
 }
-function formatDataBR(isoDate){
-  if(!isoDate) return "";
-  const partes = isoDate.split("-");
-  return partes[2] + "/" + partes[1] + "/" + partes[0];
+
+
+function formatDataBR(
+  isoDate
+){
+
+  if(!isoDate){
+
+    return "";
+
+  }
+
+
+  const partes =
+    isoDate.split("-");
+
+
+  return (
+
+    partes[2] +
+    "/" +
+    partes[1] +
+    "/" +
+    partes[0]
+
+  );
+
 }
+
 
 function goToStep(n){
+
   state.step = n;
-  document.querySelectorAll(".panel").forEach(function(p){ p.classList.remove("visible"); });
-  document.getElementById("panel-" + n).classList.add("visible");
 
-  const dots = document.querySelectorAll(".steps .dot");
-  dots.forEach(function(d, i){
-    d.classList.remove("active", "done");
-    if(i < n) d.classList.add("done");
-    if(i === n) d.classList.add("active");
-  });
 
-  document.getElementById("steps").style.display = (n === 4) ? "none" : "flex";
+  document
+    .querySelectorAll(".panel")
+    .forEach(
+      function(p){
+
+        p.classList.remove(
+          "visible"
+        );
+
+      }
+    );
+
+
+  document
+    .getElementById(
+      "panel-" + n
+    )
+    .classList.add(
+      "visible"
+    );
+
+
+  const dots =
+    document.querySelectorAll(
+      ".steps .dot"
+    );
+
+
+  dots.forEach(
+    function(d, i){
+
+      d.classList.remove(
+        "active",
+        "done"
+      );
+
+
+      if(i < n){
+
+        d.classList.add(
+          "done"
+        );
+
+      }
+
+
+      if(i === n){
+
+        d.classList.add(
+          "active"
+        );
+
+      }
+
+    }
+  );
+
+
+  document
+    .getElementById("steps")
+    .style.display =
+      (n === 4)
+        ? "none"
+        : "flex";
+
+
   hideTopError();
+
 }
 
+
 /* ============================================================
-   5) PASSO 0 — DADOS DO CLIENTE
-   ============================================================ */
+   PASSO 0
+============================================================ */
+
 function validarPasso0(){
+
   clearFieldErrors();
+
   let ok = true;
 
-  const nome = document.getElementById("inputNome").value.trim();
-  const email = document.getElementById("inputEmail").value.trim();
-  const telefone = document.getElementById("inputTelefone").value.trim();
+
+  const nome =
+    document
+      .getElementById(
+        "inputNome"
+      )
+      .value
+      .trim();
+
+
+  const email =
+    document
+      .getElementById(
+        "inputEmail"
+      )
+      .value
+      .trim();
+
+
+  const telefone =
+    document
+      .getElementById(
+        "inputTelefone"
+      )
+      .value
+      .trim();
+
 
   if(nome.length < 3){
-    setFieldError("err-nome", "Digite seu nome completo.");
+
+    setFieldError(
+      "err-nome",
+      "Digite seu nome completo."
+    );
+
     ok = false;
+
   }
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+
+  const emailRegex =
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+
   if(!emailRegex.test(email)){
-    setFieldError("err-email", "Digite um e-mail válido.");
+
+    setFieldError(
+      "err-email",
+      "Digite um e-mail válido."
+    );
+
     ok = false;
+
   }
+
+
   if(telefone.length < 8){
-    setFieldError("err-telefone", "Digite um telefone válido.");
+
+    setFieldError(
+      "err-telefone",
+      "Digite um telefone válido."
+    );
+
     ok = false;
+
   }
+
 
   if(ok){
+
     state.nome = nome;
+
     state.email = email;
+
     state.telefone = telefone;
+
   }
+
+
   return ok;
+
 }
 
-document.getElementById("btn-step0-next").addEventListener("click", function(){
-  if(validarPasso0()){
-    goToStep(1);
-  }
-});
 
-/* ============================================================
-   6) PASSO 1 — SERVIÇOS
-   ============================================================ */
-function renderServicos(){
-  const wrap = document.getElementById("servicesList");
-  wrap.innerHTML = "";
-  SERVICOS.forEach(function(s){
-    const card = document.createElement("div");
-    card.className = "service-card";
-    card.setAttribute("data-id", s.id);
-    if(state.servico && state.servico.id === s.id){
-      card.classList.add("selected");
+document
+  .getElementById(
+    "btn-step0-next"
+  )
+  .addEventListener(
+    "click",
+    function(){
+
+      if(validarPasso0()){
+
+        goToStep(1);
+
+      }
+
     }
-    card.innerHTML =
-      '<div class="service-card-inner">' +
-        '<div class="check"></div>' +
-        '<div>' +
-          '<div class="name">' + s.nome + '</div>' +
-          '<div class="desc">' + s.desc + '</div>' +
-        '</div>' +
-      '</div>' +
-      '<div class="price">' + formatPreco(s.preco) + '</div>';
+  );
 
-    card.addEventListener("click", function(){
-      state.servico = s;
-      renderServicos();
-      setFieldError("err-servico", "");
-    });
-    wrap.appendChild(card);
-  });
-}
-
-document.getElementById("btn-step1-next").addEventListener("click", function(){
-  if(!state.servico){
-    setFieldError("err-servico", "Selecione um serviço para continuar.");
-    return;
-  }
-  goToStep(2);
-});
 
 /* ============================================================
-   7) PASSO 2 — DATA E HORÁRIO
-   ============================================================ */
-const inputData = document.getElementById("inputData");
+   PASSO 1
+============================================================ */
+
+function renderServicos(){
+
+  const wrap =
+    document.getElementById(
+      "servicesList"
+    );
+
+
+  wrap.innerHTML = "";
+
+
+  SERVICOS.forEach(
+    function(s){
+
+      const card =
+        document.createElement(
+          "div"
+        );
+
+
+      card.className =
+        "service-card";
+
+
+      card.setAttribute(
+        "data-id",
+        s.id
+      );
+
+
+      if(
+        state.servico &&
+        state.servico.id === s.id
+      ){
+
+        card.classList.add(
+          "selected"
+        );
+
+      }
+
+
+      card.innerHTML =
+
+        '<div class="service-card-inner">' +
+
+          '<div class="check"></div>' +
+
+          '<div>' +
+
+            '<div class="name">' +
+              s.nome +
+            '</div>' +
+
+            '<div class="desc">' +
+              s.desc +
+            '</div>' +
+
+          '</div>' +
+
+        '</div>' +
+
+        '<div class="price">' +
+          formatPreco(s.preco) +
+        '</div>';
+
+
+      card.addEventListener(
+        "click",
+        function(){
+
+          state.servico = s;
+
+          renderServicos();
+
+          setFieldError(
+            "err-servico",
+            ""
+          );
+
+        }
+      );
+
+
+      wrap.appendChild(
+        card
+      );
+
+    }
+  );
+
+}
+
+
+document
+  .getElementById(
+    "btn-step1-next"
+  )
+  .addEventListener(
+    "click",
+    function(){
+
+      if(!state.servico){
+
+        setFieldError(
+          "err-servico",
+          "Selecione um serviço para continuar."
+        );
+
+        return;
+
+      }
+
+
+      goToStep(2);
+
+    }
+  );
+
+
+/* ============================================================
+   PASSO 2
+============================================================ */
+
+const inputData =
+  document.getElementById(
+    "inputData"
+  );
+
 
 function hojeISO(){
-  const d = new Date();
-  const yyyy = d.getFullYear();
-  const mm = String(d.getMonth() + 1).padStart(2, "0");
-  const dd = String(d.getDate()).padStart(2, "0");
-  return yyyy + "-" + mm + "-" + dd;
-}
-inputData.min = hojeISO();
 
-async function carregarHorariosOcupados(data){
-  const grid = document.getElementById("slotsGrid");
-  grid.innerHTML = '<div class="slots-loading"><span class="spinner" style="border-top-color:#f5f4f1;border-color:rgba(245,244,241,0.25);"></span>Carregando horários...</div>';
+  const d =
+    new Date();
+
+
+  const yyyy =
+    d.getFullYear();
+
+
+  const mm =
+    String(
+      d.getMonth() + 1
+    ).padStart(
+      2,
+      "0"
+    );
+
+
+  const dd =
+    String(
+      d.getDate()
+    ).padStart(
+      2,
+      "0"
+    );
+
+
+  return (
+
+    yyyy +
+    "-" +
+    mm +
+    "-" +
+    dd
+
+  );
+
+}
+
+
+inputData.min =
+  hojeISO();
+
+
+async function carregarHorariosOcupados(
+  data
+){
+
+  const grid =
+    document.getElementById(
+      "slotsGrid"
+    );
+
+
+  grid.innerHTML =
+
+    '<div class="slots-loading">' +
+
+      '<span class="spinner"></span>' +
+
+      'Carregando horários...' +
+
+    '</div>';
+
 
   try{
-    const { data: rows, error } = await supabaseClient
-      .from("agendamentos")
-      .select("horario")
-      .eq("data", data);
 
-    if(error) throw error;
+    const {
+      data: rows,
+      error
+    } =
 
-    state.horariosOcupados = rows.map(function(r){ return r.horario; });
+      await supabaseClient
+
+        .from(
+          "agendamentos"
+        )
+
+        .select(
+          "horario"
+        )
+
+        .eq(
+          "data",
+          data
+        );
+
+
+    if(error){
+
+      throw error;
+
+    }
+
+
+    state.horariosOcupados =
+      rows.map(
+        function(r){
+
+          return r.horario;
+
+        }
+      );
+
+
   }catch(err){
-    console.error(err);
-    state.horariosOcupados = [];
-    showTopError("Não foi possível verificar os horários disponíveis. Tente novamente.");
+
+    console.error(
+      err
+    );
+
+
+    state.horariosOcupados =
+      [];
+
+
+    showTopError(
+      "Não foi possível verificar os horários disponíveis. Tente novamente."
+    );
+
   }
 
+
   renderSlots();
+
 }
+
 
 function renderSlots(){
-  const grid = document.getElementById("slotsGrid");
+
+  const grid =
+    document.getElementById(
+      "slotsGrid"
+    );
+
+
   grid.innerHTML = "";
 
+
   if(!state.data){
-    grid.innerHTML = '<div class="slots-empty">Escolha uma data para ver os horários.</div>';
+
+    grid.innerHTML =
+
+      '<div class="slots-empty">' +
+
+        'Escolha uma data para ver os horários.' +
+
+      '</div>';
+
     return;
+
   }
 
-  HORARIOS.forEach(function(h){
-    const ocupado = state.horariosOcupados.indexOf(h) !== -1;
-    const btn = document.createElement("div");
-    btn.className = "slot" + (ocupado ? " busy" : "") + (state.horario === h && !ocupado ? " selected" : "");
-    btn.textContent = ocupado ? (h + " · Ocupado") : h;
 
-    if(!ocupado){
-      btn.addEventListener("click", function(){
-        state.horario = h;
-        setFieldError("err-horario", "");
-        renderSlots();
-      });
-    }
-    grid.appendChild(btn);
-  });
-}
+  HORARIOS.forEach(
+    function(h){
 
-inputData.addEventListener("change", function(){
-  state.data = inputData.value;
-  state.horario = "";
-  setFieldError("err-data", "");
-  if(!state.data){
-    renderSlots();
-    return;
-  }
-  carregarHorariosOcupados(state.data);
-});
+      const ocupado =
+        state.horariosOcupados
+          .indexOf(h) !== -1;
 
-document.getElementById("btn-step2-next").addEventListener("click", function(){
-  clearFieldErrors();
-  let ok = true;
 
-  if(!state.data){
-    setFieldError("err-data", "Escolha uma data.");
-    ok = false;
-  }
-  if(!state.horario){
-    setFieldError("err-horario", "Escolha um horário disponível.");
-    ok = false;
-  }
-  if(ok){
-    montarResumo();
-    goToStep(3);
-  }
-});
+      const btn =
+        document.createElement(
+          "div"
+        );
 
-/* ============================================================
-   8) PASSO 3 — RESUMO
-   ============================================================ */
-function montarResumo(){
-  document.getElementById("sum-nome").textContent = state.nome;
-  document.getElementById("sum-email").textContent = state.email;
-  document.getElementById("sum-telefone").textContent = state.telefone;
-  document.getElementById("sum-servico").textContent = state.servico.nome;
-  document.getElementById("sum-data").textContent = formatDataBR(state.data);
-  document.getElementById("sum-horario").textContent = state.horario;
-  document.getElementById("sum-preco").textContent = formatPreco(state.servico.preco);
-}
 
-const btnConfirmar = document.getElementById("btn-confirmar");
+      btn.className =
 
-btnConfirmar.addEventListener("click", async function(){
-  hideTopError();
-  btnConfirmar.disabled = true;
-  const textoOriginal = btnConfirmar.textContent;
-  btnConfirmar.innerHTML = '<span class="spinner"></span>Confirmando...';
+        "slot" +
 
-  try{
-    /* Revalida disponibilidade imediatamente antes de salvar,
-       para reduzir o risco de duas pessoas reservarem o mesmo horário. */
-    const { data: existentes, error: erroConsulta } = await supabaseClient
-      .from("agendamentos")
-      .select("id")
-      .eq("data", state.data)
-      .eq("horario", state.horario);
+        (
+          ocupado
+            ? " busy"
+            : ""
+        ) +
 
-    if(erroConsulta) throw erroConsulta;
+        (
+          state.horario === h &&
+          !ocupado
+            ? " selected"
+            : ""
+        );
 
-    if(existentes && existentes.length > 0){
-      showTopError("Esse horário acabou de ser reservado por outra pessoa. Escolha outro horário.");
-      await carregarHorariosOcupados(state.data);
-      state.horario = "";
-      goToStep(2);
-      return;
-    }
 
-    const { error: erroInsercao } = await supabaseClient
-      .from("agendamentos")
-      .insert([{
-        nome: state.nome,
-        email: state.email,
-        telefone: state.telefone,
-        servico: state.servico.nome,
-        preco: state.servico.preco,
-        data: state.data,
-        horario: state.horario
-      }]);
+      btn.textContent =
+        ocupado
+          ? h + " · Ocupado"
+          : h;
 
-    if(erroInsercao){
-      /* Código 23505 = violação de constraint UNIQUE no Postgres.
-         Isso indica que outra pessoa reservou o mesmo horário
-         no exato momento da confirmação. */
-      if(erroInsercao.code === "23505"){
-        showTopError("Esse horário acabou de ser reservado por outra pessoa. Escolha outro horário.");
-        await carregarHorariosOcupados(state.data);
-        state.horario = "";
-        goToStep(2);
-        return;
+
+      if(!ocupado){
+
+        btn.addEventListener(
+          "click",
+          function(){
+
+            state.horario =
+              h;
+
+
+            setFieldError(
+              "err-horario",
+              ""
+            );
+
+
+            renderSlots();
+
+          }
+        );
+
       }
-      throw erroInsercao;
+
+
+      grid.appendChild(
+        btn
+      );
+
+    }
+  );
+
+}
+
+
+inputData.addEventListener(
+  "change",
+  function(){
+
+    state.data =
+      inputData.value;
+
+
+    state.horario =
+      "";
+
+
+    setFieldError(
+      "err-data",
+      ""
+    );
+
+
+    if(!state.data){
+
+      renderSlots();
+
+      return;
+
     }
 
-    document.getElementById("conf-servico").textContent = state.servico.nome;
-    document.getElementById("conf-data").textContent = formatDataBR(state.data);
-    document.getElementById("conf-horario").textContent = state.horario;
-    document.getElementById("conf-nome").textContent = state.nome;
 
-    goToStep(4);
+    carregarHorariosOcupados(
+      state.data
+    );
 
-  }catch(err){
-    console.error(err);
-    showTopError("Não foi possível concluir o agendamento. Verifique sua conexão e tente novamente.");
-  }finally{
-    btnConfirmar.disabled = false;
-    btnConfirmar.textContent = textoOriginal;
   }
-});
+);
+
+
+document
+  .getElementById(
+    "btn-step2-next"
+  )
+  .addEventListener(
+    "click",
+    function(){
+
+      clearFieldErrors();
+
+      let ok = true;
+
+
+      if(!state.data){
+
+        setFieldError(
+          "err-data",
+          "Escolha uma data."
+        );
+
+        ok = false;
+
+      }
+
+
+      if(!state.horario){
+
+        setFieldError(
+          "err-horario",
+          "Escolha um horário disponível."
+        );
+
+        ok = false;
+
+      }
+
+
+      if(ok){
+
+        montarResumo();
+
+        goToStep(3);
+
+      }
+
+    }
+  );
+
 
 /* ============================================================
-   9) NAVEGAÇÃO GERAL (voltar / novo agendamento)
-   ============================================================ */
-document.querySelectorAll("[data-back]").forEach(function(btn){
-  btn.addEventListener("click", function(){
-    goToStep(parseInt(btn.getAttribute("data-back"), 10));
-  });
-});
+   PASSO 3
+============================================================ */
 
-document.getElementById("btn-novo").addEventListener("click", function(){
-  document.getElementById("inputNome").value = "";
-  document.getElementById("inputEmail").value = "";
-  document.getElementById("inputTelefone").value = "";
-  inputData.value = "";
+function montarResumo(){
 
-  state.nome = "";
-  state.email = "";
-  state.telefone = "";
-  state.servico = null;
-  state.data = "";
-  state.horario = "";
-  state.horariosOcupados = [];
+  document
+    .getElementById(
+      "sum-nome"
+    )
+    .textContent =
+      state.nome;
 
-  clearFieldErrors();
-  hideTopError();
-  renderServicos();
-  renderSlots();
-  goToStep(0);
-});
+
+  document
+    .getElementById(
+      "sum-email"
+    )
+    .textContent =
+      state.email;
+
+
+  document
+    .getElementById(
+      "sum-telefone"
+    )
+    .textContent =
+      state.telefone;
+
+
+  document
+    .getElementById(
+      "sum-servico"
+    )
+    .textContent =
+      state.servico.nome;
+
+
+  document
+    .getElementById(
+      "sum-data"
+    )
+    .textContent =
+      formatDataBR(
+        state.data
+      );
+
+
+  document
+    .getElementById(
+      "sum-horario"
+    )
+    .textContent =
+      state.horario;
+
+
+  document
+    .getElementById(
+      "sum-preco"
+    )
+    .textContent =
+      formatPreco(
+        state.servico.preco
+      );
+
+}
+
+
+const btnConfirmar =
+  document.getElementById(
+    "btn-confirmar"
+  );
+
+
+btnConfirmar.addEventListener(
+  "click",
+  async function(){
+
+    hideTopError();
+
+    btnConfirmar.disabled =
+      true;
+
+
+    const textoOriginal =
+      btnConfirmar.textContent;
+
+
+    btnConfirmar.innerHTML =
+
+      '<span class="spinner"></span>' +
+
+      'Confirmando...';
+
+
+    try{
+
+      const {
+        data: existentes,
+        error: erroConsulta
+      } =
+
+        await supabaseClient
+
+          .from(
+            "agendamentos"
+          )
+
+          .select(
+            "id"
+          )
+
+          .eq(
+            "data",
+            state.data
+          )
+
+          .eq(
+            "horario",
+            state.horario
+          );
+
+
+      if(erroConsulta){
+
+        throw erroConsulta;
+
+      }
+
+
+      if(
+        existentes &&
+        existentes.length > 0
+      ){
+
+        showTopError(
+          "Esse horário acabou de ser reservado por outra pessoa. Escolha outro horário."
+        );
+
+
+        await carregarHorariosOcupados(
+          state.data
+        );
+
+
+        state.horario =
+          "";
+
+
+        goToStep(2);
+
+        return;
+
+      }
+
+
+      const {
+        error: erroInsercao
+      } =
+
+        await supabaseClient
+
+          .from(
+            "agendamentos"
+          )
+
+          .insert([{
+
+            nome:
+              state.nome,
+
+            email:
+              state.email,
+
+            telefone:
+              state.telefone,
+
+            servico:
+              state.servico.nome,
+
+            preco:
+              state.servico.preco,
+
+            data:
+              state.data,
+
+            horario:
+              state.horario
+
+          }]);
+
+
+      if(erroInsercao){
+
+        if(
+          erroInsercao.code ===
+          "23505"
+        ){
+
+          showTopError(
+            "Esse horário acabou de ser reservado por outra pessoa. Escolha outro horário."
+          );
+
+
+          await carregarHorariosOcupados(
+            state.data
+          );
+
+
+          state.horario =
+            "";
+
+
+          goToStep(2);
+
+          return;
+
+        }
+
+
+        throw erroInsercao;
+
+      }
+
+
+      document
+        .getElementById(
+          "conf-servico"
+        )
+        .textContent =
+          state.servico.nome;
+
+
+      document
+        .getElementById(
+          "conf-data"
+        )
+        .textContent =
+          formatDataBR(
+            state.data
+          );
+
+
+      document
+        .getElementById(
+          "conf-horario"
+        )
+        .textContent =
+          state.horario;
+
+
+      document
+        .getElementById(
+          "conf-nome"
+        )
+        .textContent =
+          state.nome;
+
+
+      goToStep(4);
+
+
+    }catch(err){
+
+      console.error(
+        err
+      );
+
+
+      showTopError(
+        "Não foi possível concluir o agendamento. Verifique sua conexão e tente novamente."
+      );
+
+
+    }finally{
+
+      btnConfirmar.disabled =
+        false;
+
+
+      btnConfirmar.textContent =
+        textoOriginal;
+
+    }
+
+  }
+);
+
 
 /* ============================================================
-   10) INICIALIZAÇÃO
-   ============================================================ */
+   NAVEGAÇÃO
+============================================================ */
+
+document
+  .querySelectorAll(
+    "[data-back]"
+  )
+  .forEach(
+    function(btn){
+
+      btn.addEventListener(
+        "click",
+        function(){
+
+          goToStep(
+            parseInt(
+              btn.getAttribute(
+                "data-back"
+              ),
+              10
+            )
+          );
+
+        }
+      );
+
+    }
+  );
+
+
+/* ============================================================
+   NOVO AGENDAMENTO
+============================================================ */
+
+document
+  .getElementById(
+    "btn-novo"
+  )
+  .addEventListener(
+    "click",
+    function(){
+
+      document
+        .getElementById(
+          "inputNome"
+        )
+        .value = "";
+
+
+      document
+        .getElementById(
+          "inputEmail"
+        )
+        .value = "";
+
+
+      document
+        .getElementById(
+          "inputTelefone"
+        )
+        .value = "";
+
+
+      inputData.value = "";
+
+
+      state.nome = "";
+
+      state.email = "";
+
+      state.telefone = "";
+
+      state.servico = null;
+
+      state.data = "";
+
+      state.horario = "";
+
+      state.horariosOcupados =
+        [];
+
+
+      clearFieldErrors();
+
+      hideTopError();
+
+      renderServicos();
+
+      renderSlots();
+
+      goToStep(0);
+
+    }
+  );
+
+
+/* ============================================================
+   INICIALIZAÇÃO
+============================================================ */
+
 renderServicos();
+
 renderSlots();
+
 goToStep(0);
+
+
 </script>
 
 </body>
+
 </html>
