@@ -569,7 +569,171 @@
 
     }
 
-async function carregarAgendamentos() {
+async function async function carregarAgendamentos() {
+
+  const hoje = new Date().toISOString().split("T")[0];
+
+  const {
+    data: agendamentos,
+    error
+  } = await supabaseClient
+    .from("agendamentos")
+    .select("id, nome, email, telefone, servico, preco, data, horario, criado_em")
+    .eq("data", hoje)
+    .order("horario", { ascending: true });
+
+  if (error) {
+    console.error("Erro ao carregar agendamentos:", error);
+    return;
+  }
+
+  const lista =
+    document.getElementById("appointmentsList");
+
+  /*
+    ==========================
+    CARDS DO DASHBOARD
+    ==========================
+  */
+
+  const quantidade =
+    agendamentos ? agendamentos.length : 0;
+
+  const faturamento =
+    (agendamentos || []).reduce((total, agendamento) => {
+      return total + Number(agendamento.preco || 0);
+    }, 0);
+
+  const proximo =
+    (agendamentos || []).find((agendamento) => {
+      return agendamento.horario >=
+        new Date().toTimeString().slice(0, 5);
+    });
+
+
+  /*
+    AGENDAMENTOS HOJE
+  */
+
+  document.querySelector(
+    ".card:nth-child(1) .card-value"
+  ).textContent = quantidade;
+
+
+  /*
+    CLIENTES
+  */
+
+  const clientesUnicos =
+    new Set(
+      (agendamentos || []).map(
+        agendamento => agendamento.telefone || agendamento.email || agendamento.nome
+      )
+    ).size;
+
+  document.querySelector(
+    ".card:nth-child(2) .card-value"
+  ).textContent = clientesUnicos;
+
+
+  /*
+    FATURAMENTO
+  */
+
+  document.querySelector(
+    ".card:nth-child(3) .card-value"
+  ).textContent =
+    "R$ " +
+    faturamento
+      .toFixed(2)
+      .replace(".", ",");
+
+
+  /*
+    PRÓXIMO HORÁRIO
+  */
+
+  document.querySelector(
+    ".card:nth-child(4) .card-value"
+  ).textContent =
+    proximo
+      ? proximo.horario
+      : "—";
+
+
+  /*
+    ==========================
+    LISTA DE AGENDAMENTOS
+    ==========================
+  */
+
+  if (!agendamentos || agendamentos.length === 0) {
+
+    lista.innerHTML = `
+      <div style="
+        background:#141414;
+        border:1px dashed #303030;
+        border-radius:14px;
+        padding:28px 18px;
+        text-align:center;
+        color:#888;
+        font-size:14px;
+      ">
+        Nenhum agendamento para hoje.
+      </div>
+    `;
+
+    return;
+  }
+
+
+  lista.innerHTML = "";
+
+
+  agendamentos.forEach((agendamento) => {
+
+    const item =
+      document.createElement("div");
+
+    item.className = "appointment";
+
+    item.innerHTML = `
+      <div class="appointment-top">
+
+        <div class="time">
+          ${agendamento.horario}
+        </div>
+
+        <div class="status">
+          Confirmado
+        </div>
+
+      </div>
+
+      <div class="client">
+        ${agendamento.nome}
+      </div>
+
+      <div class="service">
+        ${agendamento.servico}
+      </div>
+
+      <div class="service">
+        ${agendamento.telefone || "Telefone não informado"}
+      </div>
+
+      <div class="price">
+        R$ ${Number(agendamento.preco)
+          .toFixed(2)
+          .replace(".", ",")}
+      </div>
+    `;
+
+    lista.appendChild(item);
+
+  });
+
+}
 
   const hoje = new Date().toISOString().split("T")[0];
 
