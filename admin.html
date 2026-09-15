@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Painel — Arantes Barbershop</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      background: #0b0b0b;
+      color: #ffffff;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px 18px 40px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .logo {
+      font-family: "Oswald", sans-serif;
+      font-size: 28px;
+      letter-spacing: 1px;
+    }
+
+    .logo span {
+      color: #bdbdbd;
+      font-size: 14px;
+      display: block;
+      font-family: "Inter", sans-serif;
+      letter-spacing: 0;
+      margin-top: 3px;
+    }
+
+    .logout {
+      border: 1px solid #2d2d2d;
+      background: #151515;
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .card {
+      background: #141414;
+      border: 1px solid #242424;
+      border-radius: 14px;
+      padding: 18px;
+    }
+
+    .card-title {
+      color: #999;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+
+    .card-value {
+      font-size: 26px;
+      font-weight: 700;
+    }
+
+    .section {
+      margin-top: 26px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    h2 {
+      font-family: "Oswald", sans-serif;
+      font-size: 23px;
+      letter-spacing: .5px;
+    }
+
+    .date {
+      background: #141414;
+      color: #fff;
+      border: 1px solid #2d2d2d;
+      padding: 10px;
+      border-radius: 9px;
+      font-size: 13px;
+    }
+
+    .appointment {
+      background: #141414;
+      border: 1px solid #242424;
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 10px;
+    }
+
+    .appointment-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .time {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .status {
+      font-size: 11px;
+      padding: 5px 8px;
+      border-radius: 20px;
+      background: #222;
+      color: #ddd;
+    }
+
+    .client {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .service {
+      color: #aaa;
+      font-size: 13px;
+    }
+
+    .price {
+      margin-top: 12px;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .empty {
+      background: #141414;
+      border: 1px dashed #303030;
+      border-radius: 14px;
+      padding: 28px 18px;
+      text-align: center;
+      color: #888;
+      font-size: 14px;
+    }
+
+    @media (min-width: 700px) {
+      .cards {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .container {
+        padding: 35px 30px 50px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <header>
+      <div class="logo">
+        ARANTES
+        <span>Painel administrativo</span>
+      </div>
+
+      <button class="logout">
+        Sair
+      </button>
+    </header>
+
+    <!-- RESUMO -->
+    <section class="cards">
+
+      <div class="card">
+        <div class="card-title">
+          Agendamentos hoje
+        </div>
+
+        <div class="card-value">
+          8
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          Clientes
+        </div>
+
+        <div class="card-value">
+          8
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          Valor previsto
+        </div>
+
+        <div class="card-value">
+          R$ 320
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          Próximo horário
+        </div>
+
+        <div class="card-value">
+          09:00
+        </div>
+      </div>
+
+    </section>
+
+    <!-- AGENDA -->
+    <section class="section">
+
+      <div class="section-header">
+
+        <h2>Agenda</h2>
+
+        <input
+          type="date"
+          class="date"
+        >
+
+      </div>
+
+      <div class="appointment">
+
+        <div class="appointment-top">
+
+          <div class="time">
+            09:00
+          </div>
+
+          <div class="status">
+            Confirmado
+          </div>
+
+        </div>
+
+        <div class="client">
+          João Silva
+        </div>
+
+        <div class="service">
+          Corte de cabelo
+        </div>
+
+        <div class="price">
+          R$ 40
+        </div>
+
+      </div>
+
+      <div class="appointment">
+
+        <div class="appointment-top">
+
+          <div class="time">
+            10:00
+          </div>
+
+          <div class="status">
+            Confirmado
+          </div>
+
+        </div>
+
+        <div class="client">
+          Pedro Santos
+        </div>
+
+        <div class="service">
+          Corte + Barba
+        </div>
+
+        <div class="price">
+          R$ 75
+        </div>
+
+      </div>
+
+      <div class="appointment">
+
+        <div class="appointment-top">
+
+          <div class="time">
+            11:00
+          </div>
+
+          <div class="status">
+            Confirmado
+          </div>
+
+        </div>
+
+        <div class="client">
+          Carlos Oliveira
+        </div>
+
+        <div class="service">
+          Barba
+        </div>
+
+        <div class="price">
+          R$ 35
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
+
+</body>
+</html>
