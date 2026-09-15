@@ -244,7 +244,33 @@
       font-size: 15px;
     }
 
+    /* BOTÃO CANCELAR */
+
+    .cancel-button {
+      width: 100%;
+      margin-top: 16px;
+      padding: 11px 14px;
+      border-radius: 9px;
+      border: 1px solid #4a2424;
+      background: #211313;
+      color: #ff7777;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .cancel-button:hover {
+      background: #321818;
+      border-color: #713535;
+    }
+
+    .cancel-button:active {
+      transform: scale(0.98);
+    }
+
     @media (min-width: 700px) {
+
       .cards {
         grid-template-columns: repeat(4, 1fr);
       }
@@ -252,6 +278,7 @@
       .container {
         padding: 35px 30px 50px;
       }
+
     }
   </style>
 </head>
@@ -260,7 +287,10 @@
 
   <!-- LOGIN -->
 
-  <div id="loginContainer" class="login-container">
+  <div
+    id="loginContainer"
+    class="login-container"
+  >
 
     <div class="login-box">
 
@@ -353,7 +383,7 @@
         <div class="card">
 
           <div class="card-title">
-            Agendamentos hoje
+            Agendamentos
           </div>
 
           <div class="card-value">
@@ -504,6 +534,32 @@
 
 
     /* ==========================
+       DATA DE HOJE
+    ========================== */
+
+    function obterDataHoje() {
+
+      const agora =
+        new Date();
+
+      return [
+
+        agora.getFullYear(),
+
+        String(
+          agora.getMonth() + 1
+        ).padStart(2, "0"),
+
+        String(
+          agora.getDate()
+        ).padStart(2, "0")
+
+      ].join("-");
+
+    }
+
+
+    /* ==========================
        MOSTRAR PAINEL
     ========================== */
 
@@ -517,7 +573,14 @@
         "hidden"
       );
 
-      carregarAgendamentos();
+      /* DEIXA A DATA DE HOJE SELECIONADA */
+
+      dateFilter.value =
+        obterDataHoje();
+
+      carregarAgendamentos(
+        dateFilter.value
+      );
 
     }
 
@@ -568,7 +631,6 @@
 
 
         const {
-          data,
           error
         } =
           await supabaseClient.auth
@@ -657,19 +719,8 @@
 
       /* DATA DE HOJE */
 
-      const hoje = [
-
-        agora.getFullYear(),
-
-        String(
-          agora.getMonth() + 1
-        ).padStart(2, "0"),
-
-        String(
-          agora.getDate()
-        ).padStart(2, "0")
-
-      ].join("-");
+      const hoje =
+        obterDataHoje();
 
 
       /* DATA QUE SERÁ CONSULTADA */
@@ -969,6 +1020,14 @@
 
             </div>
 
+
+            <button
+              class="cancel-button"
+              onclick="cancelarAgendamento('${agendamento.id}')"
+            >
+              Cancelar agendamento
+            </button>
+
           `;
 
 
@@ -977,6 +1036,75 @@
           );
 
         }
+      );
+
+    }
+
+
+    /* ==========================
+       CANCELAR AGENDAMENTO
+    ========================== */
+
+    async function cancelarAgendamento(
+      id
+    ) {
+
+      const confirmar =
+        confirm(
+          "Tem certeza que deseja cancelar este agendamento?"
+        );
+
+
+      if (!confirmar) {
+
+        return;
+
+      }
+
+
+      /* EXCLUIR DO SUPABASE */
+
+      const {
+        error
+      } =
+        await supabaseClient
+          .from("agendamentos")
+          .delete()
+          .eq(
+            "id",
+            id
+          );
+
+
+      /* ERRO */
+
+      if (error) {
+
+        console.error(
+          "Erro ao cancelar agendamento:",
+          error
+        );
+
+        alert(
+          "Não foi possível cancelar o agendamento."
+        );
+
+        return;
+
+      }
+
+
+      /* SUCESSO */
+
+      alert(
+        "Agendamento cancelado com sucesso!"
+      );
+
+
+      /* ATUALIZAR A AGENDA */
+
+      carregarAgendamentos(
+        dateFilter.value
       );
 
     }
