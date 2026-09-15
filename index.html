@@ -1195,7 +1195,7 @@ input::placeholder{
   ></div>
 
   <label>
-    Horários
+    Horários disponíveis
   </label>
 
   <div
@@ -1907,6 +1907,11 @@ async function carregarHorariosOcupados(data){
 
   try{
 
+    /*
+      Agora usamos a função segura do Supabase.
+      Ela retorna somente os horários ocupados.
+    */
+
     const {
       data:rows,
       error
@@ -1914,18 +1919,19 @@ async function carregarHorariosOcupados(data){
 
       await supabaseClient
 
-        .from("agendamentos")
-
-        .select("horario")
-
-        .eq("data",data);
+        .rpc(
+          "horarios_ocupados",
+          {
+            p_data:data
+          }
+        );
 
     if(error){
       throw error;
     }
 
     state.horariosOcupados =
-      rows.map(
+      (rows || []).map(
         function(r){
           return r.horario;
         }
@@ -1933,7 +1939,10 @@ async function carregarHorariosOcupados(data){
 
   }catch(err){
 
-    console.error(err);
+    console.error(
+      "ERRO AO CARREGAR HORÁRIOS:",
+      err
+    );
 
     state.horariosOcupados = [];
 
@@ -1971,12 +1980,34 @@ function renderSlots(){
 
   }
 
-  HORARIOS.forEach(
-    function(h){
+  const horariosDisponiveis =
+    HORARIOS.filter(
+      function(h){
+        return (
+          state.horariosOcupados
+            .indexOf(h) === -1
+        );
+      }
+    );
 
-      const ocupado =
-        state.horariosOcupados
-          .indexOf(h) !== -1;
+
+  if(horariosDisponiveis.length === 0){
+
+    grid.innerHTML =
+
+      '<div class="slots-empty">' +
+
+        'Não há horários disponíveis para esta data.' +
+
+      '</div>';
+
+    return;
+
+  }
+
+
+  horariosDisponiveis.forEach(
+    function(h){
 
       const btn =
         document.createElement(
@@ -1988,42 +2019,29 @@ function renderSlots(){
         "slot" +
 
         (
-          ocupado
-            ? " busy"
-            : ""
-        ) +
-
-        (
-          state.horario === h &&
-          !ocupado
+          state.horario === h
             ? " selected"
             : ""
         );
 
       btn.textContent =
-        ocupado
-          ? h + " · Ocupado"
-          : h;
+        h;
 
-      if(!ocupado){
+      btn.addEventListener(
+        "click",
+        function(){
 
-        btn.addEventListener(
-          "click",
-          function(){
+          state.horario = h;
 
-            state.horario = h;
+          setFieldError(
+            "err-horario",
+            ""
+          );
 
-            setFieldError(
-              "err-horario",
-              ""
-            );
+          renderSlots();
 
-            renderSlots();
-
-          }
-        );
-
-      }
+        }
+      );
 
       grid.appendChild(btn);
 
@@ -2181,20 +2199,24 @@ btnConfirmar.addEventListener(
 
     try{
 
+      /*
+        A verificação de disponibilidade agora
+        também usa a função segura.
+      */
+
       const {
-        data:existentes,
+        data:horariosAtuais,
         error:erroConsulta
       } =
 
         await supabaseClient
 
-          .from("agendamentos")
-
-          .select("id")
-
-          .eq("data",state.data)
-
-          .eq("horario",state.horario);
+          .rpc(
+            "horarios_ocupados",
+            {
+              p_data:state.data
+            }
+          );
 
       if(erroConsulta){
 
@@ -2202,10 +2224,18 @@ btnConfirmar.addEventListener(
 
       }
 
-      if(
-        existentes &&
-        existentes.length > 0
-      ){
+      const horarioJaOcupado =
+        (horariosAtuais || []).some(
+          function(r){
+            return (
+              r.horario ===
+              state.horario
+            );
+          }
+        );
+
+
+      if(horarioJaOcupado){
 
         showTopError(
           "Esse horário acabou de ser reservado por outra pessoa. Escolha outro horário."
@@ -2222,6 +2252,7 @@ btnConfirmar.addEventListener(
         return;
 
       }
+
 
       const {
         error:erroInsercao
@@ -2256,6 +2287,7 @@ btnConfirmar.addEventListener(
 
           }]);
 
+
       if(erroInsercao){
 
         if(
@@ -2282,6 +2314,7 @@ btnConfirmar.addEventListener(
         throw erroInsercao;
 
       }
+
 
       document
         .getElementById("conf-servico")
