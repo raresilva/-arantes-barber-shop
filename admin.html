@@ -346,6 +346,8 @@
       </header>
 
 
+      <!-- CARDS -->
+
       <section class="cards">
 
         <div class="card">
@@ -402,6 +404,8 @@
       </section>
 
 
+      <!-- AGENDA -->
+
       <section class="section">
 
         <div class="section-header">
@@ -446,11 +450,16 @@
 
   <script>
 
+    /* ==========================
+       SUPABASE
+    ========================== */
+
     const SUPABASE_URL =
       "https://bgmcryfcwjikuttwftgp.supabase.co";
 
     const SUPABASE_KEY =
       "sb_publishable_C0Tahq5Lffw4ukCwj9WXHQ_HtDbD6PU";
+
 
     const supabaseClient =
       window.supabase.createClient(
@@ -459,41 +468,80 @@
       );
 
 
+    /* ==========================
+       ELEMENTOS
+    ========================== */
+
     const loginContainer =
-      document.getElementById("loginContainer");
+      document.getElementById(
+        "loginContainer"
+      );
 
     const adminPanel =
-      document.getElementById("adminPanel");
+      document.getElementById(
+        "adminPanel"
+      );
 
     const loginForm =
-      document.getElementById("loginForm");
+      document.getElementById(
+        "loginForm"
+      );
 
     const loginError =
-      document.getElementById("loginError");
+      document.getElementById(
+        "loginError"
+      );
 
     const logoutButton =
-      document.getElementById("logoutButton");
+      document.getElementById(
+        "logoutButton"
+      );
 
+    const dateFilter =
+      document.getElementById(
+        "dateFilter"
+      );
+
+
+    /* ==========================
+       MOSTRAR PAINEL
+    ========================== */
 
     function mostrarPainel() {
 
-      loginContainer.classList.add("hidden");
+      loginContainer.classList.add(
+        "hidden"
+      );
 
-      adminPanel.classList.remove("hidden");
+      adminPanel.classList.remove(
+        "hidden"
+      );
 
       carregarAgendamentos();
 
     }
 
 
+    /* ==========================
+       MOSTRAR LOGIN
+    ========================== */
+
     function mostrarLogin() {
 
-      adminPanel.classList.add("hidden");
+      adminPanel.classList.add(
+        "hidden"
+      );
 
-      loginContainer.classList.remove("hidden");
+      loginContainer.classList.remove(
+        "hidden"
+      );
 
     }
 
+
+    /* ==========================
+       LOGIN
+    ========================== */
 
     loginForm.addEventListener(
       "submit",
@@ -501,23 +549,36 @@
 
         event.preventDefault();
 
-        loginError.classList.add("hidden");
+        loginError.classList.add(
+          "hidden"
+        );
+
 
         const email =
-          document.getElementById("email").value.trim();
+          document
+            .getElementById("email")
+            .value
+            .trim();
+
 
         const password =
-          document.getElementById("password").value;
+          document
+            .getElementById("password")
+            .value;
 
 
         const {
           data,
           error
         } =
-          await supabaseClient.auth.signInWithPassword({
-            email: email,
-            password: password
-          });
+          await supabaseClient.auth
+            .signInWithPassword({
+
+              email: email,
+
+              password: password
+
+            });
 
 
         if (error) {
@@ -525,7 +586,9 @@
           loginError.textContent =
             "E-mail ou senha incorretos.";
 
-          loginError.classList.remove("hidden");
+          loginError.classList.remove(
+            "hidden"
+          );
 
           return;
 
@@ -537,6 +600,10 @@
       }
     );
 
+
+    /* ==========================
+       LOGOUT
+    ========================== */
 
     logoutButton.addEventListener(
       "click",
@@ -550,12 +617,17 @@
     );
 
 
+    /* ==========================
+       VERIFICAR SESSÃO
+    ========================== */
+
     async function verificarSessao() {
 
       const {
         data
       } =
-        await supabaseClient.auth.getSession();
+        await supabaseClient.auth
+          .getSession();
 
 
       if (data.session) {
@@ -571,16 +643,42 @@
     }
 
 
-    async function carregarAgendamentos() {
+    /* ==========================
+       CARREGAR AGENDAMENTOS
+    ========================== */
 
-      const agora = new Date();
+    async function carregarAgendamentos(
+      dataSelecionada = null
+    ) {
+
+      const agora =
+        new Date();
+
+
+      /* DATA DE HOJE */
 
       const hoje = [
+
         agora.getFullYear(),
-        String(agora.getMonth() + 1).padStart(2, "0"),
-        String(agora.getDate()).padStart(2, "0")
+
+        String(
+          agora.getMonth() + 1
+        ).padStart(2, "0"),
+
+        String(
+          agora.getDate()
+        ).padStart(2, "0")
+
       ].join("-");
 
+
+      /* DATA QUE SERÁ CONSULTADA */
+
+      const dataBusca =
+        dataSelecionada || hoje;
+
+
+      /* BUSCAR NO SUPABASE */
 
       const {
         data: agendamentos,
@@ -591,10 +689,16 @@
           .select(
             "id, nome, email, telefone, servico, preco, data, horario, criado_em"
           )
-          .eq("data", hoje)
-          .order("horario", {
-            ascending: true
-          });
+          .eq(
+            "data",
+            dataBusca
+          )
+          .order(
+            "horario",
+            {
+              ascending: true
+            }
+          );
 
 
       if (error) {
@@ -615,47 +719,103 @@
         );
 
 
+      /* ==========================
+         QUANTIDADE
+      ========================== */
+
       const quantidade =
         agendamentos
           ? agendamentos.length
           : 0;
 
 
+      /* ==========================
+         FATURAMENTO
+      ========================== */
+
       const faturamento =
-        (agendamentos || []).reduce(
-          (total, agendamento) => {
+        (agendamentos || [])
+          .reduce(
+            (
+              total,
+              agendamento
+            ) => {
 
-            return total +
-              Number(
-                agendamento.preco || 0
-              );
+              return total +
+                Number(
+                  agendamento.preco || 0
+                );
 
-          },
-          0
-        );
+            },
+            0
+          );
 
+
+      /* ==========================
+         CLIENTES
+      ========================== */
 
       const clientesUnicos =
         new Set(
-          (agendamentos || []).map(
-            agendamento =>
-              agendamento.telefone ||
-              agendamento.email ||
-              agendamento.nome
-          )
+
+          (agendamentos || [])
+            .map(
+              agendamento =>
+
+                agendamento.telefone ||
+
+                agendamento.email ||
+
+                agendamento.nome
+
+            )
+
         ).size;
 
 
-      const horaAtual =
-        agora.toTimeString().slice(0, 5);
+      /* ==========================
+         PRÓXIMO HORÁRIO
+      ========================== */
+
+      let proximo = null;
 
 
-      const proximo =
-        (agendamentos || []).find(
-          agendamento =>
-            agendamento.horario >= horaAtual
-        );
+      if (dataBusca === hoje) {
 
+        const horaAtual =
+          agora
+            .toTimeString()
+            .slice(0, 5);
+
+
+        proximo =
+          (agendamentos || [])
+            .find(
+              agendamento =>
+
+                agendamento.horario >=
+                horaAtual
+
+            );
+
+      } else {
+
+        if (
+          agendamentos &&
+          agendamentos.length > 0
+        ) {
+
+          proximo =
+            agendamentos[0];
+
+        }
+
+      }
+
+
+      /* ==========================
+         ATUALIZAR CARDS
+      ========================== */
 
       document.querySelector(
         ".card:nth-child(1) .card-value"
@@ -672,19 +832,29 @@
       document.querySelector(
         ".card:nth-child(3) .card-value"
       ).textContent =
+
         "R$ " +
+
         faturamento
           .toFixed(2)
-          .replace(".", ",");
+          .replace(
+            ".",
+            ","
+          );
 
 
       document.querySelector(
         ".card:nth-child(4) .card-value"
       ).textContent =
+
         proximo
           ? proximo.horario
           : "—";
 
+
+      /* ==========================
+         SEM AGENDAMENTOS
+      ========================== */
 
       if (
         !agendamentos ||
@@ -692,6 +862,7 @@
       ) {
 
         lista.innerHTML = `
+
           <div style="
             background:#141414;
             border:1px dashed #303030;
@@ -701,8 +872,11 @@
             color:#888;
             font-size:14px;
           ">
-            Nenhum agendamento para hoje.
+
+            Nenhum agendamento para esta data.
+
           </div>
+
         `;
 
         return;
@@ -710,14 +884,26 @@
       }
 
 
+      /* ==========================
+         LIMPAR LISTA
+      ========================== */
+
       lista.innerHTML = "";
 
 
+      /* ==========================
+         MOSTRAR AGENDAMENTOS
+      ========================== */
+
       agendamentos.forEach(
-        (agendamento) => {
+        (
+          agendamento
+        ) => {
 
           const item =
-            document.createElement("div");
+            document.createElement(
+              "div"
+            );
 
 
           item.className =
@@ -725,52 +911,106 @@
 
 
           item.innerHTML = `
+
             <div class="appointment-top">
 
               <div class="time">
+
                 ${agendamento.horario}
+
               </div>
+
 
               <div class="status">
+
                 Confirmado
+
               </div>
 
             </div>
 
+
             <div class="client">
+
               ${agendamento.nome}
+
             </div>
 
+
             <div class="service">
+
               ${agendamento.servico}
+
             </div>
 
+
             <div class="service">
+
               ${
                 agendamento.telefone ||
                 "Telefone não informado"
               }
+
             </div>
 
+
             <div class="price">
+
               R$ ${
                 Number(
                   agendamento.preco
                 )
                 .toFixed(2)
-                .replace(".", ",")
+                .replace(
+                  ".",
+                  ","
+                )
               }
+
             </div>
+
           `;
 
 
-          lista.appendChild(item);
+          lista.appendChild(
+            item
+          );
 
         }
       );
 
     }
 
+
+    /* ==========================
+       FILTRO DE DATA
+    ========================== */
+
+    dateFilter.addEventListener(
+      "change",
+      function() {
+
+        const dataSelecionada =
+          this.value;
+
+
+        if (
+          dataSelecionada
+        ) {
+
+          carregarAgendamentos(
+            dataSelecionada
+          );
+
+        }
+
+      }
+    );
+
+
+    /* ==========================
+       INICIAR SISTEMA
+    ========================== */
 
     verificarSessao();
 
