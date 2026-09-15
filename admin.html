@@ -3,1930 +3,2007 @@
 
 <head>
 
-  <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1"
+>
 
-  <title>Painel — Arantes Barbershop</title>
+<title>Arantes Barbershop — Agendamento</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
 
-  <link
-    rel="preconnect"
-    href="https://fonts.gstatic.com"
-    crossorigin
-  >
+<link
+  rel="preconnect"
+  href="https://fonts.googleapis.com"
+  crossorigin
+>
 
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap"
-    rel="stylesheet"
-  >
+<link
+  href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap"
+  rel="stylesheet"
+>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<style>
 
-  <style>
+:root{
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+  --preto:#07090c;
+  --preto-2:#0d1117;
+  --preto-3:#111720;
 
+  --azul:#0B1F3A;
+  --azul-2:#102B4F;
+  --azul-light:#163A63;
+  --azul-brilho:#28588D;
 
-    :root {
+  --branco:#f5f7fa;
+  --cinza-claro:#c3c9d1;
+  --cinza-medio:#7f8995;
+  --cinza-escuro:#202833;
+  --linha:#29323e;
 
-      --black: #080808;
+  --erro:#e05252;
+  --verde:#25D366;
 
-      --black-2: #0e0e0e;
+  --radius:12px;
 
-      --card: #141414;
+  --serif-headline:'Oswald',sans-serif;
+  --sans-body:'Inter',sans-serif;
 
-      --card-2: #191919;
+}
 
-      --border: #292929;
+*{
+  box-sizing:border-box;
+}
 
-      --text: #ffffff;
+html,
+body{
+  margin:0;
+  padding:0;
+}
 
-      --muted: #8c8c8c;
+body{
 
-      --muted-2: #b5b5b5;
+  background:
 
-      --blue: #0B1F3A;
+    radial-gradient(
+      circle at top right,
+      rgba(11,31,58,.38),
+      transparent 38%
+    ),
 
-      --blue-light: #163A63;
+    radial-gradient(
+      circle at bottom left,
+      rgba(22,58,99,.12),
+      transparent 35%
+    ),
 
-      --green: #25D366;
+    var(--preto);
 
-    }
+  color:var(--branco);
 
+  font-family:var(--sans-body);
 
-    body {
+  min-height:100vh;
 
-      font-family: "Inter", sans-serif;
+  line-height:1.5;
 
-      background:
-        radial-gradient(
-          circle at top right,
-          rgba(11, 31, 58, .22),
-          transparent 35%
-        ),
-        var(--black);
+  -webkit-font-smoothing:antialiased;
 
-      color: var(--text);
+}
 
-      min-height: 100vh;
+button{
+  font-family:inherit;
+}
 
-    }
 
+/* TOPO */
 
-    button,
-    input {
+header.topbar{
 
-      font-family: inherit;
+  position:sticky;
 
-    }
+  top:0;
 
+  z-index:20;
 
-    .hidden {
+  background:rgba(7,9,12,.94);
 
-      display: none !important;
+  backdrop-filter:blur(12px);
 
-    }
+  border-bottom:1px solid var(--linha);
 
+  padding:17px 20px 15px;
 
-    /* =================================
-       LOGIN
-    ================================= */
+}
 
-    .login-container {
+.brand{
 
-      min-height: 100vh;
+  font-family:var(--serif-headline);
 
-      display: flex;
+  font-weight:600;
 
-      align-items: center;
+  letter-spacing:.05em;
 
-      justify-content: center;
+  font-size:22px;
 
-      padding: 22px;
+  color:var(--branco);
 
-    }
+  display:flex;
 
+  align-items:center;
 
-    .login-box {
+  gap:11px;
 
-      width: 100%;
+}
 
-      max-width: 410px;
+.brand .pole{
 
-      background: rgba(20,20,20,.96);
+  width:7px;
 
-      border: 1px solid var(--border);
+  height:30px;
 
-      border-radius: 22px;
+  border-radius:5px;
 
-      padding: 34px 24px;
+  background:
 
-      box-shadow:
-        0 25px 70px rgba(0,0,0,.55);
+    linear-gradient(
+      180deg,
+      var(--azul-light),
+      var(--azul),
+      var(--azul-brilho)
+    );
 
-    }
+  box-shadow:
 
+    0 0 18px rgba(22,58,99,.45);
 
-    .login-logo {
+  flex-shrink:0;
 
-      width: 58px;
+}
 
-      height: 58px;
+.brand small{
 
-      border-radius: 16px;
+  display:block;
 
-      display: flex;
+  font-family:var(--sans-body);
 
-      align-items: center;
+  font-weight:400;
 
-      justify-content: center;
+  letter-spacing:.02em;
 
-      background: var(--blue);
+  font-size:11px;
 
-      color: white;
+  color:var(--cinza-medio);
 
-      font-family: "Oswald", sans-serif;
+  margin-top:2px;
 
-      font-size: 25px;
+}
 
-      font-weight: 700;
 
-      margin-bottom: 18px;
+/* PASSOS */
 
-      box-shadow:
-        0 10px 30px rgba(11,31,58,.45);
+.steps{
 
-    }
+  display:flex;
 
+  gap:6px;
 
-    .login-title {
+  max-width:520px;
 
-      font-family: "Oswald", sans-serif;
+  margin:14px auto 0;
 
-      font-size: 32px;
+  padding:0 20px;
 
-      letter-spacing: 1px;
+}
 
-    }
+.steps .dot{
 
+  flex:1;
 
-    .login-subtitle {
+  height:4px;
 
-      color: var(--muted);
+  background:var(--cinza-escuro);
 
-      font-size: 13px;
+  border-radius:5px;
 
-      margin-top: 5px;
+  transition:
+    background .25s ease,
+    box-shadow .25s ease;
 
-      margin-bottom: 30px;
+}
 
-    }
+.steps .dot.active{
 
+  background:var(--azul-light);
 
-    label {
+  box-shadow:0 0 10px rgba(22,58,99,.45);
 
-      display: block;
+}
 
-      color: var(--muted-2);
+.steps .dot.done{
 
-      font-size: 12px;
+  background:var(--azul-brilho);
 
-      font-weight: 600;
+}
 
-      margin-bottom: 7px;
 
-    }
+/* CONTEÚDO */
 
+main{
 
-    input {
+  max-width:520px;
 
-      width: 100%;
+  margin:0 auto;
 
-      background: #0b0b0b;
+  padding:30px 20px 60px;
 
-      color: white;
+}
 
-      border: 1px solid var(--border);
+.panel{
+  display:none;
+}
 
-      border-radius: 11px;
+.panel.visible{
 
-      padding: 14px;
+  display:block;
 
-      outline: none;
+  animation:fade-in .35s ease;
 
-      margin-bottom: 17px;
+}
 
-      font-size: 14px;
+@keyframes fade-in{
 
-    }
+  from{
+    opacity:0;
+    transform:translateY(7px);
+  }
 
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
 
-    input:focus {
+}
 
-      border-color: var(--blue-light);
 
-    }
+/* TÍTULOS */
 
+h1.title{
 
-    .login-button {
+  font-family:var(--serif-headline);
 
-      width: 100%;
+  font-weight:600;
 
-      border: none;
+  font-size:29px;
 
-      border-radius: 11px;
+  letter-spacing:.02em;
 
-      padding: 15px;
+  margin:0 0 5px;
 
-      background: var(--blue);
+}
 
-      color: white;
+p.subtitle{
 
-      font-weight: 800;
+  color:var(--cinza-medio);
 
-      font-size: 14px;
+  font-size:14px;
 
-      cursor: pointer;
+  margin:0 0 28px;
 
-      transition: .2s;
+}
 
-    }
 
+/* CAMPOS */
 
-    .login-button:active {
+label{
 
-      transform: scale(.98);
+  display:block;
 
-    }
+  font-size:12px;
 
+  font-weight:600;
 
-    .error {
+  color:var(--cinza-claro);
 
-      color: #ff7777;
+  margin:0 0 7px;
 
-      font-size: 13px;
+}
 
-      margin-top: 14px;
+.field{
+  margin-bottom:18px;
+}
 
-    }
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"]{
 
+  width:100%;
 
-    /* =================================
-       CONTAINER
-    ================================= */
+  background:var(--preto-2);
 
-    .container {
+  border:1px solid var(--linha);
 
-      width: 100%;
+  color:var(--branco);
 
-      max-width: 1200px;
+  padding:14px;
 
-      margin: 0 auto;
+  border-radius:var(--radius);
 
-      padding: 22px 16px 45px;
+  font-size:16px;
 
-    }
+  font-family:var(--sans-body);
 
+  transition:
+    border-color .2s ease,
+    box-shadow .2s ease;
 
-    /* =================================
-       HEADER
-    ================================= */
+}
 
-    header {
+input:focus{
 
-      display: flex;
+  outline:none;
 
-      justify-content: space-between;
+  border-color:var(--azul-light);
 
-      align-items: center;
+  box-shadow:
 
-      gap: 15px;
+    0 0 0 3px rgba(22,58,99,.18);
 
-      margin-bottom: 25px;
+}
 
-    }
+input::placeholder{
+  color:#68727e;
+}
 
+.error-text{
 
-    .brand {
+  color:var(--erro);
 
-      display: flex;
+  font-size:13px;
 
-      align-items: center;
+  margin-top:-10px;
 
-      gap: 12px;
+  margin-bottom:16px;
 
-    }
+  min-height:16px;
 
+}
 
-    .brand-icon {
 
-      width: 46px;
+/* BOTÕES */
 
-      height: 46px;
+.btn{
 
-      border-radius: 13px;
+  display:block;
 
-      background: var(--blue);
+  width:100%;
 
-      display: flex;
+  padding:15px 18px;
 
-      align-items: center;
+  border-radius:var(--radius);
 
-      justify-content: center;
+  border:1px solid var(--azul-light);
 
-      font-family: "Oswald", sans-serif;
+  background:
 
-      font-weight: 700;
+    linear-gradient(
+      135deg,
+      var(--azul-light),
+      var(--azul)
+    );
 
-      font-size: 19px;
+  color:white;
 
-    }
+  font-weight:700;
 
+  font-size:14px;
 
-    .header-title {
+  letter-spacing:.02em;
 
-      font-family: "Oswald", sans-serif;
+  cursor:pointer;
 
-      font-size: 25px;
+  transition:
 
-      letter-spacing: 1px;
+    opacity .15s ease,
 
-      line-height: 1;
+    transform .1s ease,
 
-    }
+    box-shadow .2s ease;
 
+  box-shadow:
 
-    .header-title span {
+    0 8px 25px rgba(11,31,58,.28);
 
-      color: var(--muted);
+}
 
-      display: block;
+.btn:hover{
 
-      font-family: "Inter", sans-serif;
+  box-shadow:
 
-      font-size: 11px;
+    0 10px 30px rgba(22,58,99,.35);
 
-      letter-spacing: 0;
+}
 
-      margin-top: 5px;
+.btn:active{
+  transform:scale(.98);
+}
 
-    }
+.btn:disabled{
 
+  opacity:.4;
 
-    .logout {
+  cursor:not-allowed;
 
-      border: 1px solid var(--border);
+}
 
-      background: #121212;
+.btn.secondary{
 
-      color: white;
+  background:transparent;
 
-      padding: 10px 13px;
+  color:var(--branco);
 
-      border-radius: 10px;
+  border:1px solid var(--linha);
 
-      font-size: 12px;
+  box-shadow:none;
 
-      font-weight: 600;
+}
 
-      cursor: pointer;
+.btn.secondary:hover{
 
-    }
+  border-color:var(--azul-light);
 
+  background:rgba(11,31,58,.15);
 
-    /* =================================
-       HERO
-    ================================= */
+}
 
-    .hero {
+.btn-row{
 
-      background:
-        linear-gradient(
-          135deg,
-          #191919,
-          #0f0f0f
-        );
+  display:flex;
 
-      border: 1px solid var(--border);
+  gap:10px;
 
-      border-radius: 18px;
+  margin-top:8px;
 
-      padding: 20px;
+}
 
-      margin-bottom: 16px;
+.btn-row .btn{
+  flex:1;
+}
 
-      position: relative;
 
-      overflow: hidden;
+/* SERVIÇOS / BARBEIROS (cards selecionáveis) */
 
-    }
+.select-card{
 
+  border:1px solid var(--linha);
 
-    .hero::after {
+  border-radius:var(--radius);
 
-      content: "";
+  padding:17px;
 
-      position: absolute;
+  margin-bottom:12px;
 
-      width: 150px;
+  cursor:pointer;
 
-      height: 150px;
+  display:flex;
 
-      border-radius: 50%;
+  justify-content:space-between;
 
-      background: rgba(11,31,58,.30);
+  align-items:center;
 
-      right: -60px;
+  transition:
 
-      top: -70px;
+    border-color .2s ease,
 
-    }
+    background .2s ease,
 
+    transform .15s ease;
 
-    .hero-small {
+  background:
 
-      color: var(--muted);
+    linear-gradient(
+      145deg,
+      var(--preto-3),
+      var(--preto-2)
+    );
 
-      font-size: 11px;
+}
 
-      text-transform: uppercase;
+.select-card:hover{
+  border-color:var(--azul-light);
+}
 
-      letter-spacing: 1.4px;
+.select-card:active{
+  transform:scale(.99);
+}
 
-      margin-bottom: 7px;
+.select-card.selected{
 
-    }
+  border-color:var(--azul-light);
 
+  background:
 
-    .hero-title {
+    linear-gradient(
+      145deg,
+      rgba(22,58,99,.34),
+      rgba(11,31,58,.30)
+    );
 
-      font-family: "Oswald", sans-serif;
+  box-shadow:
 
-      font-size: 29px;
+    0 8px 25px rgba(11,31,58,.18);
 
-      letter-spacing: .5px;
+}
 
-    }
+.select-card .name{
 
+  font-family:var(--serif-headline);
 
-    .hero-date {
+  font-weight:500;
 
-      color: var(--muted-2);
+  font-size:18px;
 
-      font-size: 13px;
+}
 
-      margin-top: 5px;
+.select-card .desc{
 
-    }
+  font-size:12px;
 
+  color:var(--cinza-medio);
 
-    /* =================================
-       CARDS
-    ================================= */
+  margin-top:3px;
 
-    .cards {
+}
 
-      display: grid;
+.select-card .price{
 
-      grid-template-columns: repeat(2, 1fr);
+  font-family:var(--serif-headline);
 
-      gap: 10px;
+  font-size:18px;
 
-      margin-bottom: 28px;
+  color:white;
 
-    }
+  white-space:nowrap;
 
+  margin-left:12px;
 
-    .card {
+}
 
-      background: var(--card);
+.select-card.selected .price{
+  color:#b9d5f3;
+}
 
-      border: 1px solid var(--border);
+.select-card .check{
 
-      border-radius: 16px;
+  width:19px;
 
-      padding: 16px;
+  height:19px;
 
-      min-height: 105px;
+  border-radius:50%;
 
-      position: relative;
+  border:1px solid var(--cinza-medio);
 
-      overflow: hidden;
+  margin-right:12px;
 
-    }
+  flex-shrink:0;
 
+  display:flex;
 
-    .card::before {
+  align-items:center;
 
-      content: "";
+  justify-content:center;
 
-      position: absolute;
+  transition:.2s;
 
-      left: 0;
+}
 
-      top: 0;
+.select-card.selected .check{
 
-      width: 3px;
+  border-color:var(--azul-light);
 
-      height: 100%;
+  background:var(--azul-light);
 
-      background: var(--blue);
+}
 
-    }
+.select-card.selected .check::after{
 
+  content:"";
 
-    .card-title {
+  width:7px;
 
-      color: var(--muted);
+  height:7px;
 
-      font-size: 11px;
+  border-radius:50%;
 
-      font-weight: 600;
+  background:white;
 
-      margin-bottom: 11px;
+}
 
-    }
+.select-card-inner{
 
+  display:flex;
 
-    .card-value {
+  align-items:center;
 
-      font-size: 24px;
+  flex:1;
 
-      font-weight: 800;
+}
 
-      letter-spacing: -.5px;
+.select-empty,
+.select-loading{
 
-    }
+  color:var(--cinza-medio);
 
+  font-size:14px;
 
-    /* =================================
-       AGENDA HEADER
-    ================================= */
+  padding:14px 0;
 
-    .section {
+}
 
-      margin-top: 24px;
 
-    }
+/* HORÁRIOS */
 
+.slots-grid{
 
-    .section-header {
+  display:grid;
 
-      display: flex;
+  grid-template-columns:repeat(2,1fr);
 
-      justify-content: space-between;
+  gap:10px;
 
-      align-items: center;
+  margin:7px 0 20px;
 
-      gap: 12px;
+}
 
-      margin-bottom: 15px;
+.slot{
 
-    }
+  border:1px solid var(--linha);
 
+  border-radius:var(--radius);
 
-    h2 {
+  padding:14px 10px;
 
-      font-family: "Oswald", sans-serif;
+  text-align:center;
 
-      font-size: 25px;
+  font-size:15px;
 
-      letter-spacing: .5px;
+  font-weight:600;
 
-    }
+  cursor:pointer;
 
+  background:var(--preto-2);
 
-    .section-subtitle {
+  color:var(--branco);
 
-      color: var(--muted);
+  transition:
 
-      font-size: 11px;
+    border-color .2s ease,
 
-      margin-top: 3px;
+    background .2s ease,
 
-    }
+    transform .1s ease;
 
+}
 
-    .date {
+.slot:hover{
+  border-color:var(--azul-light);
+}
 
-      width: auto;
+.slot:active{
+  transform:scale(.98);
+}
 
-      min-width: 145px;
+.slot.selected{
 
-      background: var(--card);
+  border-color:var(--azul-light);
 
-      color: white;
+  background:
 
-      border: 1px solid var(--border);
+    linear-gradient(
+      135deg,
+      var(--azul-light),
+      var(--azul)
+    );
 
-      padding: 10px;
+  color:white;
 
-      border-radius: 10px;
+  box-shadow:
 
-      font-size: 12px;
+    0 7px 20px rgba(11,31,58,.3);
 
-      margin: 0;
+}
 
-    }
+.slots-empty,
+.slots-loading{
 
+  color:var(--cinza-medio);
 
-    /* =================================
-       APPOINTMENT
-    ================================= */
+  font-size:14px;
 
-    .appointment {
+  padding:14px 0;
 
-      background:
-        linear-gradient(
-          145deg,
-          #171717,
-          #111111
-        );
+}
 
-      border: 1px solid var(--border);
 
-      border-radius: 17px;
+/* RESUMO */
 
-      padding: 17px;
+.summary-box{
 
-      margin-bottom: 11px;
+  border:1px solid var(--linha);
 
-      box-shadow:
-        0 8px 25px rgba(0,0,0,.15);
+  border-radius:var(--radius);
 
-    }
+  padding:18px;
 
+  margin-bottom:22px;
 
-    .appointment-top {
+  background:
 
-      display: flex;
+    linear-gradient(
+      145deg,
+      var(--preto-3),
+      var(--preto-2)
+    );
 
-      justify-content: space-between;
+}
 
-      align-items: center;
+.summary-row{
 
-      margin-bottom: 14px;
+  display:flex;
 
-    }
+  justify-content:space-between;
 
+  padding:11px 0;
 
-    .time {
+  border-bottom:1px solid var(--linha);
 
-      font-family: "Oswald", sans-serif;
+  font-size:14px;
 
-      font-size: 25px;
+  gap:12px;
 
-      color: white;
+}
 
-    }
+.summary-row:last-child{
+  border-bottom:none;
+}
 
+.summary-row .k{
+  color:var(--cinza-medio);
+}
 
-    .status {
+.summary-row .v{
 
-      font-size: 10px;
+  text-align:right;
 
-      font-weight: 700;
+  font-weight:600;
 
-      padding: 6px 9px;
+}
 
-      border-radius: 20px;
+.summary-row.total .v{
 
-      background: rgba(11,31,58,.35);
+  font-family:var(--serif-headline);
 
-      color: #7da7d9;
+  font-size:20px;
 
-      border: 1px solid rgba(22,58,99,.65);
+  color:#b9d5f3;
 
-    }
+}
 
 
-    .client {
+/* CONFIRMAÇÃO */
 
-      font-size: 17px;
+.confirm-wrap{
 
-      font-weight: 700;
+  text-align:center;
 
-      margin-bottom: 5px;
+  padding-top:20px;
 
-    }
+}
 
+.confirm-badge{
 
-    .service {
+  width:68px;
 
-      color: var(--muted-2);
+  height:68px;
 
-      font-size: 13px;
+  border-radius:50%;
 
-      margin-bottom: 4px;
+  border:1px solid var(--azul-light);
 
-    }
+  background:
 
+    radial-gradient(
+      circle,
+      rgba(22,58,99,.35),
+      rgba(11,31,58,.15)
+    );
 
-    .price {
+  color:#b9d5f3;
 
-      color: white;
+  display:flex;
 
-      margin-top: 11px;
+  align-items:center;
 
-      font-size: 15px;
+  justify-content:center;
 
-      font-weight: 800;
+  margin:0 auto 22px;
 
-    }
+  font-size:29px;
 
+  box-shadow:
 
-    /* =================================
-       ACTIONS
-    ================================= */
+    0 0 30px rgba(22,58,99,.25);
 
-    .appointment-actions {
+}
 
-      display: flex;
+.confirm-title{
 
-      flex-direction: column;
+  font-family:var(--serif-headline);
 
-      gap: 8px;
+  font-size:27px;
 
-      margin-top: 16px;
+  margin:0 0 6px;
 
-    }
+}
 
+.confirm-sub{
 
-    .whatsapp-button {
+  color:var(--cinza-medio);
 
-      width: 100%;
+  font-size:14px;
 
-      border: none;
+  margin:0 0 26px;
 
-      border-radius: 10px;
+}
 
-      padding: 12px;
+.confirm-box{
 
-      background: var(--green);
+  text-align:left;
 
-      color: white;
+  border:1px solid var(--linha);
 
-      font-weight: 800;
+  border-radius:var(--radius);
 
-      font-size: 13px;
+  padding:18px;
 
-      cursor: pointer;
+  margin-bottom:26px;
 
-      text-align: center;
+  background:
 
-      text-decoration: none;
+    linear-gradient(
+      145deg,
+      var(--preto-3),
+      var(--preto-2)
+    );
 
-    }
+}
 
 
-    .cancel-button {
+/* ERRO */
 
-      width: 100%;
+.top-error{
 
-      border: 1px solid #252d38;
+  background:rgba(217,83,79,.10);
 
-      border-radius: 10px;
+  border:1px solid rgba(217,83,79,.65);
 
-      padding: 12px;
+  color:#f0c2c2;
 
-      background: #11151a;
+  padding:12px 14px;
 
-      color: #8fb1d6;
+  border-radius:var(--radius);
 
-      font-weight: 600;
+  font-size:13px;
 
-      font-size: 13px;
+  margin-bottom:18px;
 
-      cursor: pointer;
+  display:none;
 
-    }
+  word-break:break-word;
 
+}
 
-    .empty {
+.top-error.visible{
+  display:block;
+}
 
-      background: var(--card);
 
-      border: 1px dashed #333;
+/* LOADING */
 
-      border-radius: 16px;
+.spinner{
 
-      padding: 35px 18px;
+  display:inline-block;
 
-      text-align: center;
+  width:16px;
 
-      color: var(--muted);
+  height:16px;
 
-      font-size: 13px;
+  border:2px solid rgba(255,255,255,.20);
 
-    }
+  border-top-color:white;
 
+  border-radius:50%;
 
-    /* =================================
-       DESKTOP
-    ================================= */
+  animation:spin .7s linear infinite;
 
-    @media (min-width: 700px) {
+  vertical-align:-3px;
 
-      .container {
+  margin-right:8px;
 
-        padding: 35px 30px 55px;
+}
 
-      }
+.btn.secondary .spinner{
 
+  border:2px solid rgba(245,247,250,.25);
 
-      .cards {
+  border-top-color:var(--branco);
 
-        grid-template-columns:
-          repeat(4, 1fr);
+}
 
-        gap: 12px;
+@keyframes spin{
 
-      }
+  to{
+    transform:rotate(360deg);
+  }
 
+}
 
-      .appointment-actions {
 
-        flex-direction: row;
+/* RESPONSIVO */
 
-      }
+@media (max-width:360px){
 
+  .slots-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
 
-      .whatsapp-button,
-      .cancel-button {
+}
 
-        flex: 1;
+@media (min-width:700px){
 
-      }
+  main{
+    padding-top:40px;
+  }
 
-    }
+  .select-card{
+    padding:18px;
+  }
 
+  .slots-grid{
+    grid-template-columns:repeat(5,1fr);
+  }
 
-  </style>
+}
+
+</style>
 
 </head>
 
-
 <body>
 
+<header class="topbar">
 
-  <!-- =================================
-       LOGIN
-  ================================= -->
+  <div class="brand">
+
+    <span class="pole"></span>
+
+    <span>
+
+      ARANTES BARBERSHOP
+
+      <small>
+        Agende seu horário
+      </small>
+
+    </span>
+
+  </div>
 
   <div
-    id="loginContainer"
-    class="login-container"
+    class="steps"
+    id="steps"
   >
 
-    <div class="login-box">
+    <div class="dot" data-step="0"></div>
+    <div class="dot" data-step="1"></div>
+    <div class="dot" data-step="2"></div>
+    <div class="dot" data-step="3"></div>
+    <div class="dot" data-step="4"></div>
+    <div class="dot" data-step="5"></div>
 
-      <div class="login-logo">
-        A
-      </div>
+  </div>
 
-      <div class="login-title">
-        ARANTES
-      </div>
+</header>
 
-      <div class="login-subtitle">
-        Painel administrativo
-      </div>
+<main>
 
-
-      <form id="loginForm">
-
-        <label for="email">
-          E-mail
-        </label>
-
-        <input
-          type="email"
-          id="email"
-          placeholder="Seu e-mail"
-          required
-        >
+<div
+  class="top-error"
+  id="topError"
+></div>
 
 
-        <label for="password">
-          Senha
-        </label>
+<!-- PASSO 0: DADOS -->
 
-        <input
-          type="password"
-          id="password"
-          placeholder="Sua senha"
-          required
-        >
+<section
+  class="panel"
+  id="panel-0"
+>
+
+  <h1 class="title">
+    Seus dados
+  </h1>
+
+  <p class="subtitle">
+    Precisamos de algumas informações para confirmar seu horário.
+  </p>
+
+  <div class="field">
+
+    <label for="inputNome">
+      Nome completo
+    </label>
+
+    <input
+      type="text"
+      id="inputNome"
+      placeholder="Seu nome"
+    >
+
+  </div>
+
+  <div
+    class="error-text"
+    id="err-nome"
+  ></div>
+
+  <div class="field">
+
+    <label for="inputEmail">
+      E-mail
+    </label>
+
+    <input
+      type="email"
+      id="inputEmail"
+      placeholder="seuemail@exemplo.com"
+    >
+
+  </div>
+
+  <div
+    class="error-text"
+    id="err-email"
+  ></div>
+
+  <div class="field">
+
+    <label for="inputTelefone">
+      WhatsApp / Telefone
+    </label>
+
+    <input
+      type="tel"
+      id="inputTelefone"
+      placeholder="(11) 91234-5678"
+    >
+
+  </div>
+
+  <div
+    class="error-text"
+    id="err-telefone"
+  ></div>
+
+  <button
+    class="btn"
+    id="btn-step0-next"
+  >
+    Continuar
+  </button>
+
+</section>
 
 
-        <button
-          type="submit"
-          class="login-button"
-        >
-          ENTRAR NO PAINEL
-        </button>
+<!-- PASSO 1: SERVIÇO -->
+
+<section
+  class="panel"
+  id="panel-1"
+>
+
+  <h1 class="title">
+    Escolha o serviço
+  </h1>
+
+  <p class="subtitle">
+    Selecione o que deseja fazer hoje.
+  </p>
+
+  <div id="servicesList"></div>
+
+  <div
+    class="error-text"
+    id="err-servico"
+  ></div>
+
+  <div class="btn-row">
+
+    <button
+      class="btn secondary"
+      data-back="0"
+    >
+      Voltar
+    </button>
+
+    <button
+      class="btn"
+      id="btn-step1-next"
+    >
+      Continuar
+    </button>
+
+  </div>
+
+</section>
 
 
-        <div
-          id="loginError"
-          class="error hidden"
-        ></div>
+<!-- PASSO 2: DATA -->
 
-      </form>
+<section
+  class="panel"
+  id="panel-2"
+>
 
+  <h1 class="title">
+    Escolha a data
+  </h1>
+
+  <p class="subtitle">
+    Vamos verificar os barbeiros disponíveis nesse dia.
+  </p>
+
+  <div class="field">
+
+    <label for="inputData">
+      Data do atendimento
+    </label>
+
+    <input
+      type="date"
+      id="inputData"
+    >
+
+  </div>
+
+  <div
+    class="error-text"
+    id="err-data"
+  ></div>
+
+  <div class="btn-row">
+
+    <button
+      class="btn secondary"
+      data-back="1"
+    >
+      Voltar
+    </button>
+
+    <button
+      class="btn"
+      id="btn-step2-next"
+    >
+      Continuar
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- PASSO 3: BARBEIRO -->
+
+<section
+  class="panel"
+  id="panel-3"
+>
+
+  <h1 class="title">
+    Escolha o barbeiro
+  </h1>
+
+  <p class="subtitle">
+    Barbeiros disponíveis nessa data.
+  </p>
+
+  <div id="barbersList">
+    <div class="select-loading">Carregando barbeiros...</div>
+  </div>
+
+  <div
+    class="error-text"
+    id="err-barbeiro"
+  ></div>
+
+  <div class="btn-row">
+
+    <button
+      class="btn secondary"
+      data-back="2"
+    >
+      Voltar
+    </button>
+
+    <button
+      class="btn"
+      id="btn-step3-next"
+    >
+      Continuar
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- PASSO 4: HORÁRIO -->
+
+<section
+  class="panel"
+  id="panel-4"
+>
+
+  <h1 class="title">
+    Escolha o horário
+  </h1>
+
+  <p class="subtitle">
+    Horários disponíveis para esse barbeiro nessa data.
+  </p>
+
+  <div
+    class="slots-grid"
+    id="slotsGrid"
+  >
+
+    <div class="slots-empty">
+      Escolha uma data e um barbeiro para ver os horários.
     </div>
 
   </div>
 
-
-  <!-- =================================
-       PAINEL
-  ================================= -->
-
   <div
-    id="adminPanel"
-    class="hidden"
-  >
-
-    <div class="container">
-
-
-      <!-- HEADER -->
-
-      <header>
-
-        <div class="brand">
-
-          <div class="brand-icon">
-            A
-          </div>
-
-          <div class="header-title">
-
-            ARANTES
-
-            <span>
-              Painel administrativo
-            </span>
-
-          </div>
-
-        </div>
-
-
-        <button
-          id="logoutButton"
-          class="logout"
-        >
-          Sair
-        </button>
-
-      </header>
-
-
-      <!-- HERO -->
-
-      <div class="hero">
-
-        <div class="hero-small">
-          Gestão da barbearia
-        </div>
-
-        <div class="hero-title">
-          Sua agenda, no controle.
-        </div>
-
-        <div
-          id="heroDate"
-          class="hero-date"
-        >
-          Hoje
-        </div>
-
-      </div>
-
-
-      <!-- CARDS -->
-
-      <section class="cards">
-
-
-        <div class="card">
-
-          <div class="card-title">
-            AGENDAMENTOS
-          </div>
-
-          <div class="card-value">
-            0
-          </div>
-
-        </div>
-
-
-        <div class="card">
-
-          <div class="card-title">
-            CLIENTES
-          </div>
-
-          <div class="card-value">
-            0
-          </div>
-
-        </div>
-
-
-        <div class="card">
-
-          <div class="card-title">
-            VALOR PREVISTO
-          </div>
-
-          <div class="card-value">
-            R$ 0,00
-          </div>
-
-        </div>
-
-
-        <div class="card">
-
-          <div class="card-title">
-            PRÓXIMO HORÁRIO
-          </div>
-
-          <div class="card-value">
-            —
-          </div>
-
-        </div>
-
-
-      </section>
-
-
-      <!-- AGENDA -->
-
-      <section class="section">
-
-
-        <div class="section-header">
-
-          <div>
-
-            <h2>
-              Agenda
-            </h2>
-
-            <div class="section-subtitle">
-              Agendamentos do dia selecionado
-            </div>
-
-          </div>
-
-
-          <input
-            type="date"
-            id="dateFilter"
-            class="date"
-          >
-
-        </div>
-
-
-        <div id="appointmentsList">
-
-          <div class="empty">
-            Nenhum agendamento carregado.
-          </div>
-
-        </div>
-
-
-      </section>
-
-
+    class="error-text"
+    id="err-horario"
+  ></div>
+
+  <div class="btn-row">
+
+    <button
+      class="btn secondary"
+      data-back="3"
+    >
+      Voltar
+    </button>
+
+    <button
+      class="btn"
+      id="btn-step4-next"
+    >
+      Continuar
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- PASSO 5: RESUMO -->
+
+<section
+  class="panel"
+  id="panel-5"
+>
+
+  <h1 class="title">
+    Confirme seu agendamento
+  </h1>
+
+  <p class="subtitle">
+    Revise os detalhes antes de confirmar.
+  </p>
+
+  <div class="summary-box">
+
+    <div class="summary-row">
+      <span class="k">Nome</span>
+      <span class="v" id="sum-nome"></span>
+    </div>
+
+    <div class="summary-row">
+      <span class="k">E-mail</span>
+      <span class="v" id="sum-email"></span>
+    </div>
+
+    <div class="summary-row">
+      <span class="k">Telefone</span>
+      <span class="v" id="sum-telefone"></span>
+    </div>
+
+    <div class="summary-row">
+      <span class="k">Serviço</span>
+      <span class="v" id="sum-servico"></span>
+    </div>
+
+    <div class="summary-row">
+      <span class="k">Barbeiro</span>
+      <span class="v" id="sum-barbeiro"></span>
+    </div>
+
+    <div class="summary-row">
+      <span class="k">Data</span>
+      <span class="v" id="sum-data"></span>
+    </div>
+
+    <div class="summary-row">
+      <span class="k">Horário</span>
+      <span class="v" id="sum-horario"></span>
+    </div>
+
+    <div class="summary-row total">
+      <span class="k">Valor</span>
+      <span class="v" id="sum-preco"></span>
     </div>
 
   </div>
 
+  <div class="btn-row">
 
-  <script>
+    <button
+      class="btn secondary"
+      data-back="4"
+    >
+      Voltar
+    </button>
 
+    <button
+      class="btn"
+      id="btn-confirmar"
+    >
+      Confirmar agendamento
+    </button>
 
-    /* =================================
-       SUPABASE
-    ================================= */
+  </div>
 
-    const SUPABASE_URL =
-      "https://bgmcryfcwjikuttwftgp.supabase.co";
-
-
-    const SUPABASE_KEY =
-      "sb_publishable_C0Tahq5Lffw4ukCwj9WXHQ_HtDbD6PU";
-
-
-    const supabaseClient =
-      window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-      );
+</section>
 
 
-    /* =================================
-       ELEMENTOS
-    ================================= */
+<!-- PASSO 6: CONFIRMAÇÃO -->
 
-    const loginContainer =
-      document.getElementById(
-        "loginContainer"
-      );
+<section
+  class="panel"
+  id="panel-6"
+>
+
+  <div class="confirm-wrap">
+
+    <div class="confirm-badge">
+      ✓
+    </div>
+
+    <h1 class="confirm-title">
+      Agendamento confirmado
+    </h1>
+
+    <p class="confirm-sub">
+      Te esperamos na Arantes Barbershop.
+    </p>
+
+    <div class="confirm-box">
+
+      <div class="summary-row">
+        <span class="k">Serviço</span>
+        <span class="v" id="conf-servico"></span>
+      </div>
+
+      <div class="summary-row">
+        <span class="k">Barbeiro</span>
+        <span class="v" id="conf-barbeiro"></span>
+      </div>
+
+      <div class="summary-row">
+        <span class="k">Data</span>
+        <span class="v" id="conf-data"></span>
+      </div>
+
+      <div class="summary-row">
+        <span class="k">Horário</span>
+        <span class="v" id="conf-horario"></span>
+      </div>
+
+      <div class="summary-row">
+        <span class="k">Nome</span>
+        <span class="v" id="conf-nome"></span>
+      </div>
+
+    </div>
+
+    <button
+      class="btn"
+      id="btn-novo"
+    >
+      Novo agendamento
+    </button>
+
+  </div>
+
+</section>
+
+</main>
 
 
-    const adminPanel =
-      document.getElementById(
-        "adminPanel"
-      );
+<script>
+
+/* ============================================================
+   SUPABASE
+============================================================ */
+
+const SUPABASE_URL =
+  "https://bgmcryfcwjikuttwftgp.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_C0Tahq5Lffw4ukCwj9WXHQ_HtDbD6PU";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
 
 
-    const loginForm =
-      document.getElementById(
-        "loginForm"
-      );
+/* ============================================================
+   SERVIÇOS
+============================================================ */
+
+const SERVICOS = [
+  { id:"corte",       nome:"Corte de cabelo", desc:"Acabamento na máquina e tesoura", preco:40 },
+  { id:"barba",        nome:"Barba",            desc:"Modelagem completa com toalha quente", preco:35 },
+  { id:"corte_barba",  nome:"Corte + Barba",    desc:"Combo completo", preco:75 }
+];
+
+/* Lista fixa de horários possíveis. Na hora de mostrar, o site
+   filtra essa lista pelo horário de abertura/fechamento do dia
+   (tabela horario_funcionamento) e pelos horários já ocupados
+   ou bloqueados daquele barbeiro. */
+const HORARIOS = ["09:00","10:00","11:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00"];
 
 
-    const loginError =
-      document.getElementById(
-        "loginError"
-      );
+/* ============================================================
+   ESTADO
+============================================================ */
+
+const state = {
+  step:0,
+  nome:"",
+  email:"",
+  telefone:"",
+  servico:null,
+  data:"",
+  diaSemana:null,
+  barbeiro:null,
+  barbeirosDisponiveis:[],
+  horario:"",
+  horariosOcupados:[],
+  horarioFuncionamento:{} // { 0:{aberto,abertura,fechamento}, 1:{...}, ... }
+};
 
 
-    const logoutButton =
-      document.getElementById(
-        "logoutButton"
-      );
+/* ============================================================
+   HELPERS GERAIS
+============================================================ */
+
+function showTopError(msg){
+  const el = document.getElementById("topError");
+  el.textContent = msg;
+  el.classList.add("visible");
+  window.scrollTo({ top:0, behavior:"smooth" });
+}
+
+function hideTopError(){
+  document.getElementById("topError").classList.remove("visible");
+}
+
+function setFieldError(id,msg){
+  document.getElementById(id).textContent = msg || "";
+}
+
+function clearFieldErrors(){
+  document.querySelectorAll(".error-text").forEach(function(e){ e.textContent = ""; });
+}
+
+function formatPreco(v){
+  return "R$ " + v.toFixed(2).replace(".",",");
+}
+
+function formatDataBR(isoDate){
+  if(!isoDate) return "";
+  const partes = isoDate.split("-");
+  return partes[2] + "/" + partes[1] + "/" + partes[0];
+}
+
+function diaSemanaDe(isoDate){
+  // "T00:00:00" evita problema de fuso horário ao converter a string em Date
+  return new Date(isoDate + "T00:00:00").getDay();
+}
+
+function goToStep(n){
+  state.step = n;
+
+  document.querySelectorAll(".panel").forEach(function(p){ p.classList.remove("visible"); });
+  document.getElementById("panel-" + n).classList.add("visible");
+
+  const dots = document.querySelectorAll(".steps .dot");
+  dots.forEach(function(d,i){
+    d.classList.remove("active","done");
+    if(i < n) d.classList.add("done");
+    if(i === n) d.classList.add("active");
+  });
+
+  document.getElementById("steps").style.display = (n === 6) ? "none" : "flex";
+  hideTopError();
+}
 
 
-    const dateFilter =
-      document.getElementById(
-        "dateFilter"
-      );
+/* ============================================================
+   INICIALIZAÇÃO: HORÁRIO DE FUNCIONAMENTO
+============================================================ */
+
+async function carregarHorarioFuncionamento(){
+  try{
+    const { data, error } = await supabaseClient
+      .from("horario_funcionamento")
+      .select("dia_semana, aberto, horario_abertura, horario_fechamento");
+
+    if(error) throw error;
+
+    const mapa = {};
+    (data || []).forEach(function(linha){
+      mapa[linha.dia_semana] = {
+        aberto: linha.aberto,
+        abertura: (linha.horario_abertura || "").slice(0,5),
+        fechamento: (linha.horario_fechamento || "").slice(0,5)
+      };
+    });
+    state.horarioFuncionamento = mapa;
+  }catch(err){
+    console.error("Erro ao carregar horário de funcionamento:", err);
+  }
+}
 
 
-    const heroDate =
-      document.getElementById(
-        "heroDate"
-      );
+/* ============================================================
+   PASSO 0 — DADOS DO CLIENTE
+============================================================ */
+
+function validarPasso0(){
+  clearFieldErrors();
+  let ok = true;
+
+  const nome = document.getElementById("inputNome").value.trim();
+  const email = document.getElementById("inputEmail").value.trim();
+  const telefone = document.getElementById("inputTelefone").value.trim();
+
+  if(nome.length < 3){
+    setFieldError("err-nome", "Digite seu nome completo.");
+    ok = false;
+  }
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if(!emailRegex.test(email)){
+    setFieldError("err-email", "Digite um e-mail válido.");
+    ok = false;
+  }
+  if(telefone.length < 8){
+    setFieldError("err-telefone", "Digite um telefone válido.");
+    ok = false;
+  }
+
+  if(ok){
+    state.nome = nome;
+    state.email = email;
+    state.telefone = telefone;
+  }
+  return ok;
+}
+
+document.getElementById("btn-step0-next").addEventListener("click", function(){
+  if(validarPasso0()){
+    goToStep(1);
+  }
+});
 
 
-    /* =================================
-       DATA DE HOJE
-    ================================= */
+/* ============================================================
+   PASSO 1 — SERVIÇO
+============================================================ */
 
-    function obterDataHoje() {
+function renderServicos(){
+  const wrap = document.getElementById("servicesList");
+  wrap.innerHTML = "";
 
-      const agora =
-        new Date();
+  SERVICOS.forEach(function(s){
+    const card = document.createElement("div");
+    card.className = "select-card" + (state.servico && state.servico.id === s.id ? " selected" : "");
+    card.innerHTML =
+      '<div class="select-card-inner">' +
+        '<div class="check"></div>' +
+        '<div>' +
+          '<div class="name">' + s.nome + '</div>' +
+          '<div class="desc">' + s.desc + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="price">' + formatPreco(s.preco) + '</div>';
+
+    card.addEventListener("click", function(){
+      state.servico = s;
+      renderServicos();
+      setFieldError("err-servico", "");
+    });
+    wrap.appendChild(card);
+  });
+}
+
+document.getElementById("btn-step1-next").addEventListener("click", function(){
+  if(!state.servico){
+    setFieldError("err-servico", "Selecione um serviço para continuar.");
+    return;
+  }
+  goToStep(2);
+});
 
 
-      return [
+/* ============================================================
+   PASSO 2 — DATA
+============================================================ */
 
-        agora.getFullYear(),
+const inputData = document.getElementById("inputData");
 
-        String(
-          agora.getMonth() + 1
-        ).padStart(2, "0"),
+function hojeISO(){
+  const d = new Date();
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2,"0");
+  const dd = String(d.getDate()).padStart(2,"0");
+  return yyyy + "-" + mm + "-" + dd;
+}
+inputData.min = hojeISO();
 
-        String(
-          agora.getDate()
-        ).padStart(2, "0")
+inputData.addEventListener("change", function(){
+  state.data = inputData.value;
+  state.barbeiro = null;
+  state.horario = "";
+  setFieldError("err-data", "");
+});
 
-      ].join("-");
+document.getElementById("btn-step2-next").addEventListener("click", async function(){
+  clearFieldErrors();
 
+  if(!state.data){
+    setFieldError("err-data", "Escolha uma data.");
+    return;
+  }
+
+  const btn = document.getElementById("btn-step2-next");
+  const textoOriginal = btn.textContent;
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Verificando...';
+
+  try{
+    state.diaSemana = diaSemanaDe(state.data);
+    const infoDia = state.horarioFuncionamento[state.diaSemana];
+
+    if(!infoDia || !infoDia.aberto){
+      setFieldError("err-data", "A barbearia não abre nesse dia da semana. Escolha outra data.");
+      return;
     }
 
+    // Verifica se o dia está bloqueado inteiro para a barbearia (feriado, por exemplo)
+    const { data: bloqueioGeral, error: erroBloqueio } = await supabaseClient
+      .from("bloqueios_dias")
+      .select("id")
+      .eq("data", state.data)
+      .is("barbeiro_id", null);
 
-    /* =================================
-       DATA FORMATADA
-    ================================= */
+    if(erroBloqueio) throw erroBloqueio;
 
-    function formatarData(
-      data
-    ) {
-
-      if (!data) {
-        return "";
-      }
-
-
-      const partes =
-        data.split("-");
-
-
-      if (
-        partes.length !== 3
-      ) {
-
-        return data;
-
-      }
-
-
-      return (
-        partes[2] +
-        "/" +
-        partes[1] +
-        "/" +
-        partes[0]
-      );
-
+    if(bloqueioGeral && bloqueioGeral.length > 0){
+      setFieldError("err-data", "A barbearia está fechada nessa data. Escolha outro dia.");
+      return;
     }
 
+    await carregarBarbeirosDisponiveis(state.data);
+    goToStep(3);
 
-    /* =================================
-       MOSTRAR PAINEL
-    ================================= */
-
-    function mostrarPainel() {
-
-      loginContainer.classList.add(
-        "hidden"
-      );
-
-
-      adminPanel.classList.remove(
-        "hidden"
-      );
+  }catch(err){
+    console.error("Erro ao verificar a data:", err);
+    showTopError("Não foi possível verificar essa data. Tente novamente.");
+  }finally{
+    btn.disabled = false;
+    btn.textContent = textoOriginal;
+  }
+});
 
 
-      dateFilter.value =
-        obterDataHoje();
+/* ============================================================
+   PASSO 3 — BARBEIRO
+============================================================ */
+
+async function carregarBarbeirosDisponiveis(data){
+  const wrap = document.getElementById("barbersList");
+  wrap.innerHTML = '<div class="select-loading"><span class="spinner" style="border-top-color:#f5f7fa;border-color:rgba(245,247,250,.25);"></span>Carregando barbeiros...</div>';
+
+  try{
+    const { data: barbeiros, error } = await supabaseClient
+      .rpc("barbeiros_disponiveis", { p_data: data });
+
+    if(error) throw error;
+
+    state.barbeirosDisponiveis = barbeiros || [];
+  }catch(err){
+    console.error("Erro ao carregar barbeiros:", err);
+    state.barbeirosDisponiveis = [];
+    showTopError("Não foi possível carregar os barbeiros disponíveis.");
+  }
+
+  renderBarbeiros();
+}
+
+function renderBarbeiros(){
+  const wrap = document.getElementById("barbersList");
+  wrap.innerHTML = "";
+
+  if(state.barbeirosDisponiveis.length === 0){
+    wrap.innerHTML = '<div class="select-empty">Nenhum barbeiro disponível nessa data. Escolha outro dia.</div>';
+    return;
+  }
+
+  state.barbeirosDisponiveis.forEach(function(b){
+    const card = document.createElement("div");
+    card.className = "select-card" + (state.barbeiro && state.barbeiro.id === b.id ? " selected" : "");
+    card.innerHTML =
+      '<div class="select-card-inner">' +
+        '<div class="check"></div>' +
+        '<div class="name">' + b.nome + '</div>' +
+      '</div>';
+
+    card.addEventListener("click", function(){
+      state.barbeiro = b;
+      state.horario = "";
+      renderBarbeiros();
+      setFieldError("err-barbeiro", "");
+    });
+    wrap.appendChild(card);
+  });
+}
+
+document.getElementById("btn-step3-next").addEventListener("click", async function(){
+  if(!state.barbeiro){
+    setFieldError("err-barbeiro", "Selecione um barbeiro para continuar.");
+    return;
+  }
+  await carregarHorariosOcupados(state.data, state.barbeiro.id);
+  goToStep(4);
+});
 
 
-      heroDate.textContent =
-        "Hoje • " +
-        formatarData(
-          obterDataHoje()
-        );
+/* ============================================================
+   PASSO 4 — HORÁRIO
+============================================================ */
+
+async function carregarHorariosOcupados(data, barbeiroId){
+  const grid = document.getElementById("slotsGrid");
+  grid.innerHTML = '<div class="slots-loading"><span class="spinner" style="border-top-color:#f5f7fa;border-color:rgba(245,247,250,.25);"></span>Carregando horários...</div>';
+
+  try{
+    const { data: rows, error } = await supabaseClient
+      .rpc("horarios_ocupados_barbeiro", { p_data: data, p_barbeiro_id: barbeiroId });
+
+    if(error) throw error;
+
+    state.horariosOcupados = (rows || []).map(function(r){ return r.horario; });
+  }catch(err){
+    console.error("Erro ao carregar horários:", err);
+    state.horariosOcupados = [];
+    showTopError("Não foi possível verificar os horários disponíveis. Tente novamente.");
+  }
+
+  renderSlots();
+}
+
+function renderSlots(){
+  const grid = document.getElementById("slotsGrid");
+  grid.innerHTML = "";
+
+  if(!state.data || !state.barbeiro){
+    grid.innerHTML = '<div class="slots-empty">Escolha uma data e um barbeiro para ver os horários.</div>';
+    return;
+  }
+
+  const infoDia = state.horarioFuncionamento[state.diaSemana] || {};
+  const abertura = infoDia.abertura || "00:00";
+  const fechamento = infoDia.fechamento || "23:59";
+
+  const horariosDisponiveis = HORARIOS.filter(function(h){
+    const dentroDoHorario = h >= abertura && h <= fechamento;
+    const ocupado = state.horariosOcupados.indexOf(h) !== -1;
+    return dentroDoHorario && !ocupado;
+  });
+
+  if(horariosDisponiveis.length === 0){
+    grid.innerHTML = '<div class="slots-empty">Não há horários disponíveis para esse barbeiro nessa data.</div>';
+    return;
+  }
+
+  horariosDisponiveis.forEach(function(h){
+    const btn = document.createElement("div");
+    btn.className = "slot" + (state.horario === h ? " selected" : "");
+    btn.textContent = h;
+
+    btn.addEventListener("click", function(){
+      state.horario = h;
+      setFieldError("err-horario", "");
+      renderSlots();
+    });
+    grid.appendChild(btn);
+  });
+}
+
+document.getElementById("btn-step4-next").addEventListener("click", function(){
+  clearFieldErrors();
+  if(!state.horario){
+    setFieldError("err-horario", "Escolha um horário disponível.");
+    return;
+  }
+  montarResumo();
+  goToStep(5);
+});
 
 
-      carregarAgendamentos();
+/* ============================================================
+   PASSO 5 — RESUMO E CONFIRMAÇÃO
+============================================================ */
 
+function montarResumo(){
+  document.getElementById("sum-nome").textContent = state.nome;
+  document.getElementById("sum-email").textContent = state.email;
+  document.getElementById("sum-telefone").textContent = state.telefone;
+  document.getElementById("sum-servico").textContent = state.servico.nome;
+  document.getElementById("sum-barbeiro").textContent = state.barbeiro.nome;
+  document.getElementById("sum-data").textContent = formatDataBR(state.data);
+  document.getElementById("sum-horario").textContent = state.horario;
+  document.getElementById("sum-preco").textContent = formatPreco(state.servico.preco);
+}
+
+const btnConfirmar = document.getElementById("btn-confirmar");
+
+btnConfirmar.addEventListener("click", async function(){
+  hideTopError();
+  btnConfirmar.disabled = true;
+  const textoOriginal = btnConfirmar.textContent;
+  btnConfirmar.innerHTML = '<span class="spinner"></span>Confirmando...';
+
+  try{
+    // Revalida disponibilidade imediatamente antes de salvar
+    const { data: horariosAtuais, error: erroConsulta } = await supabaseClient
+      .rpc("horarios_ocupados_barbeiro", { p_data: state.data, p_barbeiro_id: state.barbeiro.id });
+
+    if(erroConsulta) throw erroConsulta;
+
+    const horarioJaOcupado = (horariosAtuais || []).some(function(r){ return r.horario === state.horario; });
+
+    if(horarioJaOcupado){
+      showTopError("Esse horário acabou de ser reservado. Escolha outro horário.");
+      await carregarHorariosOcupados(state.data, state.barbeiro.id);
+      state.horario = "";
+      goToStep(4);
+      return;
     }
 
-
-    /* =================================
-       MOSTRAR LOGIN
-    ================================= */
-
-    function mostrarLogin() {
-
-      adminPanel.classList.add(
-        "hidden"
-      );
-
-
-      loginContainer.classList.remove(
-        "hidden"
-      );
-
-    }
-
-
-    /* =================================
-       LOGIN
-    ================================= */
-
-    loginForm.addEventListener(
-      "submit",
-      async function(event) {
-
-        event.preventDefault();
-
-
-        loginError.classList.add(
-          "hidden"
-        );
-
-
-        const email =
-          document
-            .getElementById("email")
-            .value
-            .trim();
-
-
-        const password =
-          document
-            .getElementById("password")
-            .value;
-
-
-        const {
-          error
-        } =
-          await supabaseClient.auth
-            .signInWithPassword({
-
-              email: email,
-
-              password: password
-
-            });
-
-
-        if (error) {
-
-          loginError.textContent =
-            "E-mail ou senha incorretos.";
-
-
-          loginError.classList.remove(
-            "hidden"
-          );
-
-
-          return;
-
-        }
-
-
-        mostrarPainel();
-
-      }
-    );
-
-
-    /* =================================
-       LOGOUT
-    ================================= */
-
-    logoutButton.addEventListener(
-      "click",
-      async function() {
-
-        await supabaseClient.auth.signOut();
-
-
-        mostrarLogin();
-
-      }
-    );
-
-
-    /* =================================
-       VERIFICAR SESSÃO
-    ================================= */
-
-    async function verificarSessao() {
-
-      const {
-        data
-      } =
-        await supabaseClient.auth
-          .getSession();
-
-
-      if (data.session) {
-
-        mostrarPainel();
-
-      } else {
-
-        mostrarLogin();
-
-      }
-
-    }
-
-
-    /* =================================
-       CARREGAR AGENDAMENTOS
-    ================================= */
-
-    async function carregarAgendamentos(
-      dataSelecionada = null
-    ) {
-
-      const agora =
-        new Date();
-
-
-      const hoje =
-        obterDataHoje();
-
-
-      const dataBusca =
-        dataSelecionada || hoje;
-
-
-      /* BUSCAR */
-
-      const {
-        data: agendamentos,
-        error
-      } =
-        await supabaseClient
-          .from("agendamentos")
-          .select(
-            "id, nome, email, telefone, servico, preco, data, horario, criado_em"
-          )
-          .eq(
-            "data",
-            dataBusca
-          )
-          .order(
-            "horario",
-            {
-              ascending: true
-            }
-          );
-
-
-      if (error) {
-
-        console.error(
-          "Erro ao carregar agendamentos:",
-          error
-        );
-
-
+    const { error: erroInsercao } = await supabaseClient
+      .from("agendamentos")
+      .insert([{
+        nome: state.nome,
+        email: state.email,
+        telefone: state.telefone,
+        servico: state.servico.nome,
+        preco: state.servico.preco,
+        data: state.data,
+        horario: state.horario,
+        barbeiro_id: state.barbeiro.id
+      }]);
+
+    if(erroInsercao){
+      if(erroInsercao.code === "23505"){
+        showTopError("Esse horário acabou de ser reservado. Escolha outro horário.");
+        await carregarHorariosOcupados(state.data, state.barbeiro.id);
+        state.horario = "";
+        goToStep(4);
         return;
-
       }
-
-
-      const lista =
-        document.getElementById(
-          "appointmentsList"
-        );
-
-
-      /* QUANTIDADE */
-
-      const quantidade =
-        agendamentos
-          ? agendamentos.length
-          : 0;
-
-
-      /* FATURAMENTO */
-
-      const faturamento =
-        (agendamentos || [])
-          .reduce(
-            (
-              total,
-              agendamento
-            ) => {
-
-              return total +
-                Number(
-                  agendamento.preco || 0
-                );
-
-            },
-            0
-          );
-
-
-      /* CLIENTES */
-
-      const clientesUnicos =
-        new Set(
-
-          (agendamentos || [])
-            .map(
-              agendamento =>
-
-                agendamento.telefone ||
-
-                agendamento.email ||
-
-                agendamento.nome
-
-            )
-
-        ).size;
-
-
-      /* PRÓXIMO */
-
-      let proximo = null;
-
-
-      if (
-        dataBusca === hoje
-      ) {
-
-        const horaAtual =
-          agora
-            .toTimeString()
-            .slice(0, 5);
-
-
-        proximo =
-          (agendamentos || [])
-            .find(
-              agendamento =>
-
-                agendamento.horario >=
-                horaAtual
-
-            );
-
-      } else {
-
-        if (
-          agendamentos &&
-          agendamentos.length > 0
-        ) {
-
-          proximo =
-            agendamentos[0];
-
-        }
-
-      }
-
-
-      /* ATUALIZAR CARDS */
-
-      document.querySelector(
-        ".card:nth-child(1) .card-value"
-      ).textContent =
-        quantidade;
-
-
-      document.querySelector(
-        ".card:nth-child(2) .card-value"
-      ).textContent =
-        clientesUnicos;
-
-
-      document.querySelector(
-        ".card:nth-child(3) .card-value"
-      ).textContent =
-
-        "R$ " +
-
-        faturamento
-          .toFixed(2)
-          .replace(
-            ".",
-            ","
-          );
-
-
-      document.querySelector(
-        ".card:nth-child(4) .card-value"
-      ).textContent =
-
-        proximo
-          ? proximo.horario
-          : "—";
-
-
-      /* DATA DO HERO */
-
-      if (
-        dataBusca === hoje
-      ) {
-
-        heroDate.textContent =
-          "Hoje • " +
-          formatarData(
-            dataBusca
-          );
-
-      } else {
-
-        heroDate.textContent =
-          "Data selecionada • " +
-          formatarData(
-            dataBusca
-          );
-
-      }
-
-
-      /* SEM AGENDAMENTOS */
-
-      if (
-        !agendamentos ||
-        agendamentos.length === 0
-      ) {
-
-        lista.innerHTML = `
-
-          <div class="empty">
-
-            Nenhum agendamento para esta data.
-
-          </div>
-
-        `;
-
-
-        return;
-
-      }
-
-
-      /* LIMPAR */
-
-      lista.innerHTML = "";
-
-
-      /* MOSTRAR */
-
-      agendamentos.forEach(
-        (
-          agendamento
-        ) => {
-
-
-          const item =
-            document.createElement(
-              "div"
-            );
-
-
-          item.className =
-            "appointment";
-
-
-          /* TELEFONE */
-
-          let telefone =
-            agendamento.telefone || "";
-
-
-          telefone =
-            telefone.replace(
-              /\D/g,
-              ""
-            );
-
-
-          if (
-            telefone.length === 10 ||
-            telefone.length === 11
-          ) {
-
-            telefone =
-              "55" +
-              telefone;
-
-          }
-
-
-          /* MENSAGEM */
-
-          const mensagem =
-            encodeURIComponent(
-
-              `Olá, ${agendamento.nome}! Aqui é da Arantes Barbershop. Estou entrando em contato sobre seu agendamento de ${agendamento.servico} às ${agendamento.horario}.`
-
-            );
-
-
-          const whatsappLink =
-            telefone
-
-              ?
-
-              `https://wa.me/${telefone}?text=${mensagem}`
-
-              :
-
-              "#";
-
-
-          /* HTML */
-
-          item.innerHTML = `
-
-            <div class="appointment-top">
-
-              <div class="time">
-                ${agendamento.horario}
-              </div>
-
-              <div class="status">
-                Confirmado
-              </div>
-
-            </div>
-
-
-            <div class="client">
-              ${agendamento.nome}
-            </div>
-
-
-            <div class="service">
-              ${agendamento.servico}
-            </div>
-
-
-            <div class="service">
-              ${
-                agendamento.telefone ||
-                "Telefone não informado"
-              }
-            </div>
-
-
-            <div class="price">
-
-              R$ ${
-                Number(
-                  agendamento.preco
-                )
-                .toFixed(2)
-                .replace(
-                  ".",
-                  ","
-                )
-              }
-
-            </div>
-
-
-            <div class="appointment-actions">
-
-
-              ${
-                telefone
-
-                ?
-
-                `
-
-                  <a
-                    href="${whatsappLink}"
-                    target="_blank"
-                    class="whatsapp-button"
-                  >
-                    💬 Chamar no WhatsApp
-                  </a>
-
-                `
-
-                :
-
-                `
-
-                  <button
-                    class="whatsapp-button"
-                    disabled
-                    style="
-                      opacity:.4;
-                      cursor:not-allowed;
-                    "
-                  >
-                    📵 Sem telefone
-                  </button>
-
-                `
-
-              }
-
-
-              <button
-                class="cancel-button"
-                onclick="cancelarAgendamento('${agendamento.id}')"
-              >
-                Cancelar agendamento
-              </button>
-
-
-            </div>
-
-          `;
-
-
-          lista.appendChild(
-            item
-          );
-
-
-        }
-      );
-
+      throw erroInsercao;
     }
 
+    document.getElementById("conf-servico").textContent = state.servico.nome;
+    document.getElementById("conf-barbeiro").textContent = state.barbeiro.nome;
+    document.getElementById("conf-data").textContent = formatDataBR(state.data);
+    document.getElementById("conf-horario").textContent = state.horario;
+    document.getElementById("conf-nome").textContent = state.nome;
 
-    /* =================================
-       CANCELAR AGENDAMENTO
-    ================================= */
+    goToStep(6);
 
-    async function cancelarAgendamento(
-      id
-    ) {
-
-      const confirmar =
-        confirm(
-          "Tem certeza que deseja cancelar este agendamento?"
-        );
-
-
-      if (!confirmar) {
-
-        return;
-
-      }
+  }catch(err){
+    console.error("Erro no agendamento:", err);
+    showTopError("ERRO: " + (err.message || "Erro desconhecido") + (err.code ? " | Código: " + err.code : ""));
+  }finally{
+    btnConfirmar.disabled = false;
+    btnConfirmar.textContent = textoOriginal;
+  }
+});
 
 
-      const {
-        error
-      } =
-        await supabaseClient
-          .from("agendamentos")
-          .delete()
-          .eq(
-            "id",
-            id
-          );
+/* ============================================================
+   NAVEGAÇÃO GERAL
+============================================================ */
+
+document.querySelectorAll("[data-back]").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    goToStep(parseInt(btn.getAttribute("data-back"), 10));
+  });
+});
+
+document.getElementById("btn-novo").addEventListener("click", function(){
+  document.getElementById("inputNome").value = "";
+  document.getElementById("inputEmail").value = "";
+  document.getElementById("inputTelefone").value = "";
+  inputData.value = "";
+
+  state.nome = "";
+  state.email = "";
+  state.telefone = "";
+  state.servico = null;
+  state.data = "";
+  state.diaSemana = null;
+  state.barbeiro = null;
+  state.barbeirosDisponiveis = [];
+  state.horario = "";
+  state.horariosOcupados = [];
+
+  clearFieldErrors();
+  hideTopError();
+  renderServicos();
+  renderBarbeiros();
+  renderSlots();
+  goToStep(0);
+});
 
 
-      if (error) {
+/* ============================================================
+   INICIALIZAÇÃO
+============================================================ */
 
-        console.error(
-          "Erro ao cancelar agendamento:",
-          error
-        );
+(async function iniciar(){
+  renderServicos();
+  renderSlots();
+  await carregarHorarioFuncionamento();
+  goToStep(0);
+})();
 
-
-        alert(
-          "Não foi possível cancelar o agendamento."
-        );
-
-
-        return;
-
-      }
-
-
-      alert(
-        "Agendamento cancelado com sucesso!"
-      );
-
-
-      carregarAgendamentos(
-        dateFilter.value
-      );
-
-    }
-
-
-    /* =================================
-       FILTRO DE DATA
-    ================================= */
-
-    dateFilter.addEventListener(
-      "change",
-      function() {
-
-        const dataSelecionada =
-          this.value;
-
-
-        if (
-          dataSelecionada
-        ) {
-
-          carregarAgendamentos(
-            dataSelecionada
-          );
-
-        }
-
-      }
-    );
-
-
-    /* =================================
-       INICIAR
-    ================================= */
-
-    verificarSessao();
-
-
-  </script>
-
+</script>
 
 </body>
 
