@@ -194,3 +194,223 @@ sb.auth.onAuthStateChange((ev,s)=>{
  if(s&&(!me||me.id!==s.user.id))setTimeout(()=>boot(s),0);
  else if(!s)login()});
 </script></body></html>
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arantes Barber Shop — Painel</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--preto:#07090c;--p2:#0d1117;--p3:#111720;--azul:#0B1F3A;--azl:#163A63;--azb:#28588D;--branco:#f5f7fa;--cm:#7f8995;--cc:#c3c9d1;--linha:#29323e;--erro:#e05252;--r:12px}
+*{box-sizing:border-box}body{margin:0;background:var(--preto);color:var(--branco);font-family:Inter,sans-serif;min-height:100vh}
+h1,h2,.brand{font-family:Oswald,sans-serif;font-weight:600;letter-spacing:.03em}
+.brand{font-size:20px;display:flex;gap:10px;align-items:center}.brand i{width:6px;height:26px;border-radius:4px;background:linear-gradient(var(--azl),var(--azb))}
+header{position:sticky;top:0;z-index:5;background:rgba(7,9,12,.95);border-bottom:1px solid var(--linha);padding:12px 16px}
+.hd{display:flex;justify-content:space-between;align-items:center;max-width:900px;margin:auto}
+nav{display:flex;gap:6px;overflow-x:auto;max-width:900px;margin:10px auto 0}
+nav button{white-space:nowrap;background:none;border:1px solid var(--linha);color:var(--cc);padding:8px 14px;border-radius:99px;font:600 13px Inter}
+nav button.on{background:var(--azl);border-color:var(--azl);color:#fff}
+main{max-width:900px;margin:auto;padding:20px 16px 60px}.box{max-width:400px;margin:8vh auto;padding:0 20px}
+input,select{width:100%;background:var(--p2);border:1px solid var(--linha);color:var(--branco);padding:13px;border-radius:var(--r);font-size:16px;margin-bottom:12px}
+.btn{width:100%;padding:14px;border-radius:var(--r);border:1px solid var(--azl);background:linear-gradient(135deg,var(--azl),var(--azul));color:#fff;font:700 14px Inter;cursor:pointer}
+.btn.s{background:none;border-color:var(--linha);color:var(--cc)}.btn.sm{width:auto;padding:8px 14px}
+.lnk{background:none;border:0;color:var(--cm);font-size:13px;margin-top:14px;cursor:pointer;width:100%}
+.msg{font-size:13px;margin:0 0 12px;min-height:16px;color:var(--erro)}.msg.ok{color:#7fd1a0}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px}
+.card{background:linear-gradient(145deg,var(--p3),var(--p2));border:1px solid var(--linha);border-radius:var(--r);padding:14px}
+.card small{color:var(--cm);font-size:12px}.card b{display:block;font:500 22px Oswald;margin-top:4px;color:#b9d5f3}
+.row{background:var(--p2);border:1px solid var(--linha);border-radius:var(--r);padding:14px;margin-bottom:10px;display:grid;grid-template-columns:1fr auto;gap:4px 12px;font-size:14px}
+.row .t{font-weight:700}.row .m{color:var(--cm);font-size:12px}.row .v{text-align:right;font-family:Oswald}
+.row select{grid-column:1/-1;margin:8px 0 0;padding:9px}.row a{color:#b9d5f3}
+.bar{display:flex;gap:8px;flex-wrap:wrap}.bar>*{flex:1;min-width:130px}
+@media(min-width:700px){.grid{grid-template-columns:repeat(3,1fr)}}
+</style></head><body>
+<div id="app"></div>
+<script>
+const sb=window.supabase.createClient("https://bgmcryfcwjikuttwftgp.supabase.co","sb_publishable_C0Tahq5Lffw4ukCwj9WXHQ_HtDbD6PU");
+const $=id=>document.getElementById(id), A=$('app');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const R=v=>'R$ '+Number(v||0).toFixed(2).replace('.',',');
+const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const ST={agendado:'Agendado',confirmado:'Confirmado',em_atendimento:'Em atendimento',concluido:'Concluído',cancelado:'Cancelado',nao_compareceu:'Não compareceu'};
+const brand='<div class="brand"><i></i>ARANTES BARBER SHOP</div>';
+let me=null, view='dash';
+const setMsg=(t,ok)=>{const m=$('msg');if(m){m.textContent=t;m.className='msg'+(ok?' ok':'')}};
+
+function login(){A.innerHTML=`<div class="box">${brand}<h2>Entrar</h2>
+<input id="em" type="email" placeholder="E-mail" autocomplete="username"><input id="pw" type="password" placeholder="Senha" autocomplete="current-password">
+<div id="msg" class="msg"></div><button class="btn" id="go">ENTRAR</button><button class="lnk" id="fg">Esqueci minha senha</button></div>`;
+$('go').onclick=async()=>{const{error}=await sb.auth.signInWithPassword({email:$('em').value.trim(),password:$('pw').value});if(error)setMsg('E-mail ou senha inválidos.')};
+$('fg').onclick=forgot}
+function forgot(){A.innerHTML=`<div class="box">${brand}<h2>Recuperar senha</h2><input id="em" type="email" placeholder="E-mail"><div id="msg" class="msg"></div>
+<button class="btn" id="go">ENVIAR LINK DE RECUPERAÇÃO</button><button class="lnk" id="bk">Voltar</button></div>`;
+$('bk').onclick=login;
+$('go').onclick=async()=>{const{error}=await sb.auth.resetPasswordForEmail($('em').value.trim(),{redirectTo:location.href.split('#')[0]});
+setMsg(error?'Não foi possível enviar agora.':'Se o e-mail existir, você receberá o link.',!error)}}
+function novaSenha(){A.innerHTML=`<div class="box">${brand}<h2>Nova senha</h2><input id="pw" type="password" placeholder="Nova senha (mín. 8)"><div id="msg" class="msg"></div>
+<button class="btn" id="go">SALVAR</button>${me?'<button class="lnk" id="bk">Voltar</button>':''}</div>`;
+if(me)$('bk').onclick=shell;
+$('go').onclick=async()=>{const p=$('pw').value;if(p.length<8)return setMsg('Mínimo de 8 caracteres.');
+const{error}=await sb.auth.updateUser({password:p});if(error)return setMsg('Erro ao salvar senha.');setMsg('Senha alterada!',true);setTimeout(()=>me?shell():location.reload(),900)}}
+
+async function boot(s){
+ const{data:p}=await sb.from('profiles').select('*').eq('id',s.user.id).maybeSingle();
+ if(!p||p.status!=='ativo'){await sb.auth.signOut();login();setMsg('Usuário sem acesso ao painel.');return}
+ me=p;view='dash';shell()}
+
+function shell(){
+ const adm=me.role==='admin';
+ const nav=[['dash','Dashboard'],['agenda',adm?'Agenda':'Minha agenda'],['com',adm?'Comissões':'Minhas comissões']];
+ if(adm)nav.push(['cli','Clientes'],['barb','Barbeiros'],['serv','Serviços'],['fin','Financeiro']);
+ A.innerHTML=`<header><div class="hd">${brand}<button class="btn s sm" id="out">Sair</button></div><nav id="nav">
+ ${nav.map(n=>`<button data-v="${n[0]}" class="${view===n[0]?'on':''}">${n[1]}</button>`).join('')}<button data-v="pw">Alterar senha</button></nav></header><main id="c"></main>`;
+ $('out').onclick=()=>sb.auth.signOut();
+ document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>{if(b.dataset.v==='pw')return novaSenha();view=b.dataset.v;shell()});
+ ({dash:vDash,agenda:vAgenda,com:vCom,barb:vBarb,cli:vCli,fin:vFin,serv:vServ})[view]()}
+
+async function vDash(){
+ const adm=me.role==='admin',h=new Date(),hoje=iso(h),ini=iso(new Date(h.getFullYear(),h.getMonth(),1)),fim=iso(new Date(h.getFullYear(),h.getMonth()+1,0));
+ const[a,c,b]=await Promise.all([
+  sb.from('agendamentos').select('data,preco,status').gte('data',ini).lte('data',fim),
+  sb.from('comissoes').select('valor_comissao,agendamentos!inner(data)').gte('agendamentos.data',ini).lte('agendamentos.data',fim),
+  adm?sb.from('barbeiros').select('id',{count:'exact',head:true}).eq('ativo',true):Promise.resolve({count:null})]);
+ if(a.error||c.error)return $('c').innerHTML='<p class="msg">Erro ao carregar dados.</p>';
+ const ok=(a.data||[]).filter(x=>x.status==='concluido'),sum=(l,f)=>l.reduce((t,x)=>t+Number(f(x)||0),0);
+ const cd=(c.data||[]).filter(x=>x.agendamentos.data===hoje);
+ const cards=[[adm?'Faturamento hoje':'Faturamento gerado hoje',R(sum(ok.filter(x=>x.data===hoje),x=>x.preco))],
+ [adm?'Faturamento do mês':'Faturamento gerado no mês',R(sum(ok,x=>x.preco))],
+ [adm?'Comissões hoje':'Minha comissão hoje',R(sum(cd,x=>x.valor_comissao))],
+ [adm?'Comissões do mês':'Minha comissão no mês',R(sum(c.data||[],x=>x.valor_comissao))],
+ [adm?'Atendimentos no mês':'Meus atendimentos no mês',ok.length],
+ ['Agendados hoje',(a.data||[]).filter(x=>x.data===hoje&&['agendado','confirmado'].includes(x.status)).length]];
+ if(adm)cards.push(['Barbeiros ativos',b.count??0]);
+ $('c').innerHTML=`<h2>Dashboard</h2><div class="grid">${cards.map(k=>`<div class="card"><small>${k[0]}</small><b>${k[1]}</b></div>`).join('')}</div>`}
+
+async function vAgenda(){
+ $('c').innerHTML=`<h2>Agenda</h2><input type="date" id="dt" value="${iso(new Date())}"><div id="ls"></div>`;
+ const load=async()=>{
+  const{data,error}=await sb.from('agendamentos').select('*,barbeiros(nome)').eq('data',$('dt').value).order('horario');
+  if(error)return $('ls').innerHTML='<p class="msg">Erro ao carregar.</p>';
+  $('ls').innerHTML=(data||[]).map(x=>`<div class="row"><span class="t">${esc(x.horario)} · ${esc(x.nome)}</span><span class="v">${R(x.preco)}</span>
+  <span class="m">${esc(x.servico)} · ${esc(x.barbeiros?.nome||'Sem barbeiro')}</span><span class="m" style="text-align:right"><a href="https://wa.me/55${esc(String(x.telefone).replace(/\D/g,''))}" target="_blank" rel="noopener">WhatsApp</a></span>
+  <select data-id="${x.id}">${Object.entries(ST).map(([k,v])=>`<option value="${k}"${k===x.status?' selected':''}>${v}</option>`).join('')}</select></div>`).join('')||'<p class="m" style="color:var(--cm)">Nenhum agendamento nesta data.</p>';
+  document.querySelectorAll('#ls select').forEach(s=>s.onchange=async()=>{
+   const{error}=await sb.rpc('atualizar_status',{p_id:s.dataset.id,p_status:s.value});if(error)alert('Não foi possível atualizar.');load()})};
+ $('dt').onchange=load;load()}
+
+async function vCom(){
+ const adm=me.role==='admin',h=new Date(),mes=iso(h).slice(0,7);
+ let bs=[];if(adm){bs=(await sb.from('barbeiros').select('id,nome').order('nome')).data||[]}
+ $('c').innerHTML=`<h2>${adm?'Comissões':'Minhas comissões'}</h2><div class="bar"><input type="month" id="mes" value="${mes}">
+ ${adm?`<select id="bb"><option value="">Todos os barbeiros</option>${bs.map(b=>`<option value="${b.id}">${esc(b.nome)}</option>`).join('')}</select>`:''}
+ <select id="stt"><option value="">Todos os status</option><option value="pendente">Pendente</option><option value="pago">Pago</option></select></div><div id="ls"></div>`;
+ const load=async()=>{
+  const[y,m]=$('mes').value.split('-').map(Number),ini=iso(new Date(y,m-1,1)),fim=iso(new Date(y,m,0));
+  let q=sb.from('comissoes').select('*,agendamentos!inner(nome,servico,data),barbeiros(nome)').gte('agendamentos.data',ini).lte('agendamentos.data',fim).order('created_at',{ascending:false});
+  if(adm&&$('bb').value)q=q.eq('barbeiro_id',$('bb').value);if($('stt').value)q=q.eq('status',$('stt').value);
+  const{data,error}=await q;if(error)return $('ls').innerHTML='<p class="msg">Erro ao carregar.</p>';
+  const l=data||[],t=s=>l.filter(x=>x.status===s).reduce((a,x)=>a+Number(x.valor_comissao),0);
+  $('ls').innerHTML=`<div class="grid"><div class="card"><small>Pendentes</small><b>${R(t('pendente'))}</b></div><div class="card"><small>Pagas</small><b>${R(t('pago'))}</b></div><div class="card"><small>Total</small><b>${R(t('pendente')+t('pago'))}</b></div></div>`+
+  (adm&&$('bb').value&&t('pendente')>0?`<button class="btn" id="pay" style="margin-bottom:14px">REGISTRAR PAGAMENTO DE ${R(t('pendente'))}</button>`:'')+
+  l.map(x=>`<div class="row"><span class="t">${x.agendamentos.data.split('-').reverse().join('/')} · ${esc(x.barbeiros?.nome)}</span><span class="v">${R(x.valor_comissao)}</span>
+  <span class="m">${esc(x.agendamentos.nome)} · ${esc(x.agendamentos.servico)}</span><span class="m" style="text-align:right">${R(x.valor_servico)} × ${Number(x.percentual)}% · ${x.status}</span></div>`).join('');
+  const p=$('pay');if(p)p.onclick=async()=>{if(!confirm('Confirmar pagamento das comissões pendentes deste período?'))return;
+   const{error}=await sb.rpc('pagar_comissoes',{p_barbeiro:$('bb').value,p_ini:ini,p_fim:fim});if(error)alert('Erro ao registrar pagamento.');load()}};
+ ['mes','stt',...(adm?['bb']:[])].forEach(i=>$(i).onchange=load);load()}
+
+async function vBarb(){
+ $('c').innerHTML='<h2>Barbeiros</h2><div class="bar" style="margin-bottom:14px"><input id="nb" placeholder="Nome do novo barbeiro" style="margin:0"><button class="btn sm" id="ab">Adicionar</button></div><div id="ls"></div>';
+ const load=async()=>{
+  const[b,c,a]=await Promise.all([sb.from('barbeiros').select('id,nome,ativo').order('nome'),sb.from('barbeiros_config').select('barbeiro_id,comissao_percentual'),sb.from('agendamentos').select('barbeiro_id,preco').eq('status','concluido')]);
+  if(b.error)return $('ls').innerHTML='<p class="msg">Erro ao carregar.</p>';
+  const pct={},st={};
+  (c.data||[]).forEach(x=>pct[x.barbeiro_id]=x.comissao_percentual);
+  (a.data||[]).forEach(x=>{const s=st[x.barbeiro_id]||(st[x.barbeiro_id]={n:0,v:0});s.n++;s.v+=Number(x.preco)});
+  $('ls').innerHTML=(b.data||[]).map(x=>{const s=st[x.id]||{n:0,v:0};return `<div class="row"><span class="t">${esc(x.nome)}${x.ativo?'':' (inativo)'}</span><span class="v">${R(s.v)}</span>
+  <span class="m">${s.n} atendimentos · comissão ${Number(pct[x.id]??0)}%</span><span></span>
+  <div class="bar" style="grid-column:1/-1;margin-top:8px"><button class="btn s sm" data-pc="${x.id}" data-v="${pct[x.id]??40}">Alterar comissão</button><button class="btn s sm" data-at="${x.id}" data-a="${x.ativo}">${x.ativo?'Desativar':'Ativar'}</button></div></div>`}).join('')||'<p class="m" style="color:var(--cm)">Nenhum barbeiro cadastrado.</p>';
+  document.querySelectorAll('[data-pc]').forEach(b=>b.onclick=async()=>{
+   const v=prompt('Nova comissão (%) — vale para os próximos atendimentos concluídos:',b.dataset.v);if(v===null)return;
+   const n=parseFloat(String(v).replace(',','.'));if(isNaN(n)||n<0||n>100)return alert('Valor inválido.');
+   const{error}=await sb.from('barbeiros_config').upsert({barbeiro_id:b.dataset.pc,comissao_percentual:n});if(error)alert('Erro ao salvar.');load()});
+  document.querySelectorAll('[data-at]').forEach(b=>b.onclick=async()=>{
+   const{error}=await sb.from('barbeiros').update({ativo:b.dataset.a!=='true'}).eq('id',b.dataset.at);if(error)alert('Erro ao salvar.');load()});
+ };
+ $('ab').onclick=async()=>{const n=$('nb').value.trim();if(n.length<2)return;
+  const{error}=await sb.from('barbeiros').insert([{nome:n}]);if(error)return alert('Erro ao adicionar.');$('nb').value='';load()};
+ load()}
+
+const dBR=d=>String(d||'').split('-').reverse().join('/');
+
+async function vCli(){
+ $('c').innerHTML='<h2>Clientes</h2><input id="q" placeholder="Buscar por nome ou telefone"><div id="ls"></div>';
+ const{data,error}=await sb.from('agendamentos').select('nome,email,telefone,servico,preco,data,horario,status,barbeiros(nome)').order('data',{ascending:false}).limit(2000);
+ if(error)return $('ls').innerHTML='<p class="msg">Erro ao carregar.</p>';
+ const m={};
+ (data||[]).forEach(x=>{const k=String(x.telefone||'').replace(/\D/g,'')||x.email||x.nome;
+  const c=m[k]||(m[k]={nome:x.nome,tel:x.telefone,h:[],total:0,n:0,ult:''});
+  c.h.push(x);if(x.status==='concluido'){c.total+=Number(x.preco);c.n++;if(!c.ult)c.ult=x.data}});
+ const draw=()=>{
+  const q=$('q').value.toLowerCase();
+  const l=Object.entries(m).filter(([k,c])=>(c.nome+' '+k).toLowerCase().includes(q)).sort((a,b)=>b[1].total-a[1].total);
+  $('ls').innerHTML=l.map(([k,c])=>`<div class="row" style="cursor:pointer"><span class="t">${esc(c.nome)}</span><span class="v">${R(c.total)}</span>
+  <span class="m">${esc(c.tel)} · ${c.n} atendimentos${c.ult?' · último em '+dBR(c.ult):''}</span><span></span>
+  <div class="hist" style="grid-column:1/-1;display:none;margin-top:8px">${c.h.map(x=>`<div class="m" style="padding:5px 0;border-top:1px solid var(--linha)">${dBR(x.data)} ${esc(x.horario)} · ${esc(x.servico)} · ${esc(x.barbeiros?.nome||'—')} · ${R(x.preco)} · ${ST[x.status]||esc(x.status)}</div>`).join('')}</div></div>`).join('')||'<p class="m" style="color:var(--cm)">Nenhum cliente encontrado.</p>';
+  document.querySelectorAll('#ls .row').forEach(r=>r.onclick=()=>{const h=r.querySelector('.hist');h.style.display=h.style.display==='none'?'block':'none'})};
+ $('q').oninput=draw;draw()}
+
+function rng(p){
+ const h=new Date(),d=h.getDate(),y=h.getFullYear(),m=h.getMonth();
+ if(p==='hoje')return[iso(h),iso(h)];
+ if(p==='semana'){const w=(h.getDay()+6)%7;return[iso(new Date(y,m,d-w)),iso(new Date(y,m,d-w+6))]}
+ if(p==='mes')return[iso(new Date(y,m,1)),iso(new Date(y,m+1,0))];
+ if(p==='ant')return[iso(new Date(y,m-1,1)),iso(new Date(y,m,0))];
+ return[$('di').value,$('df').value]}
+
+async function vFin(){
+ $('c').innerHTML='<h2>Financeiro</h2><div class="bar"><select id="pp"><option value="hoje">Hoje</option><option value="semana">Esta semana</option><option value="mes" selected>Este mês</option><option value="ant">Mês anterior</option><option value="per">Período personalizado</option></select><input type="date" id="di"><input type="date" id="df"></div><div id="ls" style="margin-top:16px"></div>';
+ const g=(l,k,v)=>{const o={};l.forEach(x=>{const n=k(x)||'—';o[n]=(o[n]||0)+Number(v(x))});return Object.entries(o).sort((a,b)=>b[1]-a[1])};
+ const lista=(t,l)=>`<h2 style="font-size:18px;margin:20px 0 10px">${t}</h2>`+(l.map(([n,v])=>`<div class="row"><span class="t">${esc(n)}</span><span class="v">${R(v)}</span></div>`).join('')||'<p class="m" style="color:var(--cm)">Sem dados no período.</p>');
+ const load=async()=>{
+  const per=$('pp').value==='per';$('di').style.display=$('df').style.display=per?'':'none';
+  const[ini,fim]=rng($('pp').value);if(!ini||!fim)return $('ls').innerHTML='';
+  const[a,c]=await Promise.all([
+   sb.from('agendamentos').select('preco,servico,barbeiros(nome)').eq('status','concluido').gte('data',ini).lte('data',fim),
+   sb.from('comissoes').select('valor_comissao,barbeiros(nome),agendamentos!inner(data)').gte('agendamentos.data',ini).lte('agendamentos.data',fim)]);
+  if(a.error||c.error)return $('ls').innerHTML='<p class="msg">Erro ao carregar.</p>';
+  const A=a.data||[],C=c.data||[],fat=A.reduce((t,x)=>t+Number(x.preco),0),com=C.reduce((t,x)=>t+Number(x.valor_comissao),0);
+  $('ls').innerHTML=`<div class="grid"><div class="card"><small>Faturamento</small><b>${R(fat)}</b></div><div class="card"><small>Comissões</small><b>${R(com)}</b></div><div class="card"><small>Líquido da barbearia</small><b>${R(fat-com)}</b></div><div class="card"><small>Serviços realizados</small><b>${A.length}</b></div></div>`+
+   lista('Faturamento por barbeiro',g(A,x=>x.barbeiros?.nome,x=>x.preco))+lista('Comissão por barbeiro',g(C,x=>x.barbeiros?.nome,x=>x.valor_comissao))+lista('Faturamento por serviço',g(A,x=>x.servico,x=>x.preco))};
+ ['pp','di','df'].forEach(i=>$(i).onchange=load);load()}
+
+async function vServ(){
+ $('c').innerHTML='<h2>Serviços</h2><div class="bar" style="margin-bottom:14px"><input id="sn" placeholder="Nome do serviço" style="margin:0"><input id="sp" type="number" step="0.01" min="0" placeholder="Valor (R$)" style="margin:0"><input id="sd" type="number" min="5" step="5" placeholder="Duração (min)" style="margin:0"><button class="btn sm" id="sa">Adicionar</button></div><div id="ls"></div>';
+ const load=async()=>{
+  const{data,error}=await sb.from('servicos').select('*').order('ordem').order('nome');
+  if(error)return $('ls').innerHTML='<p class="msg">Erro ao carregar.</p>';
+  $('ls').innerHTML=(data||[]).map(x=>`<div class="row"><span class="t">${esc(x.nome)}${x.ativo?'':' (inativo)'}</span><span class="v">${R(x.preco)}</span>
+  <span class="m">${x.duracao_min} min</span><span></span>
+  <div class="bar" style="grid-column:1/-1;margin-top:8px"><button class="btn s sm" data-ed="${x.id}" data-p="${x.preco}" data-d="${x.duracao_min}">Editar valor e duração</button><button class="btn s sm" data-at="${x.id}" data-a="${x.ativo}">${x.ativo?'Desativar':'Ativar'}</button></div></div>`).join('')||'<p class="m" style="color:var(--cm)">Nenhum serviço cadastrado.</p>';
+  document.querySelectorAll('[data-ed]').forEach(b=>b.onclick=async()=>{
+   const p=prompt('Novo valor (R$):',b.dataset.p);if(p===null)return;
+   const d=prompt('Nova duração (minutos):',b.dataset.d);if(d===null)return;
+   const pn=parseFloat(String(p).replace(',','.')),dn=parseInt(d,10);
+   if(isNaN(pn)||pn<0||isNaN(dn)||dn<5||dn>480)return alert('Valores inválidos.');
+   const{error}=await sb.from('servicos').update({preco:pn,duracao_min:dn}).eq('id',b.dataset.ed);if(error)alert('Erro ao salvar.');load()});
+  document.querySelectorAll('[data-at]').forEach(b=>b.onclick=async()=>{
+   const{error}=await sb.from('servicos').update({ativo:b.dataset.a!=='true'}).eq('id',b.dataset.at);if(error)alert('Erro ao salvar.');load()});
+ };
+ $('sa').onclick=async()=>{
+  const n=$('sn').value.trim(),p=parseFloat(String($('sp').value).replace(',','.')),d=parseInt($('sd').value,10);
+  if(n.length<2||isNaN(p)||p<0||isNaN(d)||d<5)return alert('Preencha nome, valor e duração.');
+  const{error}=await sb.from('servicos').insert([{nome:n,preco:p,duracao_min:d}]);if(error)return alert('Erro ao adicionar.');
+  ['sn','sp','sd'].forEach(i=>$(i).value='');load()};
+ load()}
+
+sb.auth.onAuthStateChange((ev,s)=>{
+ if(ev==='PASSWORD_RECOVERY')return novaSenha();
+ if(ev==='SIGNED_OUT'){me=null;return login()}
+ if(s&&(!me||me.id!==s.user.id))setTimeout(()=>boot(s),0);
+ else if(!s)login()});
+</script></body></html>
